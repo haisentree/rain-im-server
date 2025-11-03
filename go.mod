@@ -3,7 +3,7 @@ module rain-im-server
 go 1.24.4
 
 require (
-	connectrpc.com/connect v1.19.1
+	connectrpc.com/connect v1.18.1
 	github.com/spf13/cobra v1.10.1
 	github.com/srikrsna/protoc-gen-gotag v1.0.2
 	go.etcd.io/etcd/client/v3 v3.6.5

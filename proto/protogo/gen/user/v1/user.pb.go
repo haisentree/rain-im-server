@@ -24,7 +24,7 @@ const (
 
 type User struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" bun:"type:uuid,pk"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -81,8 +81,8 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x12user/v1/user.proto\x12\auser.v1\x1a\x13tagger/tagger.proto\"C\n" +
 	"\x04User\x12'\n" +
 	"\x02id\x18\x01 \x01(\x03B\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04nameB\x92\x01\n" +
-	"\vcom.user.v1B\tUserProtoP\x01Z;github.com/haisentree/rain-im-server/protogo/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
+	"\x04name\x18\x02 \x01(\tR\x04nameB\x94\x01\n" +
+	"\vcom.user.v1B\tUserProtoP\x01Z=github.com/haisentree/rain-im-server/proto/gen/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var (
 	file_user_v1_user_proto_rawDescOnce sync.Once

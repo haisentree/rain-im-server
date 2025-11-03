@@ -7,4 +7,4 @@ import (
 )
 
 //go:generate buf generate ../proto --template buf.gen.yaml
-//go:generate buf generate ../protogo --template buf.gen.tag.yaml
+//go:generate buf generate gen --template buf.gen.tag.yaml
