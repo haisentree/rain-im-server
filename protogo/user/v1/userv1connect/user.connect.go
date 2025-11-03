@@ -8,8 +8,8 @@ import (
 	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
-	v1 "github.com/haisentree/rain-im-server/protogo/user/v1"
 	http "net/http"
+	v1 "rain-im-server/protogo/user/v1"
 	strings "strings"
 )
 

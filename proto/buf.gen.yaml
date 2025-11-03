@@ -5,7 +5,7 @@ managed:
     - module: buf.build/srikrsna/protoc-gen-gotag
   override:
   - file_option: go_package_prefix
-    value: github.com/haisentree/rain-im-server/protogo  
+    value: rain-im-server/protogo  
 plugins:
   - local: protoc-gen-go
     out: protogo
