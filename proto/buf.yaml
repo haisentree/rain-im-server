@@ -1,0 +1,9 @@
+version: v2
+lint:
+  use:
+    - STANDARD
+deps:
+  - buf.build/srikrsna/protoc-gen-gotag
+breaking:
+  use:
+    - FILE
