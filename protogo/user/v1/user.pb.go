@@ -74,6 +74,94 @@ func (x *User) GetName() string {
 	return ""
 }
 
+type GreetRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GreetRequest) Reset() {
+	*x = GreetRequest{}
+	mi := &file_user_v1_user_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GreetRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GreetRequest) ProtoMessage() {}
+
+func (x *GreetRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GreetRequest.ProtoReflect.Descriptor instead.
+func (*GreetRequest) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *GreetRequest) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type GreetResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GreetResponse) Reset() {
+	*x = GreetResponse{}
+	mi := &file_user_v1_user_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GreetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GreetResponse) ProtoMessage() {}
+
+func (x *GreetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_user_v1_user_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GreetResponse.ProtoReflect.Descriptor instead.
+func (*GreetResponse) Descriptor() ([]byte, []int) {
+	return file_user_v1_user_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GreetResponse) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 var File_user_v1_user_proto protoreflect.FileDescriptor
 
 const file_user_v1_user_proto_rawDesc = "" +
@@ -81,7 +169,13 @@ const file_user_v1_user_proto_rawDesc = "" +
 	"\x12user/v1/user.proto\x12\auser.v1\x1a\x13tagger/tagger.proto\"\\\n" +
 	"\x04User\x12'\n" +
 	"\x02id\x18\x01 \x01(\x03B\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12+\n" +
-	"\x04name\x18\x02 \x01(\tB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x04nameB\x94\x01\n" +
+	"\x04name\x18\x02 \x01(\tB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x04name\"\"\n" +
+	"\fGreetRequest\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"#\n" +
+	"\rGreetResponse\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name2I\n" +
+	"\vUserService\x12:\n" +
+	"\aGetUser\x12\x15.user.v1.GreetRequest\x1a\x16.user.v1.GreetResponse\"\x00B\x94\x01\n" +
 	"\vcom.user.v1B\tUserProtoP\x01Z=github.com/haisentree/rain-im-server/proto/gen/user/v1;userv1\xa2\x02\x03UXX\xaa\x02\aUser.V1\xca\x02\aUser\\V1\xe2\x02\x13User\\V1\\GPBMetadata\xea\x02\bUser::V1b\x06proto3"
 
 var (
@@ -96,13 +190,17 @@ func file_user_v1_user_proto_rawDescGZIP() []byte {
 	return file_user_v1_user_proto_rawDescData
 }
 
-var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_user_v1_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_user_v1_user_proto_goTypes = []any{
-	(*User)(nil), // 0: user.v1.User
+	(*User)(nil),          // 0: user.v1.User
+	(*GreetRequest)(nil),  // 1: user.v1.GreetRequest
+	(*GreetResponse)(nil), // 2: user.v1.GreetResponse
 }
 var file_user_v1_user_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
+	1, // 0: user.v1.UserService.GetUser:input_type -> user.v1.GreetRequest
+	2, // 1: user.v1.UserService.GetUser:output_type -> user.v1.GreetResponse
+	1, // [1:2] is the sub-list for method output_type
+	0, // [0:1] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -119,9 +217,9 @@ func file_user_v1_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_user_v1_user_proto_rawDesc), len(file_user_v1_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   3,
 			NumExtensions: 0,
-			NumServices:   0,
+			NumServices:   1,
 		},
 		GoTypes:           file_user_v1_user_proto_goTypes,
 		DependencyIndexes: file_user_v1_user_proto_depIdxs,

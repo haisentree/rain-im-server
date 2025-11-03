@@ -8,3 +8,15 @@ message User {
     int64  id   = 1  [(tagger.tags) = "bun:\"type:uuid,pk\""];
     string name = 2    [(tagger.tags) = "bun:\"type:uuid,pk\""];
 }
+
+message GreetRequest {
+  string name = 1;
+}
+
+message GreetResponse {
+  string name = 1;
+}
+
+service UserService {
+  rpc GetUser(GreetRequest) returns (GreetResponse) {}
+}
