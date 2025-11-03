@@ -6,5 +6,5 @@ import "tagger/tagger.proto";
 
 message User {
     int64  id   = 1  [(tagger.tags) = "bun:\"type:uuid,pk\""];
-    string name = 2;  
+    string name = 2    [(tagger.tags) = "bun:\"type:uuid,pk\""];
 }

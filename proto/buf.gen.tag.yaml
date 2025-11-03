@@ -8,5 +8,5 @@ managed:
       value: github.com/haisentree/rain-im-server/protogo
 plugins:
   - local: protoc-gen-gotag
-    out: protogo
-    opt: paths=source_relative,outdir=gen
+    out: ../
+    opt: paths=source_relative,outdir=protogo
