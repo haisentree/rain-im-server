@@ -14,4 +14,3 @@ plugins:
     out: ../protogo
     opt:
       - paths=source_relative
-      - simple

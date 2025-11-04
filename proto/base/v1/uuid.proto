@@ -1,0 +1,11 @@
+syntax = "proto3";
+package base.v1;
+
+// A UUID, encoded in accordance with section 4.1.2 of RFC 4122.
+message UUID {
+    // The high 64 bits of the UUID - MSB -> LSB: time_low (32 bits) | time_mid (16 bits) | time_hi_and_version (16 bits).
+    fixed64 hi = 1;
+
+    // The low 64 bits of the UUID - MSB -> LSB: clock_seq_hi_and_reserved (8 bits) | clock_seq_low (8 bits) | node (48 bits).
+    fixed64 lo = 2;
+}

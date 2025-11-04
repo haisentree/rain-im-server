@@ -1,0 +1,51 @@
+syntax = "proto3";
+package core.v1;
+
+import "base/v1/uuid.proto";
+import "tagger/tagger.proto";
+import "core/v1/client.proto";
+import "core/v1/msg.proto";
+import "base/v1/query.proto";
+
+service Base {
+    rpc ListClient(ListClientRequest) returns (ListClientResponse) {}
+    rpc CreateClient(CreateClientRequest) returns (CreateClientResponse) {}
+
+    rpc ListMessage(ListMessageRequest) returns (ListMessageResponse) {}
+    rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse) {}
+}
+
+message ListClientRequest {
+    optional base.v1.Pagination pagination = 1;
+    optional base.v1.Sort sort             = 2;
+    repeated base.v1.UUID id               = 3;
+}
+message ListClientResponse {
+    repeated Client data  = 1;
+    int64           count = 2;
+}
+
+message CreateClientRequest {}
+message CreateClientResponse {
+    Client data = 1;
+}
+
+message ListMessageRequest {
+    optional base.v1.Pagination pagination = 1;
+    optional base.v1.Sort sort             = 2;
+    repeated base.v1.UUID source_id        = 3;
+    repeated base.v1.UUID target_id        = 4;
+}
+message ListMessageResponse {
+    repeated Message data  = 1;
+    int64            count = 2;
+}
+
+message CreateMessageRequest {
+    base.v1.UUID source_id = 1;
+    base.v1.UUID target_id = 2;
+    string       content   = 3;
+}
+message CreateMessageResponse {
+    Message data = 1;
+}

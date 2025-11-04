@@ -1,0 +1,16 @@
+syntax = "proto3";
+package core.v1;
+
+import "tagger/tagger.proto";
+import "base/v1/time.proto";
+import "base/v1/uuid.proto";
+
+message Message {
+    base.v1.UUID id         = 1 [(tagger.tags) = "bun:\"type:uuid,pk\""];
+    base.v1.UUID source_id  = 2 [(tagger.tags) = "bun:\"type:uuid\""];
+    base.v1.UUID target_id  = 3 [(tagger.tags) = "bun:\"type:uuid\""];
+    fixed64      seq        = 4;
+    string       content    = 5;
+    base.v1.Time created_at = 6 [(tagger.tags) = "bun:\"type:timestamptz\""];
+    base.v1.Time updated_at = 7 [(tagger.tags) = "bun:\"type:timestamptz\""];
+}

@@ -1,0 +1,13 @@
+syntax = "proto3";
+package core.v1;
+
+import "tagger/tagger.proto";
+import "base/v1/time.proto";
+import "base/v1/uuid.proto";
+
+message Client {
+    base.v1.UUID id                  = 1 [(tagger.tags) = "bun:\"type:uuid,pk\""];
+    base.v1.Time created_at          = 2 [(tagger.tags) = "bun:\"type:timestamptz\""];
+    base.v1.Time updated_at          = 3 [(tagger.tags) = "bun:\"type:timestamptz\""];
+    optional base.v1.Time deleted_at = 4 [(tagger.tags) = "bun:\"type:timestamptz,soft_delete,nullzero\""];
+}

@@ -1,0 +1,18 @@
+syntax = "proto3";
+package base.v1;
+
+message Pagination {
+    int32 page      = 1;
+    int32 page_size = 2;
+}
+
+message Sort {
+    repeated SortKey key = 1;
+}
+
+message SortKey {
+    oneof key {
+        string asc  = 1;
+        string desc = 2;
+    }
+}
