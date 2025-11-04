@@ -2,12 +2,11 @@ syntax = "proto3";
 package core.v1;
 
 import "base/v1/uuid.proto";
-import "tagger/tagger.proto";
 import "core/v1/client.proto";
 import "core/v1/msg.proto";
 import "base/v1/query.proto";
 
-service Base {
+service BaseService {
     rpc ListClient(ListClientRequest) returns (ListClientResponse) {}
     rpc CreateClient(CreateClientRequest) returns (CreateClientResponse) {}
 

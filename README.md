@@ -8,6 +8,12 @@ go generate ./...
 # 格式检查
 alias protofmt="find . -name '*.proto' -print0 | xargs -0 clang-format -i"
 protofmt
+
+# 测试接口
+
+curl     --header "Content-Type: application/json"     --data '{"name": "Jane"}'     http://localhost:8080/core.v1.BaseService/ListClient
+
+buf curl   --schema ./proto/core/v1/client.proto --schema ./proto/core/v1/srv_base.proto  --protocol grpc   --http2-prior-knowledge     http://localhost:8080/core.v1.BaseService/ListClient
 ```
 
 ## 特点

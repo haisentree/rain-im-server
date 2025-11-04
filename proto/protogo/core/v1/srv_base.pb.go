@@ -7,7 +7,6 @@
 package corev1
 
 import (
-	_ "github.com/srikrsna/protoc-gen-gotag/tagger"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	v1 "rain-im-server/protogo/base/v1"
@@ -443,7 +442,7 @@ var File_core_v1_srv_base_proto protoreflect.FileDescriptor
 
 const file_core_v1_srv_base_proto_rawDesc = "" +
 	"\n" +
-	"\x16core/v1/srv_base.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\x1a\x13tagger/tagger.proto\x1a\x14core/v1/client.proto\x1a\x11core/v1/msg.proto\x1a\x13base/v1/query.proto\"\xac\x01\n" +
+	"\x16core/v1/srv_base.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\x1a\x14core/v1/client.proto\x1a\x11core/v1/msg.proto\x1a\x13base/v1/query.proto\"\xac\x01\n" +
 	"\x11ListClientRequest\x128\n" +
 	"\n" +
 	"pagination\x18\x01 \x01(\v2\x13.base.v1.PaginationH\x00R\n" +
@@ -475,8 +474,8 @@ const file_core_v1_srv_base_proto_rawDesc = "" +
 	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\"=\n" +
 	"\x15CreateMessageResponse\x12$\n" +
-	"\x04data\x18\x01 \x01(\v2\x10.core.v1.MessageR\x04data2\xbc\x02\n" +
-	"\x04Base\x12G\n" +
+	"\x04data\x18\x01 \x01(\v2\x10.core.v1.MessageR\x04data2\xc3\x02\n" +
+	"\vBaseService\x12G\n" +
 	"\n" +
 	"ListClient\x12\x1a.core.v1.ListClientRequest\x1a\x1b.core.v1.ListClientResponse\"\x00\x12M\n" +
 	"\fCreateClient\x12\x1c.core.v1.CreateClientRequest\x1a\x1d.core.v1.CreateClientResponse\"\x00\x12J\n" +
@@ -526,14 +525,14 @@ var file_core_v1_srv_base_proto_depIdxs = []int32{
 	10, // 10: core.v1.CreateMessageRequest.source_id:type_name -> base.v1.UUID
 	10, // 11: core.v1.CreateMessageRequest.target_id:type_name -> base.v1.UUID
 	12, // 12: core.v1.CreateMessageResponse.data:type_name -> core.v1.Message
-	0,  // 13: core.v1.Base.ListClient:input_type -> core.v1.ListClientRequest
-	2,  // 14: core.v1.Base.CreateClient:input_type -> core.v1.CreateClientRequest
-	4,  // 15: core.v1.Base.ListMessage:input_type -> core.v1.ListMessageRequest
-	6,  // 16: core.v1.Base.CreateMessage:input_type -> core.v1.CreateMessageRequest
-	1,  // 17: core.v1.Base.ListClient:output_type -> core.v1.ListClientResponse
-	3,  // 18: core.v1.Base.CreateClient:output_type -> core.v1.CreateClientResponse
-	5,  // 19: core.v1.Base.ListMessage:output_type -> core.v1.ListMessageResponse
-	7,  // 20: core.v1.Base.CreateMessage:output_type -> core.v1.CreateMessageResponse
+	0,  // 13: core.v1.BaseService.ListClient:input_type -> core.v1.ListClientRequest
+	2,  // 14: core.v1.BaseService.CreateClient:input_type -> core.v1.CreateClientRequest
+	4,  // 15: core.v1.BaseService.ListMessage:input_type -> core.v1.ListMessageRequest
+	6,  // 16: core.v1.BaseService.CreateMessage:input_type -> core.v1.CreateMessageRequest
+	1,  // 17: core.v1.BaseService.ListClient:output_type -> core.v1.ListClientResponse
+	3,  // 18: core.v1.BaseService.CreateClient:output_type -> core.v1.CreateClientResponse
+	5,  // 19: core.v1.BaseService.ListMessage:output_type -> core.v1.ListMessageResponse
+	7,  // 20: core.v1.BaseService.CreateMessage:output_type -> core.v1.CreateMessageResponse
 	17, // [17:21] is the sub-list for method output_type
 	13, // [13:17] is the sub-list for method input_type
 	13, // [13:13] is the sub-list for extension type_name

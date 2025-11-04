@@ -5,12 +5,13 @@
 package corev1connect
 
 import (
-	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
 	http "net/http"
 	v1 "rain-im-server/protogo/core/v1"
 	strings "strings"
+
+	connect "connectrpc.com/connect"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
@@ -21,8 +22,8 @@ import (
 const _ = connect.IsAtLeastVersion1_13_0
 
 const (
-	// BaseName is the fully-qualified name of the Base service.
-	BaseName = "core.v1.Base"
+	// BaseServiceName is the fully-qualified name of the BaseService service.
+	BaseServiceName = "core.v1.BaseService"
 )
 
 // These constants are the fully-qualified names of the RPCs defined in this package. They're
@@ -33,160 +34,162 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// BaseListClientProcedure is the fully-qualified name of the Base's ListClient RPC.
-	BaseListClientProcedure = "/core.v1.Base/ListClient"
-	// BaseCreateClientProcedure is the fully-qualified name of the Base's CreateClient RPC.
-	BaseCreateClientProcedure = "/core.v1.Base/CreateClient"
-	// BaseListMessageProcedure is the fully-qualified name of the Base's ListMessage RPC.
-	BaseListMessageProcedure = "/core.v1.Base/ListMessage"
-	// BaseCreateMessageProcedure is the fully-qualified name of the Base's CreateMessage RPC.
-	BaseCreateMessageProcedure = "/core.v1.Base/CreateMessage"
+	// BaseServiceListClientProcedure is the fully-qualified name of the BaseService's ListClient RPC.
+	BaseServiceListClientProcedure = "/core.v1.BaseService/ListClient"
+	// BaseServiceCreateClientProcedure is the fully-qualified name of the BaseService's CreateClient
+	// RPC.
+	BaseServiceCreateClientProcedure = "/core.v1.BaseService/CreateClient"
+	// BaseServiceListMessageProcedure is the fully-qualified name of the BaseService's ListMessage RPC.
+	BaseServiceListMessageProcedure = "/core.v1.BaseService/ListMessage"
+	// BaseServiceCreateMessageProcedure is the fully-qualified name of the BaseService's CreateMessage
+	// RPC.
+	BaseServiceCreateMessageProcedure = "/core.v1.BaseService/CreateMessage"
 )
 
-// BaseClient is a client for the core.v1.Base service.
-type BaseClient interface {
+// BaseServiceClient is a client for the core.v1.BaseService service.
+type BaseServiceClient interface {
 	ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error)
 	CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error)
 	ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error)
 	CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error)
 }
 
-// NewBaseClient constructs a client for the core.v1.Base service. By default, it uses the Connect
-// protocol with the binary Protobuf Codec, asks for gzipped responses, and sends uncompressed
-// requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
+// NewBaseServiceClient constructs a client for the core.v1.BaseService service. By default, it uses
+// the Connect protocol with the binary Protobuf Codec, asks for gzipped responses, and sends
+// uncompressed requests. To use the gRPC or gRPC-Web protocols, supply the connect.WithGRPC() or
 // connect.WithGRPCWeb() options.
 //
 // The URL supplied here should be the base URL for the Connect or gRPC server (for example,
 // http://api.acme.com or https://acme.com/grpc).
-func NewBaseClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) BaseClient {
+func NewBaseServiceClient(httpClient connect.HTTPClient, baseURL string, opts ...connect.ClientOption) BaseServiceClient {
 	baseURL = strings.TrimRight(baseURL, "/")
-	baseMethods := v1.File_core_v1_srv_base_proto.Services().ByName("Base").Methods()
-	return &baseClient{
+	baseServiceMethods := v1.File_core_v1_srv_base_proto.Services().ByName("BaseService").Methods()
+	return &baseServiceClient{
 		listClient: connect.NewClient[v1.ListClientRequest, v1.ListClientResponse](
 			httpClient,
-			baseURL+BaseListClientProcedure,
-			connect.WithSchema(baseMethods.ByName("ListClient")),
+			baseURL+BaseServiceListClientProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("ListClient")),
 			connect.WithClientOptions(opts...),
 		),
 		createClient: connect.NewClient[v1.CreateClientRequest, v1.CreateClientResponse](
 			httpClient,
-			baseURL+BaseCreateClientProcedure,
-			connect.WithSchema(baseMethods.ByName("CreateClient")),
+			baseURL+BaseServiceCreateClientProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("CreateClient")),
 			connect.WithClientOptions(opts...),
 		),
 		listMessage: connect.NewClient[v1.ListMessageRequest, v1.ListMessageResponse](
 			httpClient,
-			baseURL+BaseListMessageProcedure,
-			connect.WithSchema(baseMethods.ByName("ListMessage")),
+			baseURL+BaseServiceListMessageProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("ListMessage")),
 			connect.WithClientOptions(opts...),
 		),
 		createMessage: connect.NewClient[v1.CreateMessageRequest, v1.CreateMessageResponse](
 			httpClient,
-			baseURL+BaseCreateMessageProcedure,
-			connect.WithSchema(baseMethods.ByName("CreateMessage")),
+			baseURL+BaseServiceCreateMessageProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("CreateMessage")),
 			connect.WithClientOptions(opts...),
 		),
 	}
 }
 
-// baseClient implements BaseClient.
-type baseClient struct {
+// baseServiceClient implements BaseServiceClient.
+type baseServiceClient struct {
 	listClient    *connect.Client[v1.ListClientRequest, v1.ListClientResponse]
 	createClient  *connect.Client[v1.CreateClientRequest, v1.CreateClientResponse]
 	listMessage   *connect.Client[v1.ListMessageRequest, v1.ListMessageResponse]
 	createMessage *connect.Client[v1.CreateMessageRequest, v1.CreateMessageResponse]
 }
 
-// ListClient calls core.v1.Base.ListClient.
-func (c *baseClient) ListClient(ctx context.Context, req *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error) {
+// ListClient calls core.v1.BaseService.ListClient.
+func (c *baseServiceClient) ListClient(ctx context.Context, req *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error) {
 	return c.listClient.CallUnary(ctx, req)
 }
 
-// CreateClient calls core.v1.Base.CreateClient.
-func (c *baseClient) CreateClient(ctx context.Context, req *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
+// CreateClient calls core.v1.BaseService.CreateClient.
+func (c *baseServiceClient) CreateClient(ctx context.Context, req *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
 	return c.createClient.CallUnary(ctx, req)
 }
 
-// ListMessage calls core.v1.Base.ListMessage.
-func (c *baseClient) ListMessage(ctx context.Context, req *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error) {
+// ListMessage calls core.v1.BaseService.ListMessage.
+func (c *baseServiceClient) ListMessage(ctx context.Context, req *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error) {
 	return c.listMessage.CallUnary(ctx, req)
 }
 
-// CreateMessage calls core.v1.Base.CreateMessage.
-func (c *baseClient) CreateMessage(ctx context.Context, req *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error) {
+// CreateMessage calls core.v1.BaseService.CreateMessage.
+func (c *baseServiceClient) CreateMessage(ctx context.Context, req *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error) {
 	return c.createMessage.CallUnary(ctx, req)
 }
 
-// BaseHandler is an implementation of the core.v1.Base service.
-type BaseHandler interface {
+// BaseServiceHandler is an implementation of the core.v1.BaseService service.
+type BaseServiceHandler interface {
 	ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error)
 	CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error)
 	ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error)
 	CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error)
 }
 
-// NewBaseHandler builds an HTTP handler from the service implementation. It returns the path on
-// which to mount the handler and the handler itself.
+// NewBaseServiceHandler builds an HTTP handler from the service implementation. It returns the path
+// on which to mount the handler and the handler itself.
 //
 // By default, handlers support the Connect, gRPC, and gRPC-Web protocols with the binary Protobuf
 // and JSON codecs. They also support gzip compression.
-func NewBaseHandler(svc BaseHandler, opts ...connect.HandlerOption) (string, http.Handler) {
-	baseMethods := v1.File_core_v1_srv_base_proto.Services().ByName("Base").Methods()
-	baseListClientHandler := connect.NewUnaryHandler(
-		BaseListClientProcedure,
+func NewBaseServiceHandler(svc BaseServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
+	baseServiceMethods := v1.File_core_v1_srv_base_proto.Services().ByName("BaseService").Methods()
+	baseServiceListClientHandler := connect.NewUnaryHandler(
+		BaseServiceListClientProcedure,
 		svc.ListClient,
-		connect.WithSchema(baseMethods.ByName("ListClient")),
+		connect.WithSchema(baseServiceMethods.ByName("ListClient")),
 		connect.WithHandlerOptions(opts...),
 	)
-	baseCreateClientHandler := connect.NewUnaryHandler(
-		BaseCreateClientProcedure,
+	baseServiceCreateClientHandler := connect.NewUnaryHandler(
+		BaseServiceCreateClientProcedure,
 		svc.CreateClient,
-		connect.WithSchema(baseMethods.ByName("CreateClient")),
+		connect.WithSchema(baseServiceMethods.ByName("CreateClient")),
 		connect.WithHandlerOptions(opts...),
 	)
-	baseListMessageHandler := connect.NewUnaryHandler(
-		BaseListMessageProcedure,
+	baseServiceListMessageHandler := connect.NewUnaryHandler(
+		BaseServiceListMessageProcedure,
 		svc.ListMessage,
-		connect.WithSchema(baseMethods.ByName("ListMessage")),
+		connect.WithSchema(baseServiceMethods.ByName("ListMessage")),
 		connect.WithHandlerOptions(opts...),
 	)
-	baseCreateMessageHandler := connect.NewUnaryHandler(
-		BaseCreateMessageProcedure,
+	baseServiceCreateMessageHandler := connect.NewUnaryHandler(
+		BaseServiceCreateMessageProcedure,
 		svc.CreateMessage,
-		connect.WithSchema(baseMethods.ByName("CreateMessage")),
+		connect.WithSchema(baseServiceMethods.ByName("CreateMessage")),
 		connect.WithHandlerOptions(opts...),
 	)
-	return "/core.v1.Base/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return "/core.v1.BaseService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case BaseListClientProcedure:
-			baseListClientHandler.ServeHTTP(w, r)
-		case BaseCreateClientProcedure:
-			baseCreateClientHandler.ServeHTTP(w, r)
-		case BaseListMessageProcedure:
-			baseListMessageHandler.ServeHTTP(w, r)
-		case BaseCreateMessageProcedure:
-			baseCreateMessageHandler.ServeHTTP(w, r)
+		case BaseServiceListClientProcedure:
+			baseServiceListClientHandler.ServeHTTP(w, r)
+		case BaseServiceCreateClientProcedure:
+			baseServiceCreateClientHandler.ServeHTTP(w, r)
+		case BaseServiceListMessageProcedure:
+			baseServiceListMessageHandler.ServeHTTP(w, r)
+		case BaseServiceCreateMessageProcedure:
+			baseServiceCreateMessageHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
 	})
 }
 
-// UnimplementedBaseHandler returns CodeUnimplemented from all methods.
-type UnimplementedBaseHandler struct{}
+// UnimplementedBaseServiceHandler returns CodeUnimplemented from all methods.
+type UnimplementedBaseServiceHandler struct{}
 
-func (UnimplementedBaseHandler) ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.Base.ListClient is not implemented"))
+func (UnimplementedBaseServiceHandler) ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.ListClient is not implemented"))
 }
 
-func (UnimplementedBaseHandler) CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.Base.CreateClient is not implemented"))
+func (UnimplementedBaseServiceHandler) CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.CreateClient is not implemented"))
 }
 
-func (UnimplementedBaseHandler) ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.Base.ListMessage is not implemented"))
+func (UnimplementedBaseServiceHandler) ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.ListMessage is not implemented"))
 }
 
-func (UnimplementedBaseHandler) CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.Base.CreateMessage is not implemented"))
+func (UnimplementedBaseServiceHandler) CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.CreateMessage is not implemented"))
 }
