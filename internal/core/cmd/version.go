@@ -10,10 +10,10 @@ const VERSION = "1.0.0"
 
 func VersionCmd() *cobra.Command {
 	return &cobra.Command{
-		Use:   "server",
+		Use:   "version",
 		Short: "run manage server",
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Printf("version:%s", VERSION)
+			fmt.Println(VERSION)
 		},
 	}
 }

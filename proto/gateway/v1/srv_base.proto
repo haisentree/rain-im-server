@@ -1,0 +1,13 @@
+syntax = "proto3";
+package gateway.v1;
+
+import "base/v1/uuid.proto";
+import "gateway/v1/gateway.proto";
+
+message WebsocketConnRequest {
+  base.v1.UUID clientId = 1;
+  Platform platform = 2;
+  optional string token = 3;
+}
+
+message SingleMessageRequest {}

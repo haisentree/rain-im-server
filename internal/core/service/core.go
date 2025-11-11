@@ -8,7 +8,7 @@ import (
 	"connectrpc.com/validate"
 )
 
-func Init() http.Server {
+func NewServer() http.Server {
 	base := &BaseServer{}
 	mux := http.NewServeMux()
 

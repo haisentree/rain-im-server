@@ -1,9 +1,7 @@
 package cmd
 
 import (
-	_ "rain-im-server/internal/core/global"
-	_ "rain-im-server/internal/core/model"
-	"rain-im-server/internal/core/service"
+	"rain-im-server/internal/gateway/service"
 
 	"github.com/spf13/cobra"
 )
@@ -19,8 +17,8 @@ func ServerCmd() *cobra.Command {
 }
 
 func RunServer() {
-	httpServer := service.NewServer()
-	httpServer.Addr = "0.0.0.0:5173"
+	gatewayServer := service.NewGatewayServer()
+	gatewayServer.Addr = ":5173"
 
-	httpServer.ListenAndServe()
+	gatewayServer.Run()
 }

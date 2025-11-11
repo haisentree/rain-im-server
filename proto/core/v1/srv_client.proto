@@ -1,0 +1,15 @@
+syntax = "proto3";
+package core.v1;
+
+import "base/v1/uuid.proto";
+import "core/v1/client.proto";
+import "core/v1/msg.proto";
+import "base/v1/query.proto";
+
+service ClientService {
+    // 预连接,确认client_id存在,提供可使用的msg_gateway
+    rpc PreConnect(PreConnectRequest) returns (PreConnectResponse) {}
+}
+
+message PreConnectRequest {}
+message PreConnectResponse {}

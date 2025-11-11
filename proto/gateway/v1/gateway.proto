@@ -1,0 +1,20 @@
+syntax = "proto3";
+package gateway.v1;
+
+enum Platform {
+  PLATFORM_UNSPECIFIED = 0;
+  PLATFORM_SYSTEM = 1; // 系统
+  PLATFORM_WEB = 2; // 网页
+  PLATFORM_Android = 3; // 安卓
+  PLATFORM_IPHONE = 4; // 苹果
+  PLATFORM_WINDOWS = 5; // Windows
+  PLATFORM_MACOS = 6; // Mac
+}
+
+enum Message {
+  MESSAGE_UNSPECIFIED = 0;
+  MESSAGE_SINGLE = 1; // 单发
+  MESSAGE_GROUP = 2; // 群发
+  MESSAGE_PULL = 3; // 拉取消息
+  MESSAGE_RELAY = 4; // TODO:转发消息
+}
