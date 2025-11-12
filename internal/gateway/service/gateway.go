@@ -1,10 +1,16 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
+
+	gatewayv1 "rain-im-server/protogo/gateway/v1"
+
+	"rain-im-server/internal/gateway/global"
 
 	"github.com/gorilla/websocket"
 )
@@ -52,13 +58,14 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 	// TODO:确定client_id存在
 	// TODO:确定token有效
 	// 检测plantform_id 合法
+	// var wsConnReq gatewayv1.WebsocketConnRequest
+	// 1.解析参数
 	r.ParseForm()
 	clientId, ok := r.Form["client_id"]
 	if !ok {
 		log.Println("clientID is none!")
 		return
 	}
-
 	platformId, ok := r.Form["platform_id"]
 	if !ok {
 		log.Println("platformID is none!")
@@ -69,6 +76,8 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("clientID conv to int fail!")
 		return
 	}
+
+	// 2.校验参数
 
 	//建立websocket连接
 	conn, err := g.UpGrader.Upgrade(w, r, nil)
@@ -83,7 +92,7 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	g.AddClientConn(newConn)
 	// 用户连接成功，对连接的数据进行读取
-	// go ws.readMsg(newConn)
+	go g.ReadMsg(newConn)
 
 }
 
@@ -135,6 +144,7 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 		log.Printf("recv: %s", message)
 		log.Printf("msgType: %d", msgType)
 		log.Printf("platformID: %d", conn.PlatformId)
+
 		err = conn.WriteMessage(websocket.TextMessage, []byte("send"))
 		if err != nil {
 			log.Println("readMsg send error:", err)
@@ -145,77 +155,25 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 }
 
 func (g *GatewayServer) ParseMsg(conn *WSClient, binaryMsg []byte) {
-	// m := pkgMessage.CommonMsg{}
-	// json.Unmarshal(binaryMsg, &m)
+	log.Println("ParseMsg")
+	msgReq := gatewayv1.SingleMessageRequest{}
+	err := json.Unmarshal(binaryMsg, &msgReq)
+	if err != nil {
+		fmt.Println("json err:", err.Error())
+	}
+	if err := global.Validate.Struct(&msgReq); err != nil {
+		log.Println("validate error:", err)
+		return
+	}
 
-	// if err := Validate.Struct(m); err != nil {
-	// 	log.Println("validate error:", err)
-	// 	return
-	// }
-	// switch m.MessageType {
-	// default:
-	// 	log.Println("clientType error")
-	// }
+	fmt.Println(msgReq.SourceId.String())
+
+	switch msgReq.MessageType {
+	case gatewayv1.Message_MESSAGE_SINGLE:
+		log.Println("single message")
+	case gatewayv1.Message_MESSAGE_GROUP:
+		log.Println("group message")
+	default:
+		log.Println("clientType error")
+	}
 }
-
-// func (ws *WServer) readMsg(conn *WSClient) {
-// 	for {
-// 		msgType, message, err := conn.ReadMessage()
-// 		if err != nil {
-// 			if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-// 				// 连接正常关闭或正在关闭
-// 				log.Println("连接关闭:", err)
-// 				ws.delClientConn(conn)
-// 			} else {
-// 				// 连接异常关闭
-// 				log.Println("连接异常关闭:", err)
-// 				ws.delClientConn(conn)
-// 			}
-// 			log.Println("ws conn error", err)
-// 			break
-// 		}
-// 		// 对接收的消息进行处理
-// 		log.Printf("recv: %s", message)
-// 		log.Printf("msgType: %d", msgType)
-// 		log.Printf("platformID: %d", conn.platformID)
-// 		err = conn.WriteMessage(websocket.TextMessage, []byte("send"))
-// 		if err != nil {
-// 			log.Println("readMsg send error:", err)
-// 		}
-// 		// 如果解析到platformID=0,直接发送给RecvID
-
-// 		if conn.platformID == 0 {
-// 			// 1.解析消息
-// 			log.Println("recv platformID==1 message")
-// 			var messageToMQ pkgPublic.SingleMsgToMQ
-// 			json.Unmarshal(message, &messageToMQ)
-// 			// 2.查看RecvID是否连接在当前wss
-// 			_, ok := ws.wsClientToConn[uint64(messageToMQ.RecvID)]
-// 			if ok {
-// 				log.Println("RecvID is online")
-// 				// 3.发送消息
-// 				for k, v := range ws.wsClientToConn[uint64(messageToMQ.RecvID)] {
-// 					err := ws.writeMsg(v, websocket.TextMessage, message)
-// 					log.Println("RecvID is sending platform:", v)
-// 					if err != nil {
-// 						log.Println("Sned RecvID error,platform:", k)
-// 					}
-// 				}
-
-// 			} else {
-// 				// 用户连接再其他的wss,通过redis判断用户是否在线
-// 				// 后期再改
-// 				log.Println("RecvID offonline")
-// 			}
-// 			// RecvID不在当前wss，message就丢弃
-
-// 		} else {
-// 			ws.msgParse(conn, message)
-// 		}
-
-// 		// req := &pbMsgGateway.MessageReq{
-// 		// 	Type:    "1",
-// 		// 	Message: string(message),
-// 		// }
-// 	}
-// }

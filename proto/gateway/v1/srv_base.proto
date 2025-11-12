@@ -1,13 +1,20 @@
 syntax = "proto3";
 package gateway.v1;
 
+import "tagger/tagger.proto";
 import "base/v1/uuid.proto";
 import "gateway/v1/gateway.proto";
 
 message WebsocketConnRequest {
-  base.v1.UUID clientId = 1;
-  Platform platform = 2;
-  optional string token = 3;
+    base.v1.UUID    client_id = 1;
+    Platform        platform  = 2;
+    optional string token     = 3;
 }
 
-message SingleMessageRequest {}
+message SingleMessageRequest {
+    base.v1.UUID source_id             = 1 [(tagger.tags) = "validate:\"required\""];
+    repeated base.v1.UUID target_id    = 2;
+    optional base.v1.UUID group_id     = 3;  // 群组消息特有
+    Message               message_type = 4;
+    string                content      = 5;
+}

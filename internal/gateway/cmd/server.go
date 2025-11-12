@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	_ "rain-im-server/internal/gateway/global"
 	"rain-im-server/internal/gateway/service"
 
 	"github.com/spf13/cobra"

@@ -5,13 +5,12 @@
 package corev1connect
 
 import (
+	connect "connectrpc.com/connect"
 	context "context"
 	errors "errors"
 	http "net/http"
 	v1 "rain-im-server/protogo/core/v1"
 	strings "strings"
-
-	connect "connectrpc.com/connect"
 )
 
 // This is a compile-time assertion to ensure that this generated file and the connect package are
