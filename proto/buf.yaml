@@ -7,3 +7,5 @@ deps:
 breaking:
   use:
     - FILE
+modules:
+  - path: .          # 指定 proto 根目录为当前目录

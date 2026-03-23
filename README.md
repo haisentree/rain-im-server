@@ -55,3 +55,30 @@ max_seq.source_id.target_id、max_seq.target_id。source_id,这样存储同步�
 
 - 认证、通讯安全性问题
 - 提供消息已读等需求
+
+
+
+
+
+2026.03.17
+
+msg-gateway1(ws+msgd队列+db队列)
+msg-gateway2(ws+msgd队列+db队列)              nats
+msg-gateway3(ws+监msgd队列+db队列nats)
+
+db队列（持久化）
+
+消息流:
+发送消息到网关 -> 一份消息 装入nats的msgd队列+db队列 -> 
+
+msg-gateway视角只有client与client,用uuid标识。
+
+会话消息序列获取redis+mq+db
+
+方法一：先更新缓存(不持久化),再添加更新消息到队列，db读取进行更新。
+如果redis挂了,重新命中缓存,mq中可能有堆积,先seqId+100,旧不会重复。
+如果长时间不使用,自动过期,对比上次更新时间,不跳加seqId
+db单独表,更新不加锁,使用分布式锁。
+
+
+方法二：使用redis持久化+集群

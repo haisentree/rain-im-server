@@ -442,7 +442,7 @@ var File_core_v1_srv_base_proto protoreflect.FileDescriptor
 
 const file_core_v1_srv_base_proto_rawDesc = "" +
 	"\n" +
-	"\x16core/v1/srv_base.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\x1a\x14core/v1/client.proto\x1a\x11core/v1/msg.proto\x1a\x13base/v1/query.proto\"\xac\x01\n" +
+	"\x16core/v1/srv_base.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\x1a\x14core/v1/client.proto\x1a\x15core/v1/message.proto\x1a\x13base/v1/query.proto\"\xac\x01\n" +
 	"\x11ListClientRequest\x128\n" +
 	"\n" +
 	"pagination\x18\x01 \x01(\v2\x13.base.v1.PaginationH\x00R\n" +
@@ -546,7 +546,7 @@ func file_core_v1_srv_base_proto_init() {
 		return
 	}
 	file_core_v1_client_proto_init()
-	file_core_v1_msg_proto_init()
+	file_core_v1_message_proto_init()
 	file_core_v1_srv_base_proto_msgTypes[0].OneofWrappers = []any{}
 	file_core_v1_srv_base_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}

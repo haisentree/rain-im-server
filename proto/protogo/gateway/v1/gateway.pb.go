@@ -31,6 +31,7 @@ const (
 	Platform_PLATFORM_IPHONE      Platform = 4 // 苹果
 	Platform_PLATFORM_WINDOWS     Platform = 5 // Windows
 	Platform_PLATFORM_MACOS       Platform = 6 // Mac
+	Platform_PLATFORM_LINUX       Platform = 7 // Linux
 )
 
 // Enum value maps for Platform.
@@ -43,6 +44,7 @@ var (
 		4: "PLATFORM_IPHONE",
 		5: "PLATFORM_WINDOWS",
 		6: "PLATFORM_MACOS",
+		7: "PLATFORM_LINUX",
 	}
 	Platform_value = map[string]int32{
 		"PLATFORM_UNSPECIFIED": 0,
@@ -52,6 +54,7 @@ var (
 		"PLATFORM_IPHONE":      4,
 		"PLATFORM_WINDOWS":     5,
 		"PLATFORM_MACOS":       6,
+		"PLATFORM_LINUX":       7,
 	}
 )
 
@@ -89,7 +92,8 @@ const (
 	Message_MESSAGE_SINGLE      Message = 1 // 单发
 	Message_MESSAGE_GROUP       Message = 2 // 群发
 	Message_MESSAGE_PULL        Message = 3 // 拉取消息
-	Message_MESSAGE_RELAY       Message = 4 // TODO:转发消息
+	Message_MESSAGE_CONFIRM     Message = 4 // TODO:确认消息
+	Message_MESSAGE_READED      Message = 5 // TODO:已读消息
 )
 
 // Enum value maps for Message.
@@ -99,14 +103,16 @@ var (
 		1: "MESSAGE_SINGLE",
 		2: "MESSAGE_GROUP",
 		3: "MESSAGE_PULL",
-		4: "MESSAGE_RELAY",
+		4: "MESSAGE_CONFIRM",
+		5: "MESSAGE_READED",
 	}
 	Message_value = map[string]int32{
 		"MESSAGE_UNSPECIFIED": 0,
 		"MESSAGE_SINGLE":      1,
 		"MESSAGE_GROUP":       2,
 		"MESSAGE_PULL":        3,
-		"MESSAGE_RELAY":       4,
+		"MESSAGE_CONFIRM":     4,
+		"MESSAGE_READED":      5,
 	}
 )
 
@@ -142,7 +148,7 @@ var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
 const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\n" +
 	"\x18gateway/v1/gateway.proto\x12\n" +
-	"gateway.v1*\xa0\x01\n" +
+	"gateway.v1*\xb4\x01\n" +
 	"\bPlatform\x12\x18\n" +
 	"\x14PLATFORM_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fPLATFORM_SYSTEM\x10\x01\x12\x10\n" +
@@ -150,13 +156,15 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\x10PLATFORM_ANDROID\x10\x03\x12\x13\n" +
 	"\x0fPLATFORM_IPHONE\x10\x04\x12\x14\n" +
 	"\x10PLATFORM_WINDOWS\x10\x05\x12\x12\n" +
-	"\x0ePLATFORM_MACOS\x10\x06*n\n" +
+	"\x0ePLATFORM_MACOS\x10\x06\x12\x12\n" +
+	"\x0ePLATFORM_LINUX\x10\a*\x84\x01\n" +
 	"\aMessage\x12\x17\n" +
 	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eMESSAGE_SINGLE\x10\x01\x12\x11\n" +
 	"\rMESSAGE_GROUP\x10\x02\x12\x10\n" +
-	"\fMESSAGE_PULL\x10\x03\x12\x11\n" +
-	"\rMESSAGE_RELAY\x10\x04B\x94\x01\n" +
+	"\fMESSAGE_PULL\x10\x03\x12\x13\n" +
+	"\x0fMESSAGE_CONFIRM\x10\x04\x12\x12\n" +
+	"\x0eMESSAGE_READED\x10\x05B\x94\x01\n" +
 	"\x0ecom.gateway.v1B\fGatewayProtoP\x01Z+rain-im-server/protogo/gateway/v1;gatewayv1\xa2\x02\x03GXX\xaa\x02\n" +
 	"Gateway.V1\xca\x02\n" +
 	"Gateway\\V1\xe2\x02\x16Gateway\\V1\\GPBMetadata\xea\x02\vGateway::V1b\x06proto3"

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"os"
 	"time"
 
 	"github.com/spf13/cobra"
@@ -34,7 +35,10 @@ func etcdGetCmd() *cobra.Command {
 			cli, err := clientv3.New(clientv3.Config{
 				Endpoints:   []string{address}, // etcd 节点地址
 				DialTimeout: 5 * time.Second,   // 连接超时时间
+				Username:    os.Getenv("ETCD_USERNAME"),
+				Password:    os.Getenv("ETCD_PASSWORD"),
 			})
+
 			if err != nil {
 				log.Fatal(err)
 			}
@@ -71,6 +75,8 @@ func etcdGetPrefixCmd() *cobra.Command {
 			cli, err := clientv3.New(clientv3.Config{
 				Endpoints:   []string{address}, // etcd 节点地址
 				DialTimeout: 5 * time.Second,   // 连接超时时间
+				Username:    os.Getenv("ETCD_USERNAME"),
+				Password:    os.Getenv("ETCD_PASSWORD"),
 			})
 			if err != nil {
 				log.Fatal(err)
@@ -108,6 +114,8 @@ func etcdPutCmd() *cobra.Command {
 			cli, err := clientv3.New(clientv3.Config{
 				Endpoints:   []string{address}, // etcd 节点地址
 				DialTimeout: 5 * time.Second,   // 连接超时时间
+				Username:    os.Getenv("ETCD_USERNAME"),
+				Password:    os.Getenv("ETCD_PASSWORD"),
 			})
 			if err != nil {
 				log.Fatal(err)

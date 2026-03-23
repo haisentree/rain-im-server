@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.10
 // 	protoc        (unknown)
-// source: core/v1/msg.proto
+// source: core/v1/message.proto
 
 package corev1
 
@@ -25,20 +25,20 @@ const (
 
 type Message struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	SourceId      *v1.UUID               `protobuf:"bytes,2,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty"`
-	TargetId      *v1.UUID               `protobuf:"bytes,3,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
+	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" bun:"type:uuid,pk"`
+	SourceId      *v1.UUID               `protobuf:"bytes,2,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty" bun:"type:uuid"`
+	TargetId      *v1.UUID               `protobuf:"bytes,3,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty" bun:"type:uuid"`
 	Seq           uint64                 `protobuf:"fixed64,4,opt,name=seq,proto3" json:"seq,omitempty"`
 	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	CreatedAt     *v1.Time               `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *v1.Time               `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt     *v1.Time               `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" bun:"type:timestamptz"`
+	UpdatedAt     *v1.Time               `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" bun:"type:timestamptz"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *Message) Reset() {
 	*x = Message{}
-	mi := &file_core_v1_msg_proto_msgTypes[0]
+	mi := &file_core_v1_message_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -50,7 +50,7 @@ func (x *Message) String() string {
 func (*Message) ProtoMessage() {}
 
 func (x *Message) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_msg_proto_msgTypes[0]
+	mi := &file_core_v1_message_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -63,7 +63,7 @@ func (x *Message) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Message.ProtoReflect.Descriptor instead.
 func (*Message) Descriptor() ([]byte, []int) {
-	return file_core_v1_msg_proto_rawDescGZIP(), []int{0}
+	return file_core_v1_message_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Message) GetId() *v1.UUID {
@@ -115,11 +115,11 @@ func (x *Message) GetUpdatedAt() *v1.Time {
 	return nil
 }
 
-var File_core_v1_msg_proto protoreflect.FileDescriptor
+var File_core_v1_message_proto protoreflect.FileDescriptor
 
-const file_core_v1_msg_proto_rawDesc = "" +
+const file_core_v1_message_proto_rawDesc = "" +
 	"\n" +
-	"\x11core/v1/msg.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\x87\x03\n" +
+	"\x15core/v1/message.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\x87\x03\n" +
 	"\aMessage\x126\n" +
 	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12@\n" +
 	"\tsource_id\x18\x02 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\bsourceId\x12@\n" +
@@ -129,28 +129,28 @@ const file_core_v1_msg_proto_rawDesc = "" +
 	"\n" +
 	"created_at\x18\x06 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\x12I\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAtB{\n" +
-	"\vcom.core.v1B\bMsgProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
+	"updated_at\x18\a \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAtB\x7f\n" +
+	"\vcom.core.v1B\fMessageProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
-	file_core_v1_msg_proto_rawDescOnce sync.Once
-	file_core_v1_msg_proto_rawDescData []byte
+	file_core_v1_message_proto_rawDescOnce sync.Once
+	file_core_v1_message_proto_rawDescData []byte
 )
 
-func file_core_v1_msg_proto_rawDescGZIP() []byte {
-	file_core_v1_msg_proto_rawDescOnce.Do(func() {
-		file_core_v1_msg_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_core_v1_msg_proto_rawDesc), len(file_core_v1_msg_proto_rawDesc)))
+func file_core_v1_message_proto_rawDescGZIP() []byte {
+	file_core_v1_message_proto_rawDescOnce.Do(func() {
+		file_core_v1_message_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_core_v1_message_proto_rawDesc), len(file_core_v1_message_proto_rawDesc)))
 	})
-	return file_core_v1_msg_proto_rawDescData
+	return file_core_v1_message_proto_rawDescData
 }
 
-var file_core_v1_msg_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
-var file_core_v1_msg_proto_goTypes = []any{
+var file_core_v1_message_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_core_v1_message_proto_goTypes = []any{
 	(*Message)(nil), // 0: core.v1.Message
 	(*v1.UUID)(nil), // 1: base.v1.UUID
 	(*v1.Time)(nil), // 2: base.v1.Time
 }
-var file_core_v1_msg_proto_depIdxs = []int32{
+var file_core_v1_message_proto_depIdxs = []int32{
 	1, // 0: core.v1.Message.id:type_name -> base.v1.UUID
 	1, // 1: core.v1.Message.source_id:type_name -> base.v1.UUID
 	1, // 2: core.v1.Message.target_id:type_name -> base.v1.UUID
@@ -163,26 +163,26 @@ var file_core_v1_msg_proto_depIdxs = []int32{
 	0, // [0:5] is the sub-list for field type_name
 }
 
-func init() { file_core_v1_msg_proto_init() }
-func file_core_v1_msg_proto_init() {
-	if File_core_v1_msg_proto != nil {
+func init() { file_core_v1_message_proto_init() }
+func file_core_v1_message_proto_init() {
+	if File_core_v1_message_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_msg_proto_rawDesc), len(file_core_v1_msg_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_message_proto_rawDesc), len(file_core_v1_message_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_core_v1_msg_proto_goTypes,
-		DependencyIndexes: file_core_v1_msg_proto_depIdxs,
-		MessageInfos:      file_core_v1_msg_proto_msgTypes,
+		GoTypes:           file_core_v1_message_proto_goTypes,
+		DependencyIndexes: file_core_v1_message_proto_depIdxs,
+		MessageInfos:      file_core_v1_message_proto_msgTypes,
 	}.Build()
-	File_core_v1_msg_proto = out.File
-	file_core_v1_msg_proto_goTypes = nil
-	file_core_v1_msg_proto_depIdxs = nil
+	File_core_v1_message_proto = out.File
+	file_core_v1_message_proto_goTypes = nil
+	file_core_v1_message_proto_depIdxs = nil
 }

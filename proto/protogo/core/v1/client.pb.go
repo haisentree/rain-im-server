@@ -91,6 +91,74 @@ func (x *Client) GetDeletedAt() *v1.Time {
 	return nil
 }
 
+type ClientSession struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	ClientMin     *v1.UUID               `protobuf:"bytes,2,opt,name=client_min,json=clientMin,proto3" json:"client_min,omitempty"`
+	ClientMax     *v1.UUID               `protobuf:"bytes,3,opt,name=client_max,json=clientMax,proto3" json:"client_max,omitempty"`
+	CreatedAt     *v1.Time               `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientSession) Reset() {
+	*x = ClientSession{}
+	mi := &file_core_v1_client_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientSession) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientSession) ProtoMessage() {}
+
+func (x *ClientSession) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_client_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientSession.ProtoReflect.Descriptor instead.
+func (*ClientSession) Descriptor() ([]byte, []int) {
+	return file_core_v1_client_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *ClientSession) GetId() *v1.UUID {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+func (x *ClientSession) GetClientMin() *v1.UUID {
+	if x != nil {
+		return x.ClientMin
+	}
+	return nil
+}
+
+func (x *ClientSession) GetClientMax() *v1.UUID {
+	if x != nil {
+		return x.ClientMax
+	}
+	return nil
+}
+
+func (x *ClientSession) GetCreatedAt() *v1.Time {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
 var File_core_v1_client_proto protoreflect.FileDescriptor
 
 const file_core_v1_client_proto_rawDesc = "" +
@@ -104,7 +172,15 @@ const file_core_v1_client_proto_rawDesc = "" +
 	"updated_at\x18\x03 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAt\x12c\n" +
 	"\n" +
 	"deleted_at\x18\x04 \x01(\v2\r.base.v1.TimeB0\x9a\x84\x9e\x03+bun:\"type:timestamptz,soft_delete,nullzero\"H\x00R\tdeletedAt\x88\x01\x01B\r\n" +
-	"\v_deleted_atB~\n" +
+	"\v_deleted_at\"\x9a\x02\n" +
+	"\rClientSession\x126\n" +
+	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12B\n" +
+	"\n" +
+	"client_min\x18\x02 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\tclientMin\x12B\n" +
+	"\n" +
+	"client_max\x18\x03 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\tclientMax\x12I\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAtB~\n" +
 	"\vcom.core.v1B\vClientProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -119,22 +195,27 @@ func file_core_v1_client_proto_rawDescGZIP() []byte {
 	return file_core_v1_client_proto_rawDescData
 }
 
-var file_core_v1_client_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
+var file_core_v1_client_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_core_v1_client_proto_goTypes = []any{
-	(*Client)(nil),  // 0: core.v1.Client
-	(*v1.UUID)(nil), // 1: base.v1.UUID
-	(*v1.Time)(nil), // 2: base.v1.Time
+	(*Client)(nil),        // 0: core.v1.Client
+	(*ClientSession)(nil), // 1: core.v1.ClientSession
+	(*v1.UUID)(nil),       // 2: base.v1.UUID
+	(*v1.Time)(nil),       // 3: base.v1.Time
 }
 var file_core_v1_client_proto_depIdxs = []int32{
-	1, // 0: core.v1.Client.id:type_name -> base.v1.UUID
-	2, // 1: core.v1.Client.created_at:type_name -> base.v1.Time
-	2, // 2: core.v1.Client.updated_at:type_name -> base.v1.Time
-	2, // 3: core.v1.Client.deleted_at:type_name -> base.v1.Time
-	4, // [4:4] is the sub-list for method output_type
-	4, // [4:4] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	2, // 0: core.v1.Client.id:type_name -> base.v1.UUID
+	3, // 1: core.v1.Client.created_at:type_name -> base.v1.Time
+	3, // 2: core.v1.Client.updated_at:type_name -> base.v1.Time
+	3, // 3: core.v1.Client.deleted_at:type_name -> base.v1.Time
+	2, // 4: core.v1.ClientSession.id:type_name -> base.v1.UUID
+	2, // 5: core.v1.ClientSession.client_min:type_name -> base.v1.UUID
+	2, // 6: core.v1.ClientSession.client_max:type_name -> base.v1.UUID
+	3, // 7: core.v1.ClientSession.created_at:type_name -> base.v1.Time
+	8, // [8:8] is the sub-list for method output_type
+	8, // [8:8] is the sub-list for method input_type
+	8, // [8:8] is the sub-list for extension type_name
+	8, // [8:8] is the sub-list for extension extendee
+	0, // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_client_proto_init() }
@@ -149,7 +230,7 @@ func file_core_v1_client_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_client_proto_rawDesc), len(file_core_v1_client_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   1,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

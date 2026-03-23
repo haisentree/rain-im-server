@@ -13,6 +13,9 @@ var rootCmd = &cobra.Command{
 	Long:  `etcd get --key "key1" -a 8.148.84.185:2379`,
 }
 
+// etcd getPrefix --key "/" -a 8.148.84.185:2379
+// etcd put --key "/key" -v "value2" -a 8.148.84.185:2379
+
 func init() {
 	rootCmd.AddCommand(toolerCmd.EtcdCmd())
 }
