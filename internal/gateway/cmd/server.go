@@ -18,8 +18,10 @@ func ServerCmd() *cobra.Command {
 }
 
 func RunServer() {
-	gatewayServer := service.NewGatewayServer()
-	gatewayServer.Addr = ":5173"
+	gatewayServer, err := service.NewGatewayServer(":5173")
+	if err != nil {
+		panic("RunServer err")
+	}
 
 	gatewayServer.Run()
 }

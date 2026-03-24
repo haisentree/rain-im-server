@@ -33,15 +33,14 @@ const (
 // reflection-formatted method names, remove the leading slash and convert the remaining slash to a
 // period.
 const (
-	// ClientServicePreConnectProcedure is the fully-qualified name of the ClientService's PreConnect
-	// RPC.
-	ClientServicePreConnectProcedure = "/core.v1.ClientService/PreConnect"
+	// ClientServiceSetTokenProcedure is the fully-qualified name of the ClientService's SetToken RPC.
+	ClientServiceSetTokenProcedure = "/core.v1.ClientService/SetToken"
 )
 
 // ClientServiceClient is a client for the core.v1.ClientService service.
 type ClientServiceClient interface {
-	// 预连接,确认client_id存在,提供可使用的msg_gateway
-	PreConnect(context.Context, *connect.Request[v1.PreConnectRequest]) (*connect.Response[v1.PreConnectResponse], error)
+	// 确定clientId存在,设置token到缓存再redis中
+	SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error)
 }
 
 // NewClientServiceClient constructs a client for the core.v1.ClientService service. By default, it
@@ -55,10 +54,10 @@ func NewClientServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 	baseURL = strings.TrimRight(baseURL, "/")
 	clientServiceMethods := v1.File_core_v1_srv_client_proto.Services().ByName("ClientService").Methods()
 	return &clientServiceClient{
-		preConnect: connect.NewClient[v1.PreConnectRequest, v1.PreConnectResponse](
+		setToken: connect.NewClient[v1.SetTokenRequest, v1.SetTokenResponse](
 			httpClient,
-			baseURL+ClientServicePreConnectProcedure,
-			connect.WithSchema(clientServiceMethods.ByName("PreConnect")),
+			baseURL+ClientServiceSetTokenProcedure,
+			connect.WithSchema(clientServiceMethods.ByName("SetToken")),
 			connect.WithClientOptions(opts...),
 		),
 	}
@@ -66,18 +65,18 @@ func NewClientServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 
 // clientServiceClient implements ClientServiceClient.
 type clientServiceClient struct {
-	preConnect *connect.Client[v1.PreConnectRequest, v1.PreConnectResponse]
+	setToken *connect.Client[v1.SetTokenRequest, v1.SetTokenResponse]
 }
 
-// PreConnect calls core.v1.ClientService.PreConnect.
-func (c *clientServiceClient) PreConnect(ctx context.Context, req *connect.Request[v1.PreConnectRequest]) (*connect.Response[v1.PreConnectResponse], error) {
-	return c.preConnect.CallUnary(ctx, req)
+// SetToken calls core.v1.ClientService.SetToken.
+func (c *clientServiceClient) SetToken(ctx context.Context, req *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error) {
+	return c.setToken.CallUnary(ctx, req)
 }
 
 // ClientServiceHandler is an implementation of the core.v1.ClientService service.
 type ClientServiceHandler interface {
-	// 预连接,确认client_id存在,提供可使用的msg_gateway
-	PreConnect(context.Context, *connect.Request[v1.PreConnectRequest]) (*connect.Response[v1.PreConnectResponse], error)
+	// 确定clientId存在,设置token到缓存再redis中
+	SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error)
 }
 
 // NewClientServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -87,16 +86,16 @@ type ClientServiceHandler interface {
 // and JSON codecs. They also support gzip compression.
 func NewClientServiceHandler(svc ClientServiceHandler, opts ...connect.HandlerOption) (string, http.Handler) {
 	clientServiceMethods := v1.File_core_v1_srv_client_proto.Services().ByName("ClientService").Methods()
-	clientServicePreConnectHandler := connect.NewUnaryHandler(
-		ClientServicePreConnectProcedure,
-		svc.PreConnect,
-		connect.WithSchema(clientServiceMethods.ByName("PreConnect")),
+	clientServiceSetTokenHandler := connect.NewUnaryHandler(
+		ClientServiceSetTokenProcedure,
+		svc.SetToken,
+		connect.WithSchema(clientServiceMethods.ByName("SetToken")),
 		connect.WithHandlerOptions(opts...),
 	)
 	return "/core.v1.ClientService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
-		case ClientServicePreConnectProcedure:
-			clientServicePreConnectHandler.ServeHTTP(w, r)
+		case ClientServiceSetTokenProcedure:
+			clientServiceSetTokenHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -106,6 +105,6 @@ func NewClientServiceHandler(svc ClientServiceHandler, opts ...connect.HandlerOp
 // UnimplementedClientServiceHandler returns CodeUnimplemented from all methods.
 type UnimplementedClientServiceHandler struct{}
 
-func (UnimplementedClientServiceHandler) PreConnect(context.Context, *connect.Request[v1.PreConnectRequest]) (*connect.Response[v1.PreConnectResponse], error) {
-	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.ClientService.PreConnect is not implemented"))
+func (UnimplementedClientServiceHandler) SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.ClientService.SetToken is not implemented"))
 }

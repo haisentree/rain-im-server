@@ -1,6 +1,25 @@
 package service
 
+import (
+	"github.com/go-playground/validator/v10"
+	"github.com/gorilla/schema"
+)
+
 type MessageHandle struct {
+	Decoder   *schema.Decoder
+	Validater *validator.Validate
+}
+
+func NewMessageHandle() MessageHandle {
+	//
+
+	decoder := schema.NewDecoder()
+	// decoder.IgnoreUnknownKeys(true)
+	// decoder.SetAliasTag("schema")
+	return MessageHandle{
+		Decoder:   decoder,
+		Validater: validator.New(),
+	}
 }
 
 // func (ws *WServer) parseSingleCommMsg(conn *WSClient, msg *pkgMessage.CommonMsg) {

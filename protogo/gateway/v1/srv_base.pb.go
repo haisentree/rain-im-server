@@ -23,29 +23,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type WebsocketConnRequest struct {
+type ConnectRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ClientId      *v1.UUID               `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	Platform      Platform               `protobuf:"varint,2,opt,name=platform,proto3,enum=gateway.v1.Platform" json:"platform,omitempty"`
-	Token         *string                `protobuf:"bytes,3,opt,name=token,proto3,oneof" json:"token,omitempty"`
+	ClientId      string                 `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty" validate:"required"`
+	Platform      Platform               `protobuf:"varint,2,opt,name=platform,proto3,enum=gateway.v1.Platform" json:"platform,omitempty" validate:"required"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *WebsocketConnRequest) Reset() {
-	*x = WebsocketConnRequest{}
+func (x *ConnectRequest) Reset() {
+	*x = ConnectRequest{}
 	mi := &file_gateway_v1_srv_base_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *WebsocketConnRequest) String() string {
+func (x *ConnectRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*WebsocketConnRequest) ProtoMessage() {}
+func (*ConnectRequest) ProtoMessage() {}
 
-func (x *WebsocketConnRequest) ProtoReflect() protoreflect.Message {
+func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_gateway_v1_srv_base_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -57,33 +56,78 @@ func (x *WebsocketConnRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use WebsocketConnRequest.ProtoReflect.Descriptor instead.
-func (*WebsocketConnRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
+func (*ConnectRequest) Descriptor() ([]byte, []int) {
 	return file_gateway_v1_srv_base_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *WebsocketConnRequest) GetClientId() *v1.UUID {
+func (x *ConnectRequest) GetClientId() string {
 	if x != nil {
 		return x.ClientId
 	}
-	return nil
+	return ""
 }
 
-func (x *WebsocketConnRequest) GetPlatform() Platform {
+func (x *ConnectRequest) GetPlatform() Platform {
 	if x != nil {
 		return x.Platform
 	}
 	return Platform_PLATFORM_UNSPECIFIED
 }
 
-func (x *WebsocketConnRequest) GetToken() string {
-	if x != nil && x.Token != nil {
-		return *x.Token
-	}
-	return ""
+type RawMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Type          Message                `protobuf:"varint,1,opt,name=type,proto3,enum=gateway.v1.Message" json:"type,omitempty"`
+	Data          []byte                 `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
-type SingleMessageRequest struct {
+func (x *RawMessage) Reset() {
+	*x = RawMessage{}
+	mi := &file_gateway_v1_srv_base_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RawMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RawMessage) ProtoMessage() {}
+
+func (x *RawMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_srv_base_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RawMessage.ProtoReflect.Descriptor instead.
+func (*RawMessage) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_srv_base_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *RawMessage) GetType() Message {
+	if x != nil {
+		return x.Type
+	}
+	return Message_MESSAGE_UNSPECIFIED
+}
+
+func (x *RawMessage) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type SingleMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SourceId      *v1.UUID               `protobuf:"bytes,1,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty" validate:"required"`
 	TargetId      []*v1.UUID             `protobuf:"bytes,2,rep,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
@@ -94,21 +138,21 @@ type SingleMessageRequest struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *SingleMessageRequest) Reset() {
-	*x = SingleMessageRequest{}
-	mi := &file_gateway_v1_srv_base_proto_msgTypes[1]
+func (x *SingleMessage) Reset() {
+	*x = SingleMessage{}
+	mi := &file_gateway_v1_srv_base_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *SingleMessageRequest) String() string {
+func (x *SingleMessage) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*SingleMessageRequest) ProtoMessage() {}
+func (*SingleMessage) ProtoMessage() {}
 
-func (x *SingleMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gateway_v1_srv_base_proto_msgTypes[1]
+func (x *SingleMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_srv_base_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -119,40 +163,40 @@ func (x *SingleMessageRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use SingleMessageRequest.ProtoReflect.Descriptor instead.
-func (*SingleMessageRequest) Descriptor() ([]byte, []int) {
-	return file_gateway_v1_srv_base_proto_rawDescGZIP(), []int{1}
+// Deprecated: Use SingleMessage.ProtoReflect.Descriptor instead.
+func (*SingleMessage) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_srv_base_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *SingleMessageRequest) GetSourceId() *v1.UUID {
+func (x *SingleMessage) GetSourceId() *v1.UUID {
 	if x != nil {
 		return x.SourceId
 	}
 	return nil
 }
 
-func (x *SingleMessageRequest) GetTargetId() []*v1.UUID {
+func (x *SingleMessage) GetTargetId() []*v1.UUID {
 	if x != nil {
 		return x.TargetId
 	}
 	return nil
 }
 
-func (x *SingleMessageRequest) GetGroupId() *v1.UUID {
+func (x *SingleMessage) GetGroupId() *v1.UUID {
 	if x != nil {
 		return x.GroupId
 	}
 	return nil
 }
 
-func (x *SingleMessageRequest) GetMessageType() Message {
+func (x *SingleMessage) GetMessageType() Message {
 	if x != nil {
 		return x.MessageType
 	}
 	return Message_MESSAGE_UNSPECIFIED
 }
 
-func (x *SingleMessageRequest) GetContent() string {
+func (x *SingleMessage) GetContent() string {
 	if x != nil {
 		return x.Content
 	}
@@ -164,13 +208,15 @@ var File_gateway_v1_srv_base_proto protoreflect.FileDescriptor
 const file_gateway_v1_srv_base_proto_rawDesc = "" +
 	"\n" +
 	"\x19gateway/v1/srv_base.proto\x12\n" +
-	"gateway.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/uuid.proto\x1a\x18gateway/v1/gateway.proto\"\x99\x01\n" +
-	"\x14WebsocketConnRequest\x12*\n" +
-	"\tclient_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bclientId\x120\n" +
-	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformR\bplatform\x12\x19\n" +
-	"\x05token\x18\x03 \x01(\tH\x00R\x05token\x88\x01\x01B\b\n" +
-	"\x06_token\"\x96\x02\n" +
-	"\x14SingleMessageRequest\x12D\n" +
+	"gateway.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/uuid.proto\x1a\x18gateway/v1/gateway.proto\"\x93\x01\n" +
+	"\x0eConnectRequest\x125\n" +
+	"\tclient_id\x18\x01 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bclientId\x12J\n" +
+	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bplatform\"I\n" +
+	"\n" +
+	"RawMessage\x12'\n" +
+	"\x04type\x18\x01 \x01(\x0e2\x13.gateway.v1.MessageR\x04type\x12\x12\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\x8f\x02\n" +
+	"\rSingleMessage\x12D\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bsourceId\x12*\n" +
 	"\ttarget_id\x18\x02 \x03(\v2\r.base.v1.UUIDR\btargetId\x12-\n" +
 	"\bgroup_id\x18\x03 \x01(\v2\r.base.v1.UUIDH\x00R\agroupId\x88\x01\x01\x126\n" +
@@ -193,21 +239,22 @@ func file_gateway_v1_srv_base_proto_rawDescGZIP() []byte {
 	return file_gateway_v1_srv_base_proto_rawDescData
 }
 
-var file_gateway_v1_srv_base_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_gateway_v1_srv_base_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_gateway_v1_srv_base_proto_goTypes = []any{
-	(*WebsocketConnRequest)(nil), // 0: gateway.v1.WebsocketConnRequest
-	(*SingleMessageRequest)(nil), // 1: gateway.v1.SingleMessageRequest
-	(*v1.UUID)(nil),              // 2: base.v1.UUID
-	(Platform)(0),                // 3: gateway.v1.Platform
-	(Message)(0),                 // 4: gateway.v1.Message
+	(*ConnectRequest)(nil), // 0: gateway.v1.ConnectRequest
+	(*RawMessage)(nil),     // 1: gateway.v1.RawMessage
+	(*SingleMessage)(nil),  // 2: gateway.v1.SingleMessage
+	(Platform)(0),          // 3: gateway.v1.Platform
+	(Message)(0),           // 4: gateway.v1.Message
+	(*v1.UUID)(nil),        // 5: base.v1.UUID
 }
 var file_gateway_v1_srv_base_proto_depIdxs = []int32{
-	2, // 0: gateway.v1.WebsocketConnRequest.client_id:type_name -> base.v1.UUID
-	3, // 1: gateway.v1.WebsocketConnRequest.platform:type_name -> gateway.v1.Platform
-	2, // 2: gateway.v1.SingleMessageRequest.source_id:type_name -> base.v1.UUID
-	2, // 3: gateway.v1.SingleMessageRequest.target_id:type_name -> base.v1.UUID
-	2, // 4: gateway.v1.SingleMessageRequest.group_id:type_name -> base.v1.UUID
-	4, // 5: gateway.v1.SingleMessageRequest.message_type:type_name -> gateway.v1.Message
+	3, // 0: gateway.v1.ConnectRequest.platform:type_name -> gateway.v1.Platform
+	4, // 1: gateway.v1.RawMessage.type:type_name -> gateway.v1.Message
+	5, // 2: gateway.v1.SingleMessage.source_id:type_name -> base.v1.UUID
+	5, // 3: gateway.v1.SingleMessage.target_id:type_name -> base.v1.UUID
+	5, // 4: gateway.v1.SingleMessage.group_id:type_name -> base.v1.UUID
+	4, // 5: gateway.v1.SingleMessage.message_type:type_name -> gateway.v1.Message
 	6, // [6:6] is the sub-list for method output_type
 	6, // [6:6] is the sub-list for method input_type
 	6, // [6:6] is the sub-list for extension type_name
@@ -221,15 +268,14 @@ func file_gateway_v1_srv_base_proto_init() {
 		return
 	}
 	file_gateway_v1_gateway_proto_init()
-	file_gateway_v1_srv_base_proto_msgTypes[0].OneofWrappers = []any{}
-	file_gateway_v1_srv_base_proto_msgTypes[1].OneofWrappers = []any{}
+	file_gateway_v1_srv_base_proto_msgTypes[2].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_srv_base_proto_rawDesc), len(file_gateway_v1_srv_base_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

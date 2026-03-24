@@ -1,10 +1,15 @@
 syntax = "proto3";
 package core.v1;
 
+import "base/v1/uuid.proto";
+
 service ClientService {
-    // 预连接,确认client_id存在,提供可使用的msg_gateway
-    rpc PreConnect(PreConnectRequest) returns (PreConnectResponse) {}
+    // 确定clientId存在,设置token到缓存再redis中
+    rpc SetToken(SetTokenRequest) returns (SetTokenResponse) {}
 }
 
-message PreConnectRequest {}
-message PreConnectResponse {}
+message SetTokenRequest {
+    base.v1.UUID client_id = 1;
+    string       token     = 2;  // clientId、plantform
+}
+message SetTokenResponse {}

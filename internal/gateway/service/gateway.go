@@ -5,36 +5,42 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
 
 	"rain-im-server/internal/gateway/global"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/websocket"
 )
 
 type GatewayServer struct {
-	Addr       string
-	MaxConnNum int
+	Addr string
+
 	UpGrader   *websocket.Upgrader
-	ClientConn map[string]map[uint8]*WSClient
+	ClientConn map[string]*WSClient // 再存储到redis中,key=clientId+"-"+platformId
 	MsgH       MessageHandle
 }
 
 type WSClient struct {
 	*websocket.Conn
-	PlatformId uint8
+	PlatformId gatewayv1.Platform
 	ClientId   string
 }
 
-func NewGatewayServer() *GatewayServer {
-	gatewayServer := &GatewayServer{
-		Addr:       ":5173",
-		MaxConnNum: 200,
-		ClientConn: make(map[string]map[uint8]*WSClient),
+func NewGatewayServer(addr string) (*GatewayServer, error) {
+
+	if addr == "" {
+		return nil, fmt.Errorf("addr is not empty!")
 	}
+
+	gatewayServer := &GatewayServer{
+		Addr:       addr,
+		ClientConn: make(map[string]*WSClient),
+	}
+
+	gatewayServer.MsgH = NewMessageHandle()
 
 	gatewayServer.UpGrader = &websocket.Upgrader{
 		HandshakeTimeout: 5 * time.Second,
@@ -43,7 +49,7 @@ func NewGatewayServer() *GatewayServer {
 		CheckOrigin:      func(r *http.Request) bool { return true },
 	}
 
-	return gatewayServer
+	return gatewayServer, nil
 }
 
 func (g *GatewayServer) Run() {
@@ -55,29 +61,31 @@ func (g *GatewayServer) Run() {
 }
 
 func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
-	// TODO:确定client_id存在
-	// TODO:确定token有效
-	// 检测plantform_id 合法
-	// var wsConnReq gatewayv1.WebsocketConnRequest
-	// 1.解析参数
-	r.ParseForm()
-	clientId, ok := r.Form["client_id"]
-	if !ok {
-		log.Println("clientID is none!")
+
+	if err := r.ParseForm(); err != nil {
+		http.Error(w, "解析表单失败: "+err.Error(), http.StatusBadRequest)
 		return
 	}
-	platformId, ok := r.Form["platform_id"]
-	if !ok {
-		log.Println("platformID is none!")
-		return
-	}
-	platform_id_uint64, err := strconv.ParseUint(platformId[0], 10, 64)
-	if err != nil {
-		log.Println("clientID conv to int fail!")
+	token := r.Form.Get("token")
+
+	var wsConnReq gatewayv1.ConnectRequest
+	if err := json.Unmarshal([]byte(token), &wsConnReq); err != nil {
+		errMsg := fmt.Sprintf("解析 token 失败: %v token内容: %s", err, token)
+		http.Error(w, errMsg, http.StatusBadRequest)
 		return
 	}
 
-	// 2.校验参数
+	if err := g.MsgH.Validater.Struct(&wsConnReq); err != nil {
+		errMsg := ""
+		for _, e := range err.(validator.ValidationErrors) {
+			errMsg += fmt.Sprintf("字段%s验证失败: %s\n", e.Field(), e.Tag())
+		}
+		http.Error(w, errMsg, http.StatusBadRequest)
+		return
+	}
+
+	// TODO:验证token有效
+	// TODO:增加时间片校验,防止重放攻击
 
 	//建立websocket连接
 	conn, err := g.UpGrader.Upgrade(w, r, nil)
@@ -85,25 +93,26 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 		return
 	}
+
 	newConn := &WSClient{
 		Conn:       conn,
-		PlatformId: uint8(platform_id_uint64),
-		ClientId:   clientId[0],
+		PlatformId: wsConnReq.Platform,
+		ClientId:   wsConnReq.ClientId,
 	}
 	g.AddClientConn(newConn)
-	// 用户连接成功，对连接的数据进行读取
-	go g.ReadMsg(newConn)
 
+	go g.ReadMsg(newConn)
 }
 
 func (g *GatewayServer) AddClientConn(conn *WSClient) {
 	// 设置写入超时时间
 	conn.SetWriteDeadline(time.Now().Add(time.Duration(60) * time.Second))
 
-	connMap := make(map[uint8]*WSClient)
-	connMap[conn.PlatformId] = conn
-	g.ClientConn[conn.ClientId] = connMap
+	platformString := conn.PlatformId.String()
+	key := conn.ClientId + platformString
+	g.ClientConn[key] = conn
 	log.Println("add client conn")
+	// 存储到redis中
 	// RedisDB.SetClientStatus(conn.clientID, true)
 }
 
@@ -112,11 +121,11 @@ func (g *GatewayServer) DelClientConn(conn *WSClient) {
 	if err != nil {
 		log.Println("del conn err:", err)
 	}
-	delete(g.ClientConn[conn.ClientId], conn.PlatformId)
+	// delete(g.ClientConn[conn.ClientId], conn.PlatformId)
 
-	if len(g.ClientConn[conn.ClientId]) == 0 {
-		delete(g.ClientConn, conn.ClientId)
-	}
+	// if len(g.ClientConn[conn.ClientId]) == 0 {
+	// 	delete(g.ClientConn, conn.ClientId)
+	// }
 	// RedisDB.SetClientStatus(conn.clientID, false)
 }
 
@@ -156,7 +165,7 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 
 func (g *GatewayServer) ParseMsg(conn *WSClient, binaryMsg []byte) {
 	log.Println("ParseMsg")
-	msgReq := gatewayv1.SingleMessageRequest{}
+	msgReq := gatewayv1.SingleMessage{}
 	err := json.Unmarshal(binaryMsg, &msgReq)
 	if err != nil {
 		fmt.Println("json err:", err.Error())

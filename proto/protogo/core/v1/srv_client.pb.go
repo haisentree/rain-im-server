@@ -9,6 +9,7 @@ package corev1
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	v1 "rain-im-server/protogo/base/v1"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -21,26 +22,28 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type PreConnectRequest struct {
+type SetTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      *v1.UUID               `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"` // clientId、plantform
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PreConnectRequest) Reset() {
-	*x = PreConnectRequest{}
+func (x *SetTokenRequest) Reset() {
+	*x = SetTokenRequest{}
 	mi := &file_core_v1_srv_client_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PreConnectRequest) String() string {
+func (x *SetTokenRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PreConnectRequest) ProtoMessage() {}
+func (*SetTokenRequest) ProtoMessage() {}
 
-func (x *PreConnectRequest) ProtoReflect() protoreflect.Message {
+func (x *SetTokenRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_core_v1_srv_client_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -52,31 +55,45 @@ func (x *PreConnectRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PreConnectRequest.ProtoReflect.Descriptor instead.
-func (*PreConnectRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use SetTokenRequest.ProtoReflect.Descriptor instead.
+func (*SetTokenRequest) Descriptor() ([]byte, []int) {
 	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{0}
 }
 
-type PreConnectResponse struct {
+func (x *SetTokenRequest) GetClientId() *v1.UUID {
+	if x != nil {
+		return x.ClientId
+	}
+	return nil
+}
+
+func (x *SetTokenRequest) GetToken() string {
+	if x != nil {
+		return x.Token
+	}
+	return ""
+}
+
+type SetTokenResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *PreConnectResponse) Reset() {
-	*x = PreConnectResponse{}
+func (x *SetTokenResponse) Reset() {
+	*x = SetTokenResponse{}
 	mi := &file_core_v1_srv_client_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *PreConnectResponse) String() string {
+func (x *SetTokenResponse) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*PreConnectResponse) ProtoMessage() {}
+func (*SetTokenResponse) ProtoMessage() {}
 
-func (x *PreConnectResponse) ProtoReflect() protoreflect.Message {
+func (x *SetTokenResponse) ProtoReflect() protoreflect.Message {
 	mi := &file_core_v1_srv_client_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -88,8 +105,8 @@ func (x *PreConnectResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use PreConnectResponse.ProtoReflect.Descriptor instead.
-func (*PreConnectResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use SetTokenResponse.ProtoReflect.Descriptor instead.
+func (*SetTokenResponse) Descriptor() ([]byte, []int) {
 	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{1}
 }
 
@@ -97,12 +114,13 @@ var File_core_v1_srv_client_proto protoreflect.FileDescriptor
 
 const file_core_v1_srv_client_proto_rawDesc = "" +
 	"\n" +
-	"\x18core/v1/srv_client.proto\x12\acore.v1\"\x13\n" +
-	"\x11PreConnectRequest\"\x14\n" +
-	"\x12PreConnectResponse2X\n" +
-	"\rClientService\x12G\n" +
-	"\n" +
-	"PreConnect\x12\x1a.core.v1.PreConnectRequest\x1a\x1b.core.v1.PreConnectResponse\"\x00B\x81\x01\n" +
+	"\x18core/v1/srv_client.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\"S\n" +
+	"\x0fSetTokenRequest\x12*\n" +
+	"\tclient_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bclientId\x12\x14\n" +
+	"\x05token\x18\x02 \x01(\tR\x05token\"\x12\n" +
+	"\x10SetTokenResponse2R\n" +
+	"\rClientService\x12A\n" +
+	"\bSetToken\x12\x18.core.v1.SetTokenRequest\x1a\x19.core.v1.SetTokenResponse\"\x00B\x81\x01\n" +
 	"\vcom.core.v1B\x0eSrvClientProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -119,17 +137,19 @@ func file_core_v1_srv_client_proto_rawDescGZIP() []byte {
 
 var file_core_v1_srv_client_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_core_v1_srv_client_proto_goTypes = []any{
-	(*PreConnectRequest)(nil),  // 0: core.v1.PreConnectRequest
-	(*PreConnectResponse)(nil), // 1: core.v1.PreConnectResponse
+	(*SetTokenRequest)(nil),  // 0: core.v1.SetTokenRequest
+	(*SetTokenResponse)(nil), // 1: core.v1.SetTokenResponse
+	(*v1.UUID)(nil),          // 2: base.v1.UUID
 }
 var file_core_v1_srv_client_proto_depIdxs = []int32{
-	0, // 0: core.v1.ClientService.PreConnect:input_type -> core.v1.PreConnectRequest
-	1, // 1: core.v1.ClientService.PreConnect:output_type -> core.v1.PreConnectResponse
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	2, // 0: core.v1.SetTokenRequest.client_id:type_name -> base.v1.UUID
+	0, // 1: core.v1.ClientService.SetToken:input_type -> core.v1.SetTokenRequest
+	1, // 2: core.v1.ClientService.SetToken:output_type -> core.v1.SetTokenResponse
+	2, // [2:3] is the sub-list for method output_type
+	1, // [1:2] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_srv_client_proto_init() }

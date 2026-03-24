@@ -89,30 +89,36 @@ type Message int32
 
 const (
 	Message_MESSAGE_UNSPECIFIED Message = 0
-	Message_MESSAGE_SINGLE      Message = 1 // 单发
-	Message_MESSAGE_GROUP       Message = 2 // 群发
-	Message_MESSAGE_PULL        Message = 3 // 拉取消息
-	Message_MESSAGE_CONFIRM     Message = 4 // TODO:确认消息
-	Message_MESSAGE_READED      Message = 5 // TODO:已读消息
+	Message_MESSAGE_CONNECT     Message = 1 // 连接消息
+	Message_MESSAGE_SINGLE      Message = 2 // 单发
+	Message_MESSAGE_GROUP       Message = 3 // 群发
+	Message_MESSAGE_PUSH        Message = 4 // 推送消息
+	Message_MESSAGE_PULL        Message = 5 // 拉取消息
+	Message_MESSAGE_CONFIRM     Message = 6 // TODO:确认消息
+	Message_MESSAGE_READED      Message = 7 // TODO:已读消息
 )
 
 // Enum value maps for Message.
 var (
 	Message_name = map[int32]string{
 		0: "MESSAGE_UNSPECIFIED",
-		1: "MESSAGE_SINGLE",
-		2: "MESSAGE_GROUP",
-		3: "MESSAGE_PULL",
-		4: "MESSAGE_CONFIRM",
-		5: "MESSAGE_READED",
+		1: "MESSAGE_CONNECT",
+		2: "MESSAGE_SINGLE",
+		3: "MESSAGE_GROUP",
+		4: "MESSAGE_PUSH",
+		5: "MESSAGE_PULL",
+		6: "MESSAGE_CONFIRM",
+		7: "MESSAGE_READED",
 	}
 	Message_value = map[string]int32{
 		"MESSAGE_UNSPECIFIED": 0,
-		"MESSAGE_SINGLE":      1,
-		"MESSAGE_GROUP":       2,
-		"MESSAGE_PULL":        3,
-		"MESSAGE_CONFIRM":     4,
-		"MESSAGE_READED":      5,
+		"MESSAGE_CONNECT":     1,
+		"MESSAGE_SINGLE":      2,
+		"MESSAGE_GROUP":       3,
+		"MESSAGE_PUSH":        4,
+		"MESSAGE_PULL":        5,
+		"MESSAGE_CONFIRM":     6,
+		"MESSAGE_READED":      7,
 	}
 )
 
@@ -157,14 +163,16 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\x0fPLATFORM_IPHONE\x10\x04\x12\x14\n" +
 	"\x10PLATFORM_WINDOWS\x10\x05\x12\x12\n" +
 	"\x0ePLATFORM_MACOS\x10\x06\x12\x12\n" +
-	"\x0ePLATFORM_LINUX\x10\a*\x84\x01\n" +
+	"\x0ePLATFORM_LINUX\x10\a*\xab\x01\n" +
 	"\aMessage\x12\x17\n" +
-	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
-	"\x0eMESSAGE_SINGLE\x10\x01\x12\x11\n" +
-	"\rMESSAGE_GROUP\x10\x02\x12\x10\n" +
-	"\fMESSAGE_PULL\x10\x03\x12\x13\n" +
-	"\x0fMESSAGE_CONFIRM\x10\x04\x12\x12\n" +
-	"\x0eMESSAGE_READED\x10\x05B\x94\x01\n" +
+	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x13\n" +
+	"\x0fMESSAGE_CONNECT\x10\x01\x12\x12\n" +
+	"\x0eMESSAGE_SINGLE\x10\x02\x12\x11\n" +
+	"\rMESSAGE_GROUP\x10\x03\x12\x10\n" +
+	"\fMESSAGE_PUSH\x10\x04\x12\x10\n" +
+	"\fMESSAGE_PULL\x10\x05\x12\x13\n" +
+	"\x0fMESSAGE_CONFIRM\x10\x06\x12\x12\n" +
+	"\x0eMESSAGE_READED\x10\aB\x94\x01\n" +
 	"\x0ecom.gateway.v1B\fGatewayProtoP\x01Z+rain-im-server/protogo/gateway/v1;gatewayv1\xa2\x02\x03GXX\xaa\x02\n" +
 	"Gateway.V1\xca\x02\n" +
 	"Gateway\\V1\xe2\x02\x16Gateway\\V1\\GPBMetadata\xea\x02\vGateway::V1b\x06proto3"
