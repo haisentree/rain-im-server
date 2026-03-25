@@ -1,7 +1,6 @@
 package service
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,24 +8,17 @@ import (
 
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
 
-	"rain-im-server/internal/gateway/global"
-
 	"github.com/go-playground/validator/v10"
 	"github.com/gorilla/websocket"
+	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type GatewayServer struct {
-	Addr string
+	Addr     string
+	UpGrader *websocket.Upgrader
 
-	UpGrader   *websocket.Upgrader
-	ClientConn map[string]*WSClient // 再存储到redis中,key=clientId+"-"+platformId
-	MsgH       MessageHandle
-}
-
-type WSClient struct {
-	*websocket.Conn
-	PlatformId gatewayv1.Platform
-	ClientId   string
+	ConnManager *ConnectionManager
+	MsgH        *MessageHandle
 }
 
 func NewGatewayServer(addr string) (*GatewayServer, error) {
@@ -36,11 +28,10 @@ func NewGatewayServer(addr string) (*GatewayServer, error) {
 	}
 
 	gatewayServer := &GatewayServer{
-		Addr:       addr,
-		ClientConn: make(map[string]*WSClient),
+		Addr:        addr,
+		ConnManager: NewConnectionManager(),
+		MsgH:        NewMessageHandle(),
 	}
-
-	gatewayServer.MsgH = NewMessageHandle()
 
 	gatewayServer.UpGrader = &websocket.Upgrader{
 		HandshakeTimeout: 5 * time.Second,
@@ -69,7 +60,7 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 	token := r.Form.Get("token")
 
 	var wsConnReq gatewayv1.ConnectRequest
-	if err := json.Unmarshal([]byte(token), &wsConnReq); err != nil {
+	if err := protojson.Unmarshal([]byte(token), &wsConnReq); err != nil {
 		errMsg := fmt.Sprintf("解析 token 失败: %v token内容: %s", err, token)
 		http.Error(w, errMsg, http.StatusBadRequest)
 		return
@@ -108,9 +99,8 @@ func (g *GatewayServer) AddClientConn(conn *WSClient) {
 	// 设置写入超时时间
 	conn.SetWriteDeadline(time.Now().Add(time.Duration(60) * time.Second))
 
-	platformString := conn.PlatformId.String()
-	key := conn.ClientId + platformString
-	g.ClientConn[key] = conn
+	g.ConnManager.Add(conn)
+
 	log.Println("add client conn")
 	// 存储到redis中
 	// RedisDB.SetClientStatus(conn.clientID, true)
@@ -121,16 +111,15 @@ func (g *GatewayServer) DelClientConn(conn *WSClient) {
 	if err != nil {
 		log.Println("del conn err:", err)
 	}
+	g.ConnManager.Remove(conn)
+
+	// TODO:删除缓存
 	// delete(g.ClientConn[conn.ClientId], conn.PlatformId)
 
 	// if len(g.ClientConn[conn.ClientId]) == 0 {
 	// 	delete(g.ClientConn, conn.ClientId)
 	// }
 	// RedisDB.SetClientStatus(conn.clientID, false)
-}
-
-func (g *GatewayServer) WriteMsg(conn *WSClient, msgType int, message []byte) error {
-	return conn.WriteMessage(msgType, message)
 }
 
 func (g *GatewayServer) ReadMsg(conn *WSClient) {
@@ -163,26 +152,54 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 	}
 }
 
-func (g *GatewayServer) ParseMsg(conn *WSClient, binaryMsg []byte) {
+func (g *GatewayServer) ParseMsg(conn *WSClient, b []byte) {
 	log.Println("ParseMsg")
-	msgReq := gatewayv1.SingleMessage{}
-	err := json.Unmarshal(binaryMsg, &msgReq)
+
+	msgReq := gatewayv1.RawMessage{}
+	err := protojson.Unmarshal(b, &msgReq)
 	if err != nil {
 		fmt.Println("json err:", err.Error())
-	}
-	if err := global.Validate.Struct(&msgReq); err != nil {
-		log.Println("validate error:", err)
 		return
 	}
+	// if err := global.Validate.Struct(&msgReq); err != nil {
+	// 	log.Println("validate error:", err)
+	// 	return
+	// }
 
-	fmt.Println(msgReq.SourceId.String())
-
-	switch msgReq.MessageType {
+	switch msgReq.Type {
 	case gatewayv1.Message_MESSAGE_SINGLE:
 		log.Println("single message")
+		var singleMsg gatewayv1.SingleMessage
+		err = protojson.Unmarshal(msgReq.Data, &singleMsg)
+		if err != nil {
+			fmt.Println("解析 SingleMessage 失败:", err)
+			return
+		}
+
+		fmt.Println(singleMsg.SourceId)
+		fmt.Println(singleMsg.TargetId)
+		fmt.Println(singleMsg.Content)
+
 	case gatewayv1.Message_MESSAGE_GROUP:
 		log.Println("group message")
 	default:
 		log.Println("clientType error")
 	}
+}
+
+type WSClient struct {
+	*websocket.Conn
+	PlatformId gatewayv1.Platform
+	ClientId   string
+	CountKey   string
+}
+
+func (wc *WSClient) WriteToSelf(msg *gatewayv1.RawMessage) error {
+
+	data, err := protojson.Marshal(msg)
+	if err != nil {
+		return err
+	}
+
+	return wc.WriteMessage(websocket.TextMessage, data)
 }

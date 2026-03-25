@@ -89,7 +89,7 @@ type Message int32
 
 const (
 	Message_MESSAGE_UNSPECIFIED Message = 0
-	Message_MESSAGE_CONNECT     Message = 1 // 连接消息
+	Message_MESSAGE_CONNECT     Message = 1 // 连接消息 TODO:没用到
 	Message_MESSAGE_SINGLE      Message = 2 // 单发
 	Message_MESSAGE_GROUP       Message = 3 // 群发
 	Message_MESSAGE_PUSH        Message = 4 // 推送消息

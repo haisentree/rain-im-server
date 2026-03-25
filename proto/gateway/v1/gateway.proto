@@ -14,13 +14,14 @@ enum Platform {
 
 enum Message {
     MESSAGE_UNSPECIFIED = 0;
-    MESSAGE_CONNECT     = 1;  // 连接消息
-    MESSAGE_SINGLE      = 2;  // 单发
-    MESSAGE_GROUP       = 3;  // 群发
-    MESSAGE_PUSH        = 4;  // 推送消息
-    MESSAGE_PULL        = 5;  // 拉取消息
-    MESSAGE_CONFIRM     = 6;  // TODO:确认消息
-    MESSAGE_READED      = 7;  // TODO:已读消息
+    MESSAGE_SINGLE      = 1;  // 单发
+    MESSAGE_GROUP       = 2;  // 群发
+    MESSAGE_PUSH        = 3;  // 推送消息
+    MESSAGE_PULL        = 4;  // 拉取消息
+    MESSAGE_CONFIRM     = 5;  // 确认消息
+    MESSAGE_READED      = 6;  // 已读消息
+    MESSAGE_RECALL = 7;      // 撤回消息
+    MESSAGE_MODIFY = 8; // 修改消息
 }
 
 // 推送消息:单发和群发消息没有seq_id,推送消息有,不用持久化直接传递。由单发和群发消息转换而来

@@ -1,0 +1,147 @@
+syntax = "proto3";
+package gateway.v1;
+
+import "tagger/tagger.proto";
+import "base/v1/uuid.proto";
+import "gateway/v1/gateway.proto";
+
+message ConnectRequest {
+    string   client_id = 1 [(tagger.tags) = "validate:\"required\""];
+    Platform platform  = 2 [(tagger.tags) = "validate:\"required\""];
+}
+// 这里不用去数据库查询client_id,所有传递字符串
+// 对token进行规范设计后,client_id、platform直接包含在token中
+
+message RawMessage {
+    Message type = 1;
+    bytes   data = 2;
+}
+
+message SingleMessage {
+    base.v1.UUID source_id             = 1 ;
+    base.v1.UUID target_id    = 2;
+    string                content      = 3 [(tagger.tags) = "validate:\"required\""];
+}
+
+message GroupMessage {
+    base.v1.UUID source_id             = 1 ;
+    optional base.v1.UUID group_id    = 2;
+    string                content      = 3 [(tagger.tags) = "validate:\"required\""];
+}
+
+message PushMessage {
+
+}
+
+message PullMessage {
+
+}
+
+message ConfirmMessage {    // 网关确认消息不会丢失
+
+}
+
+message ReadedMessage {     // 接收方收到消息
+
+}
+
+
+// syntax = "proto3";
+
+// package im.v1; // 统一包名，规范命名空间
+
+// // 基础UUID定义（依赖的基础类型，补充完整）
+// package base.v1;
+// message UUID {
+//   string value = 1; // UUID字符串，如：550e8400-e29b-41d4-a716-446655440000
+// }
+
+// // 核心：顶层消息封装（所有消息都通过该结构传输）
+// message RawMessage {
+//   // 消息类型枚举（必须定义枚举，替代原始Message类型，更规范、易扩展）
+//   enum Type {
+//     TYPE_UNSPECIFIED = 0; // 默认值，必须保留
+//     TYPE_SINGLE = 1;      // 单聊消息
+//     TYPE_GROUP = 2;       // 群聊消息
+//     TYPE_PUSH = 3;        // 系统推送消息
+//     TYPE_PULL = 4;        // 拉取消息请求
+//     TYPE_CONFIRM = 5;     // 消息送达确认（网关/服务端确认）
+//     TYPE_READED = 6;      // 消息已读确认（用户端确认）
+//     TYPE_RECALL = 7;      // 消息撤回
+//   }
+
+//   Type type = 1;                // 消息类型（必填）
+//   string message_id = 2;        // 全局唯一消息ID（UUID，核心字段，必加）
+//   int64 timestamp = 3;          // 消息时间戳（毫秒级，服务端生成，必加）
+//   bytes data = 4;               // 实际消息体（对应具体消息序列化后的bytes）
+//   string extra = 5;             // 扩展字段（JSON格式，兼容自定义业务数据）
+// }
+
+// // 1. 单聊消息
+// message SingleMessage {
+//   base.v1.UUID source_id = 1;   // 发送方ID（必填）
+//   base.v1.UUID target_id = 2;   // 接收方ID（必填）
+//   string content = 3 [(tagger.tags) = "validate:\"required\""]; // 消息内容
+//   // 扩展字段
+//   string content_type = 4;      // 内容类型：text(文本)/image(图片)/file(文件)/voice(语音)
+//   map<string, string> meta = 5; // 元数据：文件大小、图片尺寸、语音时长等
+// }
+
+// // 2. 群聊消息
+// message GroupMessage {
+//   base.v1.UUID source_id = 1;   // 发送方ID（必填）
+//   base.v1.UUID group_id = 2;    // 群ID（移除optional，群聊必须指定群ID）
+//   string content = 3 [(tagger.tags) = "validate:\"required\""]; // 消息内容
+//   // 扩展字段
+//   string content_type = 4;      // 内容类型：text/image/file/voice
+//   map<string, string> meta = 5; // 元数据
+//   repeated base.v1.UUID mention_user_ids = 6; // @用户列表
+// }
+
+// // 3. 系统推送消息（服务端→客户端主动推送）
+// message PushMessage {
+//   enum PushType {
+//     PUSH_UNSPECIFIED = 0;
+//     PUSH_SYSTEM = 1;       // 系统公告
+//     PUSH_FRIEND = 2;       // 好友申请/通知
+//     PUSH_GROUP = 3;        // 群通知（入群/退群/解散）
+//   }
+
+//   PushType push_type = 1;  // 推送类型
+//   string title = 2;        // 推送标题
+//   string content = 3;      // 推送内容
+//   base.v1.UUID business_id = 4; // 业务ID（好友ID/群ID）
+// }
+
+// // 4. 拉取消息请求（客户端→服务端拉取历史消息）
+// message PullMessage {
+//   base.v1.UUID user_id = 1;        // 当前用户ID（必填）
+//   base.v1.UUID target_id = 2;      // 聊天对象ID（单聊用户ID/群ID）
+//   bool is_group = 3;               // 是否拉取群聊消息
+//   string last_message_id = 4;      // 上一条消息ID（分页拉取用）
+//   int32 limit = 5;                 // 拉取数量（默认20）
+// }
+
+// // 5. 消息送达确认（服务端→客户端：消息已可靠接收）
+// message ConfirmMessage {
+//   string message_id = 1;    // 确认的消息ID（必填）
+//   base.v1.UUID target_id = 2; // 接收方ID
+//   int64 confirm_time = 3;   // 确认时间戳
+// }
+
+// // 6. 消息已读确认（客户端→服务端/服务端→发送方：对方已读）
+// message ReadedMessage {
+//   string message_id = 1;          // 已读的消息ID
+//   base.v1.UUID source_id = 2;     // 原始消息发送方
+//   base.v1.UUID reader_id = 3;     // 已读用户ID
+//   int64 readed_time = 4;          // 已读时间戳
+// }
+
+// // 7. 消息撤回（新增：IM核心功能，原始定义缺失）
+// message RecallMessage {
+//   string message_id = 1;          // 要撤回的消息ID
+//   base.v1.UUID source_id = 2;    // 撤回者ID（必须是原发送方）
+//   base.v1.UUID target_id = 3;    // 接收方/群ID
+//   bool is_group = 4;             // 是否群消息撤回
+//   int64 recall_time = 5;         // 撤回时间
+// }
