@@ -17,7 +17,8 @@ var rootCmd = &cobra.Command{
 // etcd getPrefix --key "/" -a 8.148.84.185:2379
 // etcd put --key "/key" -v "value2" -a 8.148.84.185:2379
 
-// ws send -a 'ws://8.148.84.185:5173/gateway?token={"client_id":"111","platform":2}'
+// ws send -a 'ws://8.148.84.185:5173/gateway?token={"client_id":"1f128448-98b4-6910-b841-95f04e9d7b28","platform":2}'
+// ws send -a 'ws://8.148.84.185:5173/gateway?token={"client_id":"1f128448-98b4-6911-9afb-5eb5553fa2b6","platform":2}'
 
 func init() {
 	rootCmd.AddCommand(toolerCmd.EtcdCmd())

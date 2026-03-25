@@ -1,10 +1,8 @@
 {
   "type": "MESSAGE_SINGLE",
   "data": {
-    "source_id": "019216bb-1354-711a-9943-85e4278d1234",
-    "target_id": "019216bb-1354-711a-9943-85e4278d5678",
+    "source_id": "1f128448-98b4-6910-b841-95f04e9d7b28",
+    "target_id": "1f128448-98b4-6911-9afb-5eb5553fa2b6",
     "content": "这是测试消息"
   }
 }
-
-{"type":"MESSAGE_TYPE_SINGLE_MESSAGE","data":{"source_id":"019216bb-1354-711a-9943-85e4278d1234","target_id":"019216bb-1354-711a-9943-85e4278d5678","content":"这是测试消息"}}

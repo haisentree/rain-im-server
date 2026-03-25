@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log"
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
 
 	"github.com/gorilla/websocket"
@@ -9,34 +10,21 @@ import (
 
 // ResponseWriter 封装消息发送逻辑
 type ResponseWriter struct {
-	currentConn *WSClient          // 当前连接，用于给自己发消息
 	connManager *ConnectionManager // 连接管理器，用于给其他连接发消息
 }
 
 // NewResponseWriter 创建 ResponseWriter 实例
-func NewResponseWriter(current *WSClient, cm *ConnectionManager) *ResponseWriter {
+func NewResponseWriter(cm *ConnectionManager) *ResponseWriter {
 	return &ResponseWriter{
-		currentConn: current,
 		connManager: cm,
 	}
-}
-
-// WriteToSelf 发送消息给当前连接
-func (rw *ResponseWriter) WriteToSelf(msg *gatewayv1.RawMessage) error {
-	if rw.currentConn == nil {
-		return nil
-	}
-	data, err := protojson.Marshal(msg)
-	if err != nil {
-		return err
-	}
-	return rw.currentConn.WriteMessage(websocket.TextMessage, data)
 }
 
 // WriteToAllUserDevices 发送消息给指定用户的所有连接（多端同步）
 func (rw *ResponseWriter) WriteToAllUserDevices(clientId string, msg *gatewayv1.RawMessage) error {
 	conns := rw.connManager.GetClientConns(clientId)
 	if len(conns) == 0 {
+		log.Println("client is not conn :", clientId)
 		return nil
 	}
 	data, err := protojson.Marshal(msg)
@@ -53,7 +41,7 @@ func (rw *ResponseWriter) WriteToAllUserDevices(clientId string, msg *gatewayv1.
 	return lastErr
 }
 
-// WriteRaw 发送原始字节消息（需自行序列化）
-func (rw *ResponseWriter) WriteRaw(conn *WSClient, msgType int, data []byte) error {
-	return conn.WriteMessage(msgType, data)
-}
+// // WriteRaw 发送原始字节消息（需自行序列化）
+// func (rw *ResponseWriter) WriteRaw(conn *WSClient, msgType int, data []byte) error {
+// 	return conn.WriteMessage(msgType, data)
+// }

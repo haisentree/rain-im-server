@@ -18,6 +18,7 @@ type GatewayServer struct {
 	UpGrader *websocket.Upgrader
 
 	ConnManager *ConnectionManager
+	RespWriter  *ResponseWriter
 	MsgH        *MessageHandle
 }
 
@@ -32,6 +33,8 @@ func NewGatewayServer(addr string) (*GatewayServer, error) {
 		ConnManager: NewConnectionManager(),
 		MsgH:        NewMessageHandle(),
 	}
+
+	gatewayServer.RespWriter = NewResponseWriter(gatewayServer.ConnManager)
 
 	gatewayServer.UpGrader = &websocket.Upgrader{
 		HandshakeTimeout: 5 * time.Second,
@@ -169,16 +172,8 @@ func (g *GatewayServer) ParseMsg(conn *WSClient, b []byte) {
 	switch msgReq.Type {
 	case gatewayv1.Message_MESSAGE_SINGLE:
 		log.Println("single message")
-		var singleMsg gatewayv1.SingleMessage
-		err = protojson.Unmarshal(msgReq.Data, &singleMsg)
-		if err != nil {
-			fmt.Println("解析 SingleMessage 失败:", err)
-			return
-		}
 
-		fmt.Println(singleMsg.SourceId)
-		fmt.Println(singleMsg.TargetId)
-		fmt.Println(singleMsg.Content)
+		g.MsgH.SingleMessageHandle(msgReq.Data, conn, g.RespWriter)
 
 	case gatewayv1.Message_MESSAGE_GROUP:
 		log.Println("group message")
