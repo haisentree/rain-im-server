@@ -25,16 +25,27 @@ message SingleMessage {
 
 message GroupMessage {
     base.v1.UUID source_id             = 1 ;
-    optional base.v1.UUID group_id    = 2;
-    string                content      = 3 [(tagger.tags) = "validate:\"required\""];
+    base.v1.UUID group_id    = 2;
+    repeated base.v1.UUID  target_id = 3;
+    string                content      = 4 [(tagger.tags) = "validate:\"required\""];
+}
+
+message RelayMessage {
+    base.v1.UUID source_id             = 1 ;
+    base.v1.UUID  target_id = 2;
+    fixed64 seq_id = 3;
+    string                content      = 4 [(tagger.tags) = "validate:\"required\""];
 }
 
 message PushMessage {
-
+    
 }
 
 message PullMessage {
-
+  base.v1.UUID client_id = 1;        // 当前用户ID（必填）
+  base.v1.UUID target_id = 2;      // 聊天对象ID（单聊用户ID/群ID）
+  string last_seq_id = 3;      // 上一条消息ID（分页拉取用）
+  int32 limit = 4;                 // 拉取数量（默认20）
 }
 
 message ConfirmMessage {    // 网关确认消息不会丢失
