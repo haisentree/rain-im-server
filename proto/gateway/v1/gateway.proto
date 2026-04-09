@@ -15,14 +15,18 @@ enum Platform {
 enum Message {
     MESSAGE_UNSPECIFIED = 0;
     MESSAGE_SINGLE      = 1;  // 单发
-    MESSAGE_GROUP       = 2;  // 群发
-    MESSAGE_RELAY       = 3;    // 转发 
+    MESSAGE_GROUP       = 2;  // 群发,支持使用缓存,第一次发送所有,如果没变化就不需要再全部发送,从缓存中读取
+    MESSAGE_RELAY       = 3;    // 转发 [拓展使用]
+    // MESSAGE_SYSTEM_RELAY     系统转发消息
+    // MESSAGE_SYSTEM_SAVE      需要持久化的消息,core的msg模块订阅处理     
+    // MESSAGE_CLIENT_RELAY      用户单挑或者合并转发功能的消息
     MESSAGE_PUSH        = 4;  // 推送消息  系统推送不是转发推送(暂未使用)
     MESSAGE_PULL        = 5;  // 拉取消息
     MESSAGE_CONFIRM     = 6;  // 确认消息
     MESSAGE_READED      = 7;  // 已读消息
     MESSAGE_RECALL = 8;      // 撤回消息
     MESSAGE_MODIFY = 9; // 修改消息
+    // 合并转发消息
 }
 
 // 推送消息:单发和群发消息没有seq_id,推送消息有,不用持久化直接传递。由单发和群发消息转换而来

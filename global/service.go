@@ -22,19 +22,28 @@ import (
 // 放在各自的global中,代码冗余;放在公共global中,不会用到所有的。
 // 怎么设计一下,而且目前不好close()
 var (
-	Etcd  *clientv3.Client
-	DB    *bun.DB
-	Redis *redisv8.Client
-	Nats  *nats.Conn
+	Etcd   *clientv3.Client
+	DB     *bun.DB
+	Redis  *redisv8.Client
+	Nats   *nats.Conn
+	NatsJS nats.JetStreamContext
 )
 
 func init() {
+	var err error
+
 	ctx := context.Background()
 	Etcd = NewEtcd()
 
 	DB = NewPG(ctx)
 	Redis = NewRedisDB(ctx)
 	Nats = NewNats()
+	NatsJS, err = Nats.JetStream()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	_ = initJetStream(NatsJS)
 }
 
 func CloseService() {
@@ -107,16 +116,29 @@ func NewRedisDB(ctx context.Context) *redisv8.Client {
 	})
 }
 
-type NatsConfig struct {
-	Url string `json:"url"`
-}
-
 // /rian-im-server/prod/nats/config
 func NewNats() *nats.Conn {
-	nc, err := nats.Connect("nats://root:haisen123@aliyun.haisentree.top:4222")
+	ctx := context.Background()
+	var natsCfg NatsConfig
+	resp, err := Etcd.Get(ctx, EtcdNatsConfig)
+	if err != nil {
+		fmt.Println("NewNats err:", err.Error())
+	}
+
+	if len(resp.Kvs) == 1 {
+		if err := json.Unmarshal(resp.Kvs[0].Value, &natsCfg); err != nil {
+			fmt.Println("err:", err.Error())
+			panic("NewNats err")
+		}
+	} else {
+		fmt.Println("NewNats err: nats config not found")
+		panic("NewNats err: nats config not found")
+	}
+
+	nc, err := nats.Connect(natsCfg.Url)
 	if err != nil {
 		log.Fatal(err)
 	}
-	// defer nc.Close()
+
 	return nc
 }

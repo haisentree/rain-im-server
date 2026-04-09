@@ -206,13 +206,31 @@ func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
 
 func (g *GatewayServer) AddClientConn(conn *WSClient) {
 	// 设置写入超时时间
-	conn.SetWriteDeadline(time.Now().Add(time.Duration(60) * time.Second))
+	conn.SetWriteDeadline(time.Now().Add(time.Duration(120) * time.Second))
 
 	g.ConnManager.Add(conn)
 
+	// 处理ping命令
+	conn.SetPingHandler(func(appData string) error {
+		// 1. 必须回复 Pong（可以调用默认 handler，或手动写 Pong）
+		// 方式一：调用默认 handler（它会自动发 Pong）
+
+		defaultHandler := conn.PingHandler()
+		defaultHandler(appData)
+
+		// 方式二：手动写 Pong（更直观）
+		// newConn.WriteControl(websocket.PongMessage, []byte(appData), time.Now().Add(5*time.Second))
+
+		// 2. 刷新读超时（避免连接被误判超时关闭）
+		conn.SetReadDeadline(time.Now().Add(90 * time.Second))
+
+		// 3. 续期 Redis TTL（异步，不阻塞）
+		go g.ConnManager.Renew(context.Background(), conn)
+
+		return nil
+	})
+
 	log.Println("add client conn")
-	// 存储到redis中
-	// RedisDB.SetClientStatus(conn.clientID, true)
 }
 
 func (g *GatewayServer) DelClientConn(conn *WSClient) {
@@ -288,10 +306,39 @@ func (g *GatewayServer) ParseMsg(conn *WSClient, b []byte) {
 	}
 }
 
-func (g *GatewayServer) SubMsg() {
-	// 订阅主题
-	_, err := global.Nats.Subscribe("foo", func(msg *nats.Msg) {
+func (g *GatewayServer) SubNatsMsg() {
+	// 订阅主题,将消息发送到对应连接,找不到就直接丢弃
+
+	gatewayMessaageRelayTheme := fmt.Sprintf(global.GatewayRelayMessageTheme, global.GatewayServerKey)
+
+	_, err := global.Nats.Subscribe(gatewayMessaageRelayTheme, func(msg *nats.Msg) {
 		log.Printf("收到消息: %s", string(msg.Data))
+
+		msgReq := gatewayv1.RawMessage{}
+		err := protojson.Unmarshal(msg.Data, &msgReq)
+		if err != nil {
+			fmt.Println("json err:", err.Error())
+			return
+		}
+		if msgReq.Type != gatewayv1.Message_MESSAGE_RELAY {
+			log.Println("消息类型错误,丢弃消息")
+			return
+		}
+
+		var relayMsg gatewayv1.RelayMessage
+		err = protojson.Unmarshal(msgReq.Data, &relayMsg)
+		if err != nil {
+			log.Printf("解析消息失败: %v", err)
+			return
+		}
+
+		targetId := relayMsg.TargetId.ToUUID().String()
+		// 发送到对应的客户端连接
+		conns := g.RespWriter.connManager.GetClientConns(targetId)
+		if len(conns) == 0 {
+			log.Println("client is not conn :", targetId)
+		}
+		g.RespWriter.writeToLocalClient(conns, &msgReq)
 	})
 	if err != nil {
 		log.Fatal(err)

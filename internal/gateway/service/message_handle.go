@@ -40,9 +40,12 @@ func (m *MessageHandle) SingleMessageHandle(data []byte, conn *WSClient, rw *Res
 		Data: data,
 	}
 
-	conn.WriteToSelf(rawMsg)
+	// conn.WriteToSelf(rawMsg)
 
-	rw.WriteToAllUserDevices(singleMsg.TargetId.ToUUID().String(), rawMsg)
+	// 1.写入到持久化存储队列
+	// 2.尝试发送到本地连接,不存在则发送对应在线网关订阅的主题
+
+	rw.WriteToClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
 	// 从server中获取conn
 	// 写入内容
 }

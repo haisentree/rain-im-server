@@ -13,6 +13,7 @@ var (
 	GatewayServerKey           = "uuid"
 	EtcdRedisConfig            = "/rian-im-server/%s/redis/config"
 	EtcdServiceRegisterGateway = "/rian-im-server/%s/service/register/gateway/%s"
+	EtcdNatsConfig             = "/rian-im-server/%s/nats/config"
 )
 
 func init() {
@@ -32,4 +33,5 @@ func init() {
 func SprintfEtcdWorkMode(mode string) {
 	EtcdRedisConfig = fmt.Sprintf(EtcdRedisConfig, mode)
 	EtcdServiceRegisterGateway = fmt.Sprintf(EtcdServiceRegisterGateway, mode, GatewayServerKey)
+	EtcdNatsConfig = fmt.Sprintf(EtcdNatsConfig, mode)
 }

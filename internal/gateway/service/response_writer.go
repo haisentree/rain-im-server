@@ -20,13 +20,22 @@ func NewResponseWriter(cm *ConnectionManager) *ResponseWriter {
 	}
 }
 
-// WriteToAllUserDevices 发送消息给指定用户的所有连接（多端同步）
-func (rw *ResponseWriter) WriteToAllUserDevices(clientId string, msg *gatewayv1.RawMessage) error {
+func (rw *ResponseWriter) WriteToClient(clientId string, msg *gatewayv1.RawMessage) error {
 	conns := rw.connManager.GetClientConns(clientId)
 	if len(conns) == 0 {
 		log.Println("client is not conn :", clientId)
+		// 没有连接，可能用户不在线或者没有连接到当前网关
+		// 发送给对应的消息队列，由其他网关处理
+		rw.writeToRemoteClinet(clientId, msg)
 		return nil
 	}
+	rw.writeToLocalClient(conns, msg)
+	return nil
+}
+
+// WriteToAllUserDevices 发送消息给指定用户的所有连接（多端同步）
+func (rw *ResponseWriter) writeToLocalClient(conns []*WSClient, msg *gatewayv1.RawMessage) error {
+	// 客户端连接存在当前网关
 	data, err := protojson.Marshal(msg)
 	if err != nil {
 		return err
@@ -35,10 +44,15 @@ func (rw *ResponseWriter) WriteToAllUserDevices(clientId string, msg *gatewayv1.
 	for _, conn := range conns {
 		if err := conn.WriteMessage(websocket.TextMessage, data); err != nil {
 			lastErr = err
-			// 继续尝试发送给其他设备
+			log.Println("err:", err)
+			continue
 		}
 	}
 	return lastErr
+}
+
+func (rw *ResponseWriter) writeToRemoteClinet(clientId string, msg *gatewayv1.RawMessage) {
+
 }
 
 // // WriteRaw 发送原始字节消息（需自行序列化）

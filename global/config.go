@@ -10,3 +10,7 @@ type RedisConfig struct {
 	Password string `json:"password"`
 	DB       int    `json:"db"`
 }
+
+type NatsConfig struct {
+	Url string `json:"url"`
+}

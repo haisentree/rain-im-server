@@ -89,36 +89,45 @@ type Message int32
 
 const (
 	Message_MESSAGE_UNSPECIFIED Message = 0
-	Message_MESSAGE_CONNECT     Message = 1 // 连接消息 TODO:没用到
-	Message_MESSAGE_SINGLE      Message = 2 // 单发
-	Message_MESSAGE_GROUP       Message = 3 // 群发
-	Message_MESSAGE_PUSH        Message = 4 // 推送消息
-	Message_MESSAGE_PULL        Message = 5 // 拉取消息
-	Message_MESSAGE_CONFIRM     Message = 6 // TODO:确认消息
-	Message_MESSAGE_READED      Message = 7 // TODO:已读消息
+	Message_MESSAGE_SINGLE      Message = 1 // 单发
+	Message_MESSAGE_GROUP       Message = 2 // 群发,支持使用缓存,第一次发送所有,如果没变化就不需要再全部发送,从缓存中读取
+	Message_MESSAGE_RELAY       Message = 3 // 转发 [拓展使用]
+	// MESSAGE_SYSTEM_RELAY     系统转发消息
+	// MESSAGE_SYSTEM_SAVE      需要持久化的消息,core的msg模块订阅处理
+	// MESSAGE_CLIENT_RELAY      用户单挑或者合并转发功能的消息
+	Message_MESSAGE_PUSH    Message = 4 // 推送消息  系统推送不是转发推送(暂未使用)
+	Message_MESSAGE_PULL    Message = 5 // 拉取消息
+	Message_MESSAGE_CONFIRM Message = 6 // 确认消息
+	Message_MESSAGE_READED  Message = 7 // 已读消息
+	Message_MESSAGE_RECALL  Message = 8 // 撤回消息
+	Message_MESSAGE_MODIFY  Message = 9 // 修改消息
 )
 
 // Enum value maps for Message.
 var (
 	Message_name = map[int32]string{
 		0: "MESSAGE_UNSPECIFIED",
-		1: "MESSAGE_CONNECT",
-		2: "MESSAGE_SINGLE",
-		3: "MESSAGE_GROUP",
+		1: "MESSAGE_SINGLE",
+		2: "MESSAGE_GROUP",
+		3: "MESSAGE_RELAY",
 		4: "MESSAGE_PUSH",
 		5: "MESSAGE_PULL",
 		6: "MESSAGE_CONFIRM",
 		7: "MESSAGE_READED",
+		8: "MESSAGE_RECALL",
+		9: "MESSAGE_MODIFY",
 	}
 	Message_value = map[string]int32{
 		"MESSAGE_UNSPECIFIED": 0,
-		"MESSAGE_CONNECT":     1,
-		"MESSAGE_SINGLE":      2,
-		"MESSAGE_GROUP":       3,
+		"MESSAGE_SINGLE":      1,
+		"MESSAGE_GROUP":       2,
+		"MESSAGE_RELAY":       3,
 		"MESSAGE_PUSH":        4,
 		"MESSAGE_PULL":        5,
 		"MESSAGE_CONFIRM":     6,
 		"MESSAGE_READED":      7,
+		"MESSAGE_RECALL":      8,
+		"MESSAGE_MODIFY":      9,
 	}
 )
 
@@ -163,16 +172,18 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\x0fPLATFORM_IPHONE\x10\x04\x12\x14\n" +
 	"\x10PLATFORM_WINDOWS\x10\x05\x12\x12\n" +
 	"\x0ePLATFORM_MACOS\x10\x06\x12\x12\n" +
-	"\x0ePLATFORM_LINUX\x10\a*\xab\x01\n" +
+	"\x0ePLATFORM_LINUX\x10\a*\xd1\x01\n" +
 	"\aMessage\x12\x17\n" +
-	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x13\n" +
-	"\x0fMESSAGE_CONNECT\x10\x01\x12\x12\n" +
-	"\x0eMESSAGE_SINGLE\x10\x02\x12\x11\n" +
-	"\rMESSAGE_GROUP\x10\x03\x12\x10\n" +
+	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eMESSAGE_SINGLE\x10\x01\x12\x11\n" +
+	"\rMESSAGE_GROUP\x10\x02\x12\x11\n" +
+	"\rMESSAGE_RELAY\x10\x03\x12\x10\n" +
 	"\fMESSAGE_PUSH\x10\x04\x12\x10\n" +
 	"\fMESSAGE_PULL\x10\x05\x12\x13\n" +
 	"\x0fMESSAGE_CONFIRM\x10\x06\x12\x12\n" +
-	"\x0eMESSAGE_READED\x10\aB\x94\x01\n" +
+	"\x0eMESSAGE_READED\x10\a\x12\x12\n" +
+	"\x0eMESSAGE_RECALL\x10\b\x12\x12\n" +
+	"\x0eMESSAGE_MODIFY\x10\tB\x94\x01\n" +
 	"\x0ecom.gateway.v1B\fGatewayProtoP\x01Z+rain-im-server/protogo/gateway/v1;gatewayv1\xa2\x02\x03GXX\xaa\x02\n" +
 	"Gateway.V1\xca\x02\n" +
 	"Gateway\\V1\xe2\x02\x16Gateway\\V1\\GPBMetadata\xea\x02\vGateway::V1b\x06proto3"
