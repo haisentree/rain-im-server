@@ -275,11 +275,13 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 			log.Println("readMsg send error:", err)
 		}
 
-		g.ParseMsg(conn, message)
+		// g.ParseMsg(conn, message)
+		g.ParseMsg(message)
+
 	}
 }
 
-func (g *GatewayServer) ParseMsg(conn *WSClient, b []byte) {
+func (g *GatewayServer) ParseMsg(b []byte) {
 	log.Println("ParseMsg")
 
 	msgReq := gatewayv1.RawMessage{}
@@ -297,7 +299,7 @@ func (g *GatewayServer) ParseMsg(conn *WSClient, b []byte) {
 	case gatewayv1.Message_MESSAGE_SINGLE:
 		log.Println("single message")
 
-		g.MsgH.SingleMessageHandle(msgReq.Data, conn, g.RespWriter)
+		g.MsgH.SingleMessageHandle(msgReq.Data, g.RespWriter)
 
 	case gatewayv1.Message_MESSAGE_GROUP:
 		log.Println("group message")
@@ -314,31 +316,7 @@ func (g *GatewayServer) SubNatsMsg() {
 	_, err := global.Nats.Subscribe(gatewayMessaageRelayTheme, func(msg *nats.Msg) {
 		log.Printf("收到消息: %s", string(msg.Data))
 
-		msgReq := gatewayv1.RawMessage{}
-		err := protojson.Unmarshal(msg.Data, &msgReq)
-		if err != nil {
-			fmt.Println("json err:", err.Error())
-			return
-		}
-		if msgReq.Type != gatewayv1.Message_MESSAGE_RELAY {
-			log.Println("消息类型错误,丢弃消息")
-			return
-		}
-
-		var relayMsg gatewayv1.RelayMessage
-		err = protojson.Unmarshal(msgReq.Data, &relayMsg)
-		if err != nil {
-			log.Printf("解析消息失败: %v", err)
-			return
-		}
-
-		targetId := relayMsg.TargetId.ToUUID().String()
-		// 发送到对应的客户端连接
-		conns := g.RespWriter.connManager.GetClientConns(targetId)
-		if len(conns) == 0 {
-			log.Println("client is not conn :", targetId)
-		}
-		g.RespWriter.writeToLocalClient(conns, &msgReq)
+		g.ParseMsg(msg.Data)
 	})
 	if err != nil {
 		log.Fatal(err)

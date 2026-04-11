@@ -88,46 +88,49 @@ func (Platform) EnumDescriptor() ([]byte, []int) {
 type Message int32
 
 const (
-	Message_MESSAGE_UNSPECIFIED Message = 0
-	Message_MESSAGE_SINGLE      Message = 1 // 单发
-	Message_MESSAGE_GROUP       Message = 2 // 群发,支持使用缓存,第一次发送所有,如果没变化就不需要再全部发送,从缓存中读取
-	Message_MESSAGE_RELAY       Message = 3 // 转发 [拓展使用]
+	Message_MESSAGE_UNSPECIFIED   Message = 0
+	Message_MESSAGE_SINGLE        Message = 1 // 单发
+	Message_MESSAGE_GROUP         Message = 2 // 群发,支持使用缓存,第一次发送所有,如果没变化就不需要再全部发送,从缓存中读取
+	Message_MESSAGE_RELAY         Message = 3 // 转发 [拓展使用]
+	Message_MESSAGE_RELAY_GATEWAY Message = 4
 	// MESSAGE_SYSTEM_RELAY     系统转发消息
 	// MESSAGE_SYSTEM_SAVE      需要持久化的消息,core的msg模块订阅处理
 	// MESSAGE_CLIENT_RELAY      用户单挑或者合并转发功能的消息
-	Message_MESSAGE_PUSH    Message = 4 // 推送消息  系统推送不是转发推送(暂未使用)
-	Message_MESSAGE_PULL    Message = 5 // 拉取消息
-	Message_MESSAGE_CONFIRM Message = 6 // 确认消息
-	Message_MESSAGE_READED  Message = 7 // 已读消息
-	Message_MESSAGE_RECALL  Message = 8 // 撤回消息
-	Message_MESSAGE_MODIFY  Message = 9 // 修改消息
+	Message_MESSAGE_PUSH    Message = 5  // 推送消息  系统推送不是转发推送(暂未使用)
+	Message_MESSAGE_PULL    Message = 6  // 拉取消息
+	Message_MESSAGE_CONFIRM Message = 7  // 确认消息
+	Message_MESSAGE_READED  Message = 8  // 已读消息
+	Message_MESSAGE_RECALL  Message = 9  // 撤回消息
+	Message_MESSAGE_MODIFY  Message = 10 // 修改消息
 )
 
 // Enum value maps for Message.
 var (
 	Message_name = map[int32]string{
-		0: "MESSAGE_UNSPECIFIED",
-		1: "MESSAGE_SINGLE",
-		2: "MESSAGE_GROUP",
-		3: "MESSAGE_RELAY",
-		4: "MESSAGE_PUSH",
-		5: "MESSAGE_PULL",
-		6: "MESSAGE_CONFIRM",
-		7: "MESSAGE_READED",
-		8: "MESSAGE_RECALL",
-		9: "MESSAGE_MODIFY",
+		0:  "MESSAGE_UNSPECIFIED",
+		1:  "MESSAGE_SINGLE",
+		2:  "MESSAGE_GROUP",
+		3:  "MESSAGE_RELAY",
+		4:  "MESSAGE_RELAY_GATEWAY",
+		5:  "MESSAGE_PUSH",
+		6:  "MESSAGE_PULL",
+		7:  "MESSAGE_CONFIRM",
+		8:  "MESSAGE_READED",
+		9:  "MESSAGE_RECALL",
+		10: "MESSAGE_MODIFY",
 	}
 	Message_value = map[string]int32{
-		"MESSAGE_UNSPECIFIED": 0,
-		"MESSAGE_SINGLE":      1,
-		"MESSAGE_GROUP":       2,
-		"MESSAGE_RELAY":       3,
-		"MESSAGE_PUSH":        4,
-		"MESSAGE_PULL":        5,
-		"MESSAGE_CONFIRM":     6,
-		"MESSAGE_READED":      7,
-		"MESSAGE_RECALL":      8,
-		"MESSAGE_MODIFY":      9,
+		"MESSAGE_UNSPECIFIED":   0,
+		"MESSAGE_SINGLE":        1,
+		"MESSAGE_GROUP":         2,
+		"MESSAGE_RELAY":         3,
+		"MESSAGE_RELAY_GATEWAY": 4,
+		"MESSAGE_PUSH":          5,
+		"MESSAGE_PULL":          6,
+		"MESSAGE_CONFIRM":       7,
+		"MESSAGE_READED":        8,
+		"MESSAGE_RECALL":        9,
+		"MESSAGE_MODIFY":        10,
 	}
 )
 
@@ -158,6 +161,64 @@ func (Message) EnumDescriptor() ([]byte, []int) {
 	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{1}
 }
 
+type Method int32
+
+const (
+	Method_METHOD_UNSPECIFIED Method = 0
+	Method_METHOD_UNUSED      Method = 1 // 未使用,默认值
+	Method_METHOD_ALL         Method = 2 // 全连接发送, 本地连接和其他连接都发送
+	Method_METHOD_LOCAL       Method = 3 // 本地发送, 只发送到本地连接
+	Method_METHOD_DELAY       Method = 4 // TODO:延时发送
+	Method_METHOD_ONCE        Method = 5 // TODO:仅发送一次（不重试）
+)
+
+// Enum value maps for Method.
+var (
+	Method_name = map[int32]string{
+		0: "METHOD_UNSPECIFIED",
+		1: "METHOD_UNUSED",
+		2: "METHOD_ALL",
+		3: "METHOD_LOCAL",
+		4: "METHOD_DELAY",
+		5: "METHOD_ONCE",
+	}
+	Method_value = map[string]int32{
+		"METHOD_UNSPECIFIED": 0,
+		"METHOD_UNUSED":      1,
+		"METHOD_ALL":         2,
+		"METHOD_LOCAL":       3,
+		"METHOD_DELAY":       4,
+		"METHOD_ONCE":        5,
+	}
+)
+
+func (x Method) Enum() *Method {
+	p := new(Method)
+	*p = x
+	return p
+}
+
+func (x Method) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (Method) Descriptor() protoreflect.EnumDescriptor {
+	return file_gateway_v1_gateway_proto_enumTypes[2].Descriptor()
+}
+
+func (Method) Type() protoreflect.EnumType {
+	return &file_gateway_v1_gateway_proto_enumTypes[2]
+}
+
+func (x Method) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use Method.Descriptor instead.
+func (Method) EnumDescriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{2}
+}
+
 var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
 
 const file_gateway_v1_gateway_proto_rawDesc = "" +
@@ -172,18 +233,28 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\x0fPLATFORM_IPHONE\x10\x04\x12\x14\n" +
 	"\x10PLATFORM_WINDOWS\x10\x05\x12\x12\n" +
 	"\x0ePLATFORM_MACOS\x10\x06\x12\x12\n" +
-	"\x0ePLATFORM_LINUX\x10\a*\xd1\x01\n" +
+	"\x0ePLATFORM_LINUX\x10\a*\xec\x01\n" +
 	"\aMessage\x12\x17\n" +
 	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eMESSAGE_SINGLE\x10\x01\x12\x11\n" +
 	"\rMESSAGE_GROUP\x10\x02\x12\x11\n" +
-	"\rMESSAGE_RELAY\x10\x03\x12\x10\n" +
-	"\fMESSAGE_PUSH\x10\x04\x12\x10\n" +
-	"\fMESSAGE_PULL\x10\x05\x12\x13\n" +
-	"\x0fMESSAGE_CONFIRM\x10\x06\x12\x12\n" +
-	"\x0eMESSAGE_READED\x10\a\x12\x12\n" +
-	"\x0eMESSAGE_RECALL\x10\b\x12\x12\n" +
-	"\x0eMESSAGE_MODIFY\x10\tB\x94\x01\n" +
+	"\rMESSAGE_RELAY\x10\x03\x12\x19\n" +
+	"\x15MESSAGE_RELAY_GATEWAY\x10\x04\x12\x10\n" +
+	"\fMESSAGE_PUSH\x10\x05\x12\x10\n" +
+	"\fMESSAGE_PULL\x10\x06\x12\x13\n" +
+	"\x0fMESSAGE_CONFIRM\x10\a\x12\x12\n" +
+	"\x0eMESSAGE_READED\x10\b\x12\x12\n" +
+	"\x0eMESSAGE_RECALL\x10\t\x12\x12\n" +
+	"\x0eMESSAGE_MODIFY\x10\n" +
+	"*x\n" +
+	"\x06Method\x12\x16\n" +
+	"\x12METHOD_UNSPECIFIED\x10\x00\x12\x11\n" +
+	"\rMETHOD_UNUSED\x10\x01\x12\x0e\n" +
+	"\n" +
+	"METHOD_ALL\x10\x02\x12\x10\n" +
+	"\fMETHOD_LOCAL\x10\x03\x12\x10\n" +
+	"\fMETHOD_DELAY\x10\x04\x12\x0f\n" +
+	"\vMETHOD_ONCE\x10\x05B\x94\x01\n" +
 	"\x0ecom.gateway.v1B\fGatewayProtoP\x01Z+rain-im-server/protogo/gateway/v1;gatewayv1\xa2\x02\x03GXX\xaa\x02\n" +
 	"Gateway.V1\xca\x02\n" +
 	"Gateway\\V1\xe2\x02\x16Gateway\\V1\\GPBMetadata\xea\x02\vGateway::V1b\x06proto3"
@@ -200,10 +271,11 @@ func file_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 	return file_gateway_v1_gateway_proto_rawDescData
 }
 
-var file_gateway_v1_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 2)
+var file_gateway_v1_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
 var file_gateway_v1_gateway_proto_goTypes = []any{
 	(Platform)(0), // 0: gateway.v1.Platform
 	(Message)(0),  // 1: gateway.v1.Message
+	(Method)(0),   // 2: gateway.v1.Method
 }
 var file_gateway_v1_gateway_proto_depIdxs = []int32{
 	0, // [0:0] is the sub-list for method output_type
@@ -223,7 +295,7 @@ func file_gateway_v1_gateway_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_gateway_proto_rawDesc), len(file_gateway_v1_gateway_proto_rawDesc)),
-			NumEnums:      2,
+			NumEnums:      3,
 			NumMessages:   0,
 			NumExtensions: 0,
 			NumServices:   0,

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"log"
 	"rain-im-server/global"
 	"rain-im-server/pkg/utils"
@@ -151,7 +152,8 @@ func (cm *ConnectionManager) Renew(ctx context.Context, conn *WSClient) error {
 // 	return cm.conns[key]
 // }
 
-// 获取client的所有连接
+// 获取本地client的所有连接
+// GetLocalClientConns
 func (cm *ConnectionManager) GetClientConns(clientId string) []*WSClient {
 	cm.mu.RLock()
 	defer cm.mu.RUnlock()
@@ -167,4 +169,45 @@ func (cm *ConnectionManager) GetClientConns(clientId string) []*WSClient {
 	// copy(result, conns)
 
 	return conns
+}
+
+// 从redis中获取远程client的连接信息，排除掉本地连接
+func (cm *ConnectionManager) GetRemoteConnsInfo(clientId string) ([]global.ConnDetail, error) {
+	ctx := context.Background()
+	setKey := global.ConnStatusSetKey + clientId
+
+	// 1. 获取该 clientId 下所有的 setKey（成员）
+	members, err := global.Redis.SMembers(ctx, setKey).Result()
+	if err != nil {
+		return nil, fmt.Errorf("redis SMembers %s failed: %w", setKey, err)
+	}
+
+	var details []global.ConnDetail
+	for _, member := range members {
+		hashKey := global.ConnDetailHashKey + member
+
+		// 2. 获取 Hash 的全部字段
+		fields, err := global.Redis.HGetAll(ctx, hashKey).Result()
+		if err != nil {
+			log.Printf("redis HGetAll %s error: %v", hashKey, err)
+			continue // 单条失败不影响其他
+		}
+
+		// 3. 转换为 ConnDetail 结构
+		var detail global.ConnDetail
+		utils.MapData2Struct(fields, &detail)
+		if err != nil {
+			log.Printf("parse ConnDetail from %s error: %v", hashKey, err)
+			continue
+		}
+
+		// 4. 排除本地网关的连接
+		if detail.GatewayUUID == global.GatewayServerKey {
+			continue
+		}
+
+		details = append(details, detail)
+	}
+
+	return details, nil
 }

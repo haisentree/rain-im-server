@@ -38,7 +38,7 @@ func init() {
 	DB = NewPG(ctx)
 	Redis = NewRedisDB(ctx)
 	Nats = NewNats()
-	NatsJS, err = Nats.JetStream()
+	NatsJS, err = Nats.JetStream(nats.PublishAsyncMaxPending(256))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -139,6 +139,11 @@ func NewNats() *nats.Conn {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	// 可选：设置连接事件回调
+	nc.SetReconnectHandler(func(conn *nats.Conn) {
+		log.Println("重新连接成功")
+	})
 
 	return nc
 }

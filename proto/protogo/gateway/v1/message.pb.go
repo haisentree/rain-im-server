@@ -132,6 +132,7 @@ type SingleMessage struct {
 	SourceId      *v1.UUID               `protobuf:"bytes,1,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty"`
 	TargetId      *v1.UUID               `protobuf:"bytes,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
 	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
+	Method        Method                 `protobuf:"varint,4,opt,name=method,proto3,enum=gateway.v1.Method" json:"method,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -185,6 +186,13 @@ func (x *SingleMessage) GetContent() string {
 		return x.Content
 	}
 	return ""
+}
+
+func (x *SingleMessage) GetMethod() Method {
+	if x != nil {
+		return x.Method
+	}
+	return Method_METHOD_UNSPECIFIED
 }
 
 type GroupMessage struct {
@@ -511,11 +519,12 @@ const file_gateway_v1_message_proto_rawDesc = "" +
 	"\n" +
 	"RawMessage\x12'\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x13.gateway.v1.MessageR\x04type\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\"\x9b\x01\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\xc7\x01\n" +
 	"\rSingleMessage\x12*\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bsourceId\x12*\n" +
 	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x122\n" +
-	"\acontent\x18\x03 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\acontent\"\xc4\x01\n" +
+	"\acontent\x18\x03 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\acontent\x12*\n" +
+	"\x06method\x18\x04 \x01(\x0e2\x12.gateway.v1.MethodR\x06method\"\xc4\x01\n" +
 	"\fGroupMessage\x12*\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bsourceId\x12(\n" +
 	"\bgroup_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\agroupId\x12*\n" +
@@ -564,24 +573,26 @@ var file_gateway_v1_message_proto_goTypes = []any{
 	(Platform)(0),          // 9: gateway.v1.Platform
 	(Message)(0),           // 10: gateway.v1.Message
 	(*v1.UUID)(nil),        // 11: base.v1.UUID
+	(Method)(0),            // 12: gateway.v1.Method
 }
 var file_gateway_v1_message_proto_depIdxs = []int32{
 	9,  // 0: gateway.v1.ConnectRequest.platform:type_name -> gateway.v1.Platform
 	10, // 1: gateway.v1.RawMessage.type:type_name -> gateway.v1.Message
 	11, // 2: gateway.v1.SingleMessage.source_id:type_name -> base.v1.UUID
 	11, // 3: gateway.v1.SingleMessage.target_id:type_name -> base.v1.UUID
-	11, // 4: gateway.v1.GroupMessage.source_id:type_name -> base.v1.UUID
-	11, // 5: gateway.v1.GroupMessage.group_id:type_name -> base.v1.UUID
-	11, // 6: gateway.v1.GroupMessage.target_id:type_name -> base.v1.UUID
-	11, // 7: gateway.v1.RelayMessage.source_id:type_name -> base.v1.UUID
-	11, // 8: gateway.v1.RelayMessage.target_id:type_name -> base.v1.UUID
-	11, // 9: gateway.v1.PullMessage.client_id:type_name -> base.v1.UUID
-	11, // 10: gateway.v1.PullMessage.target_id:type_name -> base.v1.UUID
-	11, // [11:11] is the sub-list for method output_type
-	11, // [11:11] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	12, // 4: gateway.v1.SingleMessage.method:type_name -> gateway.v1.Method
+	11, // 5: gateway.v1.GroupMessage.source_id:type_name -> base.v1.UUID
+	11, // 6: gateway.v1.GroupMessage.group_id:type_name -> base.v1.UUID
+	11, // 7: gateway.v1.GroupMessage.target_id:type_name -> base.v1.UUID
+	11, // 8: gateway.v1.RelayMessage.source_id:type_name -> base.v1.UUID
+	11, // 9: gateway.v1.RelayMessage.target_id:type_name -> base.v1.UUID
+	11, // 10: gateway.v1.PullMessage.client_id:type_name -> base.v1.UUID
+	11, // 11: gateway.v1.PullMessage.target_id:type_name -> base.v1.UUID
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_gateway_v1_message_proto_init() }

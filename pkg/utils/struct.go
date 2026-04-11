@@ -13,3 +13,11 @@ func StructData2Map(structObj interface{}) (map[string]interface{}, error) {
 	}
 	return inInterface, nil
 }
+
+func MapData2Struct(m map[string]string, v interface{}) error {
+	data, err := json.Marshal(m)
+	if err != nil {
+		return err
+	}
+	return json.Unmarshal(data, v)
+}
