@@ -299,7 +299,7 @@ func (g *GatewayServer) ParseMsg(b []byte) {
 	case gatewayv1.Message_MESSAGE_SINGLE:
 		log.Println("single message")
 
-		g.MsgH.SingleMessageHandle(msgReq.Data, g.RespWriter)
+		g.MsgH.SingleMessageHandle(&msgReq, g.RespWriter)
 
 	case gatewayv1.Message_MESSAGE_GROUP:
 		log.Println("group message")
@@ -308,7 +308,7 @@ func (g *GatewayServer) ParseMsg(b []byte) {
 	}
 }
 
-func (g *GatewayServer) SubNatsMsg() {
+func (g *GatewayServer) SubNatsMessaage() {
 	// 订阅主题,将消息发送到对应连接,找不到就直接丢弃
 
 	gatewayMessaageRelayTheme := fmt.Sprintf(global.GatewayRelayMessageTheme, global.GatewayServerKey)

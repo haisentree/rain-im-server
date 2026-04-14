@@ -1,7 +1,9 @@
 package service
 
 import (
+	"encoding/json"
 	"fmt"
+	"rain-im-server/global"
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
 
 	"github.com/go-playground/validator/v10"
@@ -26,9 +28,9 @@ func NewMessageHandle() *MessageHandle {
 	}
 }
 
-func (m *MessageHandle) SingleMessageHandle(data []byte, rw *ResponseWriter) {
+func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage, rw *ResponseWriter) {
 	var singleMsg gatewayv1.SingleMessage
-	if err := protojson.Unmarshal(data, &singleMsg); err != nil {
+	if err := protojson.Unmarshal(rawMsg.Data, &singleMsg); err != nil {
 		fmt.Println("解析 SingleMessage 失败:", err)
 		return
 	}
@@ -37,28 +39,44 @@ func (m *MessageHandle) SingleMessageHandle(data []byte, rw *ResponseWriter) {
 	fmt.Println(singleMsg.TargetId)
 	fmt.Println(singleMsg.Content)
 
-	rawMsg := &gatewayv1.RawMessage{
-		Type: gatewayv1.Message_MESSAGE_CONFIRM,
-		Data: data,
+	rawMsgByte, err := json.Marshal(rawMsg)
+	if err != nil {
+		fmt.Println("序列化 rawMsg 失败:", err)
+		return
 	}
-
-	// conn.WriteToSelf(rawMsg)
-
 	// 1.写入到持久化存储队列
-	// 2.尝试发送到本地连接,不存在则发送对应在线网关订阅的主题
-
-	switch singleMsg.Method {
-	case gatewayv1.Method_METHOD_ALL:
-		rw.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
-		rw.WriteToRemoteClinet(singleMsg.TargetId.ToUUID().String(), rawMsg)
-	case gatewayv1.Method_METHOD_LOCAL:
-		rw.WriteToRemoteClinet(singleMsg.TargetId.ToUUID().String(), rawMsg)
-	default:
-		panic("err")
+	pubSaveTheme := fmt.Sprintf(global.GatewayMessageSaveTheme, singleMsg.TargetId.ToUUID().String()[0:2]) // 取前两位作为分片
+	if ack, err := global.NatsJS.Publish(pubSaveTheme, rawMsgByte); err != nil {
+		fmt.Println("发布消息到 NATS 失败:", err)
+		return
+	} else {
+		fmt.Printf("消息已发布到 NATS: %v\n", ack)
 	}
 
-	// 从server中获取conn
-	// 写入内容
+	// 2.消息会话seq+1
+	pubSeqIncreaseTheme := fmt.Sprintf(global.GatewayMessageSeqIncreaseTheme, singleMsg.TargetId.ToUUID().String()[0:2]) // 取前两位作为分片
+	if ack, err := global.NatsJS.Publish(pubSeqIncreaseTheme, rawMsgByte); err != nil {
+		fmt.Println("发布消息到 NATS 失败:", err)
+		return
+	} else {
+		fmt.Printf("消息已发布到 NATS: %v\n", ack)
+	}
+
+	// 3.本地和远程连接消息发送
+	rw.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
+	rawMsg.Type = gatewayv1.Message_MESSAGE_RELAY_GATEWAY_SINGLE // 改变消息类型再发送
+	rw.WriteToRemoteClinet(singleMsg.TargetId.ToUUID().String(), rawMsg)
+}
+
+func (m *MessageHandle) RelayGatewaySingleMessageHandle(rawMsg *gatewayv1.RawMessage, rw *ResponseWriter) {
+	var relaySingleMsg gatewayv1.SingleMessage
+	if err := protojson.Unmarshal(rawMsg.Data, &relaySingleMsg); err != nil {
+		fmt.Println("解析 relaySingleMsg 失败:", err)
+		return
+	}
+
+	rawMsg.Type = gatewayv1.Message_MESSAGE_SINGLE // 还原消息类型再发送
+	rw.WriteToLocalClient(relaySingleMsg.TargetId.ToUUID().String(), rawMsg)
 }
 
 // 转发消息的内容是单方消息结构,只发送到本地的连接

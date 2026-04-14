@@ -22,9 +22,8 @@ const (
 
 func initJetStream(js nats.JetStreamContext) error {
 	subjects := []string{
-		fmt.Sprintf(GatewayRelayMessageTheme, "*"), // 匹配任意网关ID
-		fmt.Sprintf(GatewayMessageSeqIncreaseTheme, "*"),
-		fmt.Sprintf(GatewayMessageSaveTheme, "*"),
+		fmt.Sprintf(GatewayMessageSeqIncreaseTheme, "*"), // seq + 1
+		fmt.Sprintf(GatewayMessageSaveTheme, "*"),        // save message
 	}
 
 	_, err := js.StreamInfo(GatewayStreamNameMessage)
