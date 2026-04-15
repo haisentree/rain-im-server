@@ -10,18 +10,14 @@ import (
 	"time"
 )
 
-// type ResponseWriter interface {
-
-// type HandlerFunc func(ResponseWriter, *Msg)
-
-// // ServeDNS calls f(w, r).
-// func (f HandlerFunc) ServeDNS(w ResponseWriter, r *Msg) {
-// 	f(w, r)
-// }
+type ConnectionGetter interface {
+	GetLocalClientConns(clientId string) []*WSClient
+	GetRemoteConnsInfo(clientId string) ([]global.ConnDetail, error)
+}
 
 type ConnectionManager struct {
 	mu          sync.RWMutex
-	conns       map[string]*WSClient   // key = clientId+"-"+platformId + "-" + string(len(totalOnline))
+	conns       map[string]*WSClient   // key = clientId+"-"+platformId + "-" + random(6)
 	clientConns map[string][]*WSClient // key = clientId
 }
 
@@ -32,12 +28,10 @@ func NewConnectionManager() *ConnectionManager {
 	}
 }
 
-// Add 添加连接，线程安全
 func (cm *ConnectionManager) Add(conn *WSClient) {
 	cm.mu.Lock()
 	defer cm.mu.Unlock()
 
-	// 如果配置一个账号在一种平台最多一个在线,那么 %s-%s-rand(6)
 	preKey := conn.ClientId + "-" + conn.PlatformId.String() + "-"
 
 	var setKey, countKey string
@@ -53,8 +47,7 @@ func (cm *ConnectionManager) Add(conn *WSClient) {
 	conn.CountKey = countKey
 	cm.conns[setKey] = conn
 	cm.clientConns[conn.ClientId] = append(cm.clientConns[conn.ClientId], conn)
-	// 存储到redis
-	// 构建结构体实例
+
 	detail := global.ConnDetail{
 		ClientId:    conn.ClientId,
 		PlatformId:  conn.PlatformId.String(),
@@ -63,7 +56,6 @@ func (cm *ConnectionManager) Add(conn *WSClient) {
 	}
 	dataMap, err := utils.StructData2Map(detail)
 	if err != nil {
-		// 处理错误，建议记录日志并可能返回错误（但 Add 方法目前无返回值）
 		log.Printf("StructData2Map error: %v", err)
 		return
 	}
@@ -79,12 +71,11 @@ func (cm *ConnectionManager) Add(conn *WSClient) {
 
 	// 使用 map 写入 HSet
 	pipe.HSet(ctx, global.ConnDetailHashKey+setKey, dataMap)
-
 	pipe.SAdd(ctx, global.ConnStatusSetKey+conn.ClientId, setKey)
 
 	// 设置 TTL
-	pipe.Expire(ctx, global.ConnDetailHashKey+setKey, 24*time.Hour)
-	pipe.Expire(ctx, global.ConnStatusSetKey+conn.ClientId, 24*time.Hour)
+	pipe.Expire(ctx, global.ConnDetailHashKey+setKey, 5*time.Minute)
+	pipe.Expire(ctx, global.ConnStatusSetKey+conn.ClientId, 5*time.Minute)
 
 	_, err = pipe.Exec(ctx)
 	if err != nil {
@@ -112,7 +103,6 @@ func (cm *ConnectionManager) Remove(conn *WSClient) {
 		delete(cm.clientConns, conn.ClientId)
 	}
 
-	// 同步删除 Redis 中的记录（建议补充）
 	ctx := context.Background()
 	pipe := global.Redis.Pipeline()
 	pipe.HDel(ctx, global.ConnDetailHashKey+key)               // 删除 hash 字段
@@ -129,8 +119,7 @@ func (cm *ConnectionManager) Renew(ctx context.Context, conn *WSClient) error {
 		return nil
 	}
 
-	// 设置 TTL，建议与 Add 中保持一致（例如 3 分钟）
-	ttl := 3 * time.Minute
+	ttl := 5 * time.Minute
 
 	pipe := global.Redis.Pipeline()
 	pipe.Expire(ctx, global.ConnDetailHashKey+conn.CountKey, ttl)
@@ -142,19 +131,8 @@ func (cm *ConnectionManager) Renew(ctx context.Context, conn *WSClient) error {
 	return err
 }
 
-// 不需要这个方法
-// GetByClientAndPlatform 根据用户ID和平台获取连接
-// func (cm *ConnectionManager) GetByClientAndPlatform(clientId string, platform gatewayv1.Platform) *WSClient {
-// 	cm.mu.RLock()
-// 	defer cm.mu.RUnlock()
-
-// 	key := clientId + platform.String()
-// 	return cm.conns[key]
-// }
-
 // 获取本地client的所有连接
-// GetLocalClientConns
-func (cm *ConnectionManager) GetClientConns(clientId string) []*WSClient {
+func (cm *ConnectionManager) GetLocalClientConns(clientId string) []*WSClient {
 	cm.mu.RLock()
 	defer cm.mu.RUnlock()
 
@@ -163,11 +141,7 @@ func (cm *ConnectionManager) GetClientConns(clientId string) []*WSClient {
 		return nil
 	}
 
-	// 不会修改
-	// // 返回副本，避免外部修改
-	// result := make([]*WSClient, len(conns))
-	// copy(result, conns)
-
+	// 避免外部修改,返回副本(使用上调用者不去修改)
 	return conns
 }
 
@@ -182,7 +156,7 @@ func (cm *ConnectionManager) GetRemoteConnsInfo(clientId string) ([]global.ConnD
 		return nil, fmt.Errorf("redis SMembers %s failed: %w", setKey, err)
 	}
 
-	var details []global.ConnDetail
+	var detailList []global.ConnDetail
 	for _, member := range members {
 		hashKey := global.ConnDetailHashKey + member
 
@@ -206,8 +180,8 @@ func (cm *ConnectionManager) GetRemoteConnsInfo(clientId string) ([]global.ConnD
 			continue
 		}
 
-		details = append(details, detail)
+		detailList = append(detailList, detail)
 	}
 
-	return details, nil
+	return detailList, nil
 }

@@ -39,10 +39,10 @@ func NewGatewayServer(addr string) (*GatewayServer, error) {
 		Addr: addr,
 
 		ConnManager: NewConnectionManager(),
-		MsgH:        NewMessageHandle(),
 	}
 
 	gatewayServer.RespWriter = NewResponseWriter(gatewayServer.ConnManager)
+	gatewayServer.MsgH = NewMessageHandle(gatewayServer.RespWriter)
 
 	gatewayServer.UpGrader = &websocket.Upgrader{
 		HandshakeTimeout: 5 * time.Second,
@@ -282,24 +282,18 @@ func (g *GatewayServer) ReadMsg(conn *WSClient) {
 }
 
 func (g *GatewayServer) ParseMsg(b []byte) {
-	log.Println("ParseMsg")
-
 	msgReq := gatewayv1.RawMessage{}
 	err := protojson.Unmarshal(b, &msgReq)
 	if err != nil {
 		fmt.Println("json err:", err.Error())
 		return
 	}
-	// if err := global.Validate.Struct(&msgReq); err != nil {
-	// 	log.Println("validate error:", err)
-	// 	return
-	// }
 
 	switch msgReq.Type {
 	case gatewayv1.Message_MESSAGE_SINGLE:
 		log.Println("single message")
 
-		g.MsgH.SingleMessageHandle(&msgReq, g.RespWriter)
+		g.MsgH.SingleMessageHandle(&msgReq)
 
 	case gatewayv1.Message_MESSAGE_GROUP:
 		log.Println("group message")

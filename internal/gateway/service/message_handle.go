@@ -7,37 +7,28 @@ import (
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/gorilla/schema"
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
 type MessageHandle struct {
-	Decoder   *schema.Decoder
 	Validater *validator.Validate
+
+	sender MessageSender // 持有消息发送器接口
 }
 
-// ResponseWriter不作为参数传递,而是MessageHandle持有ResponseWriter的引用,这样MessageHandle就可以调用ResponseWriter的方法来发送消息
-// 抽象出接口,让MessageHandle依赖接口而不是具体的ResponseWriter实现,这样可以降低耦合度,提高代码的可测试性和可维护性
-func NewMessageHandle() *MessageHandle {
-	decoder := schema.NewDecoder()
-	// decoder.IgnoreUnknownKeys(true)
-	// decoder.SetAliasTag("schema")
+func NewMessageHandle(sender MessageSender) *MessageHandle {
 	return &MessageHandle{
-		Decoder:   decoder,
 		Validater: validator.New(),
+		sender:    sender,
 	}
 }
 
-func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage, rw *ResponseWriter) {
+func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
 	var singleMsg gatewayv1.SingleMessage
 	if err := protojson.Unmarshal(rawMsg.Data, &singleMsg); err != nil {
 		fmt.Println("解析 SingleMessage 失败:", err)
 		return
 	}
-
-	fmt.Println(singleMsg.SourceId)
-	fmt.Println(singleMsg.TargetId)
-	fmt.Println(singleMsg.Content)
 
 	rawMsgByte, err := json.Marshal(rawMsg)
 	if err != nil {
@@ -63,9 +54,9 @@ func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage, rw *Re
 	}
 
 	// 3.本地和远程连接消息发送
-	rw.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
+	m.sender.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
 	rawMsg.Type = gatewayv1.Message_MESSAGE_RELAY_GATEWAY_SINGLE // 改变消息类型再发送
-	rw.WriteToRemoteClinet(singleMsg.TargetId.ToUUID().String(), rawMsg)
+	m.sender.WriteToRemoteClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
 }
 
 func (m *MessageHandle) RelayGatewaySingleMessageHandle(rawMsg *gatewayv1.RawMessage, rw *ResponseWriter) {
@@ -77,24 +68,4 @@ func (m *MessageHandle) RelayGatewaySingleMessageHandle(rawMsg *gatewayv1.RawMes
 
 	rawMsg.Type = gatewayv1.Message_MESSAGE_SINGLE // 还原消息类型再发送
 	rw.WriteToLocalClient(relaySingleMsg.TargetId.ToUUID().String(), rawMsg)
-}
-
-// 转发消息的内容是单方消息结构,只发送到本地的连接
-func (m *MessageHandle) RelayMessageHandle(data []byte, conn *WSClient, rw *ResponseWriter) {
-	var relayMsg gatewayv1.RelayMessage
-	if err := protojson.Unmarshal(data, &relayMsg); err != nil {
-		fmt.Println("解析 RelayMessage 失败:", err)
-		return
-	}
-
-	fmt.Println(relayMsg.SourceId)
-	fmt.Println(relayMsg.TargetId)
-	fmt.Println(relayMsg.Content)
-
-	// rawMsg := &gatewayv1.RawMessage{
-	// 	Type: gatewayv1.Message_MESSAGE_CONFIRM,
-	// 	Data: data,
-	// }
-
-	// rw.WriteToClient(relayMsg.TargetId.ToUUID().String(), false, rawMsg)
 }

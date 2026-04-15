@@ -5,13 +5,6 @@ import "tagger/tagger.proto";
 import "base/v1/uuid.proto";
 import "gateway/v1/gateway.proto";
 
-message ConnectRequest {
-    string   client_id = 1 [(tagger.tags) = "validate:\"required\""];
-    Platform platform  = 2 [(tagger.tags) = "validate:\"required\""];
-}
-// 这里不用去数据库查询client_id,所有传递字符串
-// 对token进行规范设计后,client_id、platform直接包含在token中
-
 message RawMessage {
     Message type = 1;
     bytes   data = 2;
@@ -20,8 +13,16 @@ message RawMessage {
 message SingleMessage {
     base.v1.UUID source_id = 1;
     base.v1.UUID target_id = 2;
-    string       content   = 3 [(tagger.tags) = "validate:\"required\""];
-    Method       method    = 4;
+    fixed64      seq_id    = 3;
+    string       content   = 4 [(tagger.tags) = "validate:\"required\""];
+    // 时间
+}
+
+// TODO: 暂时不使用,RelayGatewaySingleMessage类型的RawMessage,data直接对应了SingleMessage
+message RelayGatewaySingleMessage {
+    bytes data = 1;
+    // 优先级
+    // 属性:普通延时，阅后即焚
 }
 
 message GroupMessage {
