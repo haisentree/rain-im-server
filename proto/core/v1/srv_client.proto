@@ -6,10 +6,23 @@ import "base/v1/uuid.proto";
 service ClientService {
     // 确定clientId存在,设置token到缓存再redis中
     rpc SetToken(SetTokenRequest) returns (SetTokenResponse) {}
+    rpc GetConversationSeq(GetConversationSeqRequest) returns (GetConversationSeqResponse) {}
+}
+
+message GetConversationSeqMap {
+    base.v1.UUID conversation_id = 1;
+    fixed64      seq             = 2;
 }
 
 message SetTokenRequest {
     base.v1.UUID client_id = 1;
-    string       token     = 2;  // clientId、plantform
+    string       token     = 2;
 }
 message SetTokenResponse {}
+
+message GetConversationSeqRequest {
+    repeated base.v1.UUID conversation_id = 1;
+}
+message GetConversationSeqResponse {
+    repeated GetConversationSeqMap data = 1;
+}

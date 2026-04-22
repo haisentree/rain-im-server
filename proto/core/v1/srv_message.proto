@@ -1,0 +1,26 @@
+syntax = "proto3";
+package core.v1;
+
+import "base/v1/uuid.proto";
+
+service MessageService {
+    rpc ListMessageBySeq(ListMessageBySeqRequest) returns (ListMessageBySeqResponse) {}
+}
+
+enum Direction {
+    DIRECTION_UNSPECIFIED = 0;
+    DIRECTION_OLDER       = 1;  // 拉取更早的
+    DIRECTION_NEWER       = 2;  // 拉取更新的
+}
+
+message ListMessageBySeqRequest {
+    base.v1.UUID source_id = 1;
+    base.v1.UUID target_id = 2;
+    fixed64      seq       = 3;
+    int32        limit     = 4;
+    Direction    direction = 5;
+}
+message ListMessageBySeqResponse {
+    repeated Message data  = 1;
+    int64            count = 2;
+}
