@@ -55,7 +55,7 @@ func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
 
 	// 3.本地和远程连接消息发送
 	m.sender.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
-	rawMsg.Type = gatewayv1.Message_MESSAGE_RELAY_GATEWAY_SINGLE // 改变消息类型再发送
+	rawMsg.Type = gatewayv1.Message_MESSAGE_SINGLE_GATEWAY_RELAY // 改变消息类型再发送
 	m.sender.WriteToRemoteClient(singleMsg.TargetId.ToUUID().String(), rawMsg)
 }
 

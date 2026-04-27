@@ -22,17 +22,69 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type GetConversationSeqMap struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConversationId *v1.UUID               `protobuf:"bytes,1,opt,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty"`
+	Seq            uint64                 `protobuf:"fixed64,2,opt,name=seq,proto3" json:"seq,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetConversationSeqMap) Reset() {
+	*x = GetConversationSeqMap{}
+	mi := &file_core_v1_srv_client_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetConversationSeqMap) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetConversationSeqMap) ProtoMessage() {}
+
+func (x *GetConversationSeqMap) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_client_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetConversationSeqMap.ProtoReflect.Descriptor instead.
+func (*GetConversationSeqMap) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *GetConversationSeqMap) GetConversationId() *v1.UUID {
+	if x != nil {
+		return x.ConversationId
+	}
+	return nil
+}
+
+func (x *GetConversationSeqMap) GetSeq() uint64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
 type SetTokenRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	ClientId      *v1.UUID               `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
-	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"` // clientId、plantform
+	Token         string                 `protobuf:"bytes,2,opt,name=token,proto3" json:"token,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SetTokenRequest) Reset() {
 	*x = SetTokenRequest{}
-	mi := &file_core_v1_srv_client_proto_msgTypes[0]
+	mi := &file_core_v1_srv_client_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +96,7 @@ func (x *SetTokenRequest) String() string {
 func (*SetTokenRequest) ProtoMessage() {}
 
 func (x *SetTokenRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_client_proto_msgTypes[0]
+	mi := &file_core_v1_srv_client_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,7 +109,7 @@ func (x *SetTokenRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetTokenRequest.ProtoReflect.Descriptor instead.
 func (*SetTokenRequest) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{0}
+	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SetTokenRequest) GetClientId() *v1.UUID {
@@ -82,7 +134,7 @@ type SetTokenResponse struct {
 
 func (x *SetTokenResponse) Reset() {
 	*x = SetTokenResponse{}
-	mi := &file_core_v1_srv_client_proto_msgTypes[1]
+	mi := &file_core_v1_srv_client_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -94,7 +146,7 @@ func (x *SetTokenResponse) String() string {
 func (*SetTokenResponse) ProtoMessage() {}
 
 func (x *SetTokenResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_client_proto_msgTypes[1]
+	mi := &file_core_v1_srv_client_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,20 +159,116 @@ func (x *SetTokenResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SetTokenResponse.ProtoReflect.Descriptor instead.
 func (*SetTokenResponse) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{1}
+	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{2}
+}
+
+type GetConversationSeqRequest struct {
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	ConversationId []*v1.UUID             `protobuf:"bytes,1,rep,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
+}
+
+func (x *GetConversationSeqRequest) Reset() {
+	*x = GetConversationSeqRequest{}
+	mi := &file_core_v1_srv_client_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetConversationSeqRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetConversationSeqRequest) ProtoMessage() {}
+
+func (x *GetConversationSeqRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_client_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetConversationSeqRequest.ProtoReflect.Descriptor instead.
+func (*GetConversationSeqRequest) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GetConversationSeqRequest) GetConversationId() []*v1.UUID {
+	if x != nil {
+		return x.ConversationId
+	}
+	return nil
+}
+
+type GetConversationSeqResponse struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Data          []*GetConversationSeqMap `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetConversationSeqResponse) Reset() {
+	*x = GetConversationSeqResponse{}
+	mi := &file_core_v1_srv_client_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetConversationSeqResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetConversationSeqResponse) ProtoMessage() {}
+
+func (x *GetConversationSeqResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_client_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetConversationSeqResponse.ProtoReflect.Descriptor instead.
+func (*GetConversationSeqResponse) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_client_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *GetConversationSeqResponse) GetData() []*GetConversationSeqMap {
+	if x != nil {
+		return x.Data
+	}
+	return nil
 }
 
 var File_core_v1_srv_client_proto protoreflect.FileDescriptor
 
 const file_core_v1_srv_client_proto_rawDesc = "" +
 	"\n" +
-	"\x18core/v1/srv_client.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\"S\n" +
+	"\x18core/v1/srv_client.proto\x12\acore.v1\x1a\x12base/v1/uuid.proto\"a\n" +
+	"\x15GetConversationSeqMap\x126\n" +
+	"\x0fconversation_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\x0econversationId\x12\x10\n" +
+	"\x03seq\x18\x02 \x01(\x06R\x03seq\"S\n" +
 	"\x0fSetTokenRequest\x12*\n" +
 	"\tclient_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bclientId\x12\x14\n" +
 	"\x05token\x18\x02 \x01(\tR\x05token\"\x12\n" +
-	"\x10SetTokenResponse2R\n" +
+	"\x10SetTokenResponse\"S\n" +
+	"\x19GetConversationSeqRequest\x126\n" +
+	"\x0fconversation_id\x18\x01 \x03(\v2\r.base.v1.UUIDR\x0econversationId\"P\n" +
+	"\x1aGetConversationSeqResponse\x122\n" +
+	"\x04data\x18\x01 \x03(\v2\x1e.core.v1.GetConversationSeqMapR\x04data2\xb3\x01\n" +
 	"\rClientService\x12A\n" +
-	"\bSetToken\x12\x18.core.v1.SetTokenRequest\x1a\x19.core.v1.SetTokenResponse\"\x00B\x81\x01\n" +
+	"\bSetToken\x12\x18.core.v1.SetTokenRequest\x1a\x19.core.v1.SetTokenResponse\"\x00\x12_\n" +
+	"\x12GetConversationSeq\x12\".core.v1.GetConversationSeqRequest\x1a#.core.v1.GetConversationSeqResponse\"\x00B\x81\x01\n" +
 	"\vcom.core.v1B\x0eSrvClientProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -135,21 +283,29 @@ func file_core_v1_srv_client_proto_rawDescGZIP() []byte {
 	return file_core_v1_srv_client_proto_rawDescData
 }
 
-var file_core_v1_srv_client_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_core_v1_srv_client_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_core_v1_srv_client_proto_goTypes = []any{
-	(*SetTokenRequest)(nil),  // 0: core.v1.SetTokenRequest
-	(*SetTokenResponse)(nil), // 1: core.v1.SetTokenResponse
-	(*v1.UUID)(nil),          // 2: base.v1.UUID
+	(*GetConversationSeqMap)(nil),      // 0: core.v1.GetConversationSeqMap
+	(*SetTokenRequest)(nil),            // 1: core.v1.SetTokenRequest
+	(*SetTokenResponse)(nil),           // 2: core.v1.SetTokenResponse
+	(*GetConversationSeqRequest)(nil),  // 3: core.v1.GetConversationSeqRequest
+	(*GetConversationSeqResponse)(nil), // 4: core.v1.GetConversationSeqResponse
+	(*v1.UUID)(nil),                    // 5: base.v1.UUID
 }
 var file_core_v1_srv_client_proto_depIdxs = []int32{
-	2, // 0: core.v1.SetTokenRequest.client_id:type_name -> base.v1.UUID
-	0, // 1: core.v1.ClientService.SetToken:input_type -> core.v1.SetTokenRequest
-	1, // 2: core.v1.ClientService.SetToken:output_type -> core.v1.SetTokenResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	1, // [1:1] is the sub-list for extension extendee
-	0, // [0:1] is the sub-list for field type_name
+	5, // 0: core.v1.GetConversationSeqMap.conversation_id:type_name -> base.v1.UUID
+	5, // 1: core.v1.SetTokenRequest.client_id:type_name -> base.v1.UUID
+	5, // 2: core.v1.GetConversationSeqRequest.conversation_id:type_name -> base.v1.UUID
+	0, // 3: core.v1.GetConversationSeqResponse.data:type_name -> core.v1.GetConversationSeqMap
+	1, // 4: core.v1.ClientService.SetToken:input_type -> core.v1.SetTokenRequest
+	3, // 5: core.v1.ClientService.GetConversationSeq:input_type -> core.v1.GetConversationSeqRequest
+	2, // 6: core.v1.ClientService.SetToken:output_type -> core.v1.SetTokenResponse
+	4, // 7: core.v1.ClientService.GetConversationSeq:output_type -> core.v1.GetConversationSeqResponse
+	6, // [6:8] is the sub-list for method output_type
+	4, // [4:6] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_srv_client_proto_init() }
@@ -163,7 +319,7 @@ func file_core_v1_srv_client_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_srv_client_proto_rawDesc), len(file_core_v1_srv_client_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

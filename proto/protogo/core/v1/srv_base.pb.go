@@ -214,6 +214,374 @@ func (x *CreateClientResponse) GetData() *Client {
 	return nil
 }
 
+type ListClientConversationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      []*v1.UUID             `protobuf:"bytes,1,rep,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListClientConversationRequest) Reset() {
+	*x = ListClientConversationRequest{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListClientConversationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListClientConversationRequest) ProtoMessage() {}
+
+func (x *ListClientConversationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListClientConversationRequest.ProtoReflect.Descriptor instead.
+func (*ListClientConversationRequest) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ListClientConversationRequest) GetClientId() []*v1.UUID {
+	if x != nil {
+		return x.ClientId
+	}
+	return nil
+}
+
+type ListClientConversationResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*ClientConversation  `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListClientConversationResponse) Reset() {
+	*x = ListClientConversationResponse{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListClientConversationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListClientConversationResponse) ProtoMessage() {}
+
+func (x *ListClientConversationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListClientConversationResponse.ProtoReflect.Descriptor instead.
+func (*ListClientConversationResponse) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ListClientConversationResponse) GetData() []*ClientConversation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateClientConversationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      *v1.UUID               `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateClientConversationRequest) Reset() {
+	*x = CreateClientConversationRequest{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateClientConversationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateClientConversationRequest) ProtoMessage() {}
+
+func (x *CreateClientConversationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateClientConversationRequest.ProtoReflect.Descriptor instead.
+func (*CreateClientConversationRequest) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *CreateClientConversationRequest) GetClientId() *v1.UUID {
+	if x != nil {
+		return x.ClientId
+	}
+	return nil
+}
+
+func (x *CreateClientConversationRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+type CreateClientConversationResponse struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Data          *ClientGroupConversation `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateClientConversationResponse) Reset() {
+	*x = CreateClientConversationResponse{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateClientConversationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateClientConversationResponse) ProtoMessage() {}
+
+func (x *CreateClientConversationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateClientConversationResponse.ProtoReflect.Descriptor instead.
+func (*CreateClientConversationResponse) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *CreateClientConversationResponse) GetData() *ClientGroupConversation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type ListClientGroupConversationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GroupId       []*v1.UUID             `protobuf:"bytes,1,rep,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListClientGroupConversationRequest) Reset() {
+	*x = ListClientGroupConversationRequest{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListClientGroupConversationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListClientGroupConversationRequest) ProtoMessage() {}
+
+func (x *ListClientGroupConversationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListClientGroupConversationRequest.ProtoReflect.Descriptor instead.
+func (*ListClientGroupConversationRequest) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *ListClientGroupConversationRequest) GetGroupId() []*v1.UUID {
+	if x != nil {
+		return x.GroupId
+	}
+	return nil
+}
+
+type ListClientGroupConversationResponse struct {
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Data          []*ClientGroupConversation `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ListClientGroupConversationResponse) Reset() {
+	*x = ListClientGroupConversationResponse{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ListClientGroupConversationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ListClientGroupConversationResponse) ProtoMessage() {}
+
+func (x *ListClientGroupConversationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ListClientGroupConversationResponse.ProtoReflect.Descriptor instead.
+func (*ListClientGroupConversationResponse) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *ListClientGroupConversationResponse) GetData() []*ClientGroupConversation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
+type CreateClientGroupConversationRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GroupId       *v1.UUID               `protobuf:"bytes,1,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	Title         string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateClientGroupConversationRequest) Reset() {
+	*x = CreateClientGroupConversationRequest{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateClientGroupConversationRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateClientGroupConversationRequest) ProtoMessage() {}
+
+func (x *CreateClientGroupConversationRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateClientGroupConversationRequest.ProtoReflect.Descriptor instead.
+func (*CreateClientGroupConversationRequest) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *CreateClientGroupConversationRequest) GetGroupId() *v1.UUID {
+	if x != nil {
+		return x.GroupId
+	}
+	return nil
+}
+
+func (x *CreateClientGroupConversationRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+type CreateClientGroupConversationResponse struct {
+	state         protoimpl.MessageState   `protogen:"open.v1"`
+	Data          *ClientGroupConversation `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *CreateClientGroupConversationResponse) Reset() {
+	*x = CreateClientGroupConversationResponse{}
+	mi := &file_core_v1_srv_base_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *CreateClientGroupConversationResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*CreateClientGroupConversationResponse) ProtoMessage() {}
+
+func (x *CreateClientGroupConversationResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_srv_base_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use CreateClientGroupConversationResponse.ProtoReflect.Descriptor instead.
+func (*CreateClientGroupConversationResponse) Descriptor() ([]byte, []int) {
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *CreateClientGroupConversationResponse) GetData() *ClientGroupConversation {
+	if x != nil {
+		return x.Data
+	}
+	return nil
+}
+
 type ListMessageRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Pagination    *v1.Pagination         `protobuf:"bytes,1,opt,name=pagination,proto3,oneof" json:"pagination,omitempty"`
@@ -226,7 +594,7 @@ type ListMessageRequest struct {
 
 func (x *ListMessageRequest) Reset() {
 	*x = ListMessageRequest{}
-	mi := &file_core_v1_srv_base_proto_msgTypes[4]
+	mi := &file_core_v1_srv_base_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -238,7 +606,7 @@ func (x *ListMessageRequest) String() string {
 func (*ListMessageRequest) ProtoMessage() {}
 
 func (x *ListMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_base_proto_msgTypes[4]
+	mi := &file_core_v1_srv_base_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -251,7 +619,7 @@ func (x *ListMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMessageRequest.ProtoReflect.Descriptor instead.
 func (*ListMessageRequest) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{4}
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *ListMessageRequest) GetPagination() *v1.Pagination {
@@ -292,7 +660,7 @@ type ListMessageResponse struct {
 
 func (x *ListMessageResponse) Reset() {
 	*x = ListMessageResponse{}
-	mi := &file_core_v1_srv_base_proto_msgTypes[5]
+	mi := &file_core_v1_srv_base_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -304,7 +672,7 @@ func (x *ListMessageResponse) String() string {
 func (*ListMessageResponse) ProtoMessage() {}
 
 func (x *ListMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_base_proto_msgTypes[5]
+	mi := &file_core_v1_srv_base_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -317,7 +685,7 @@ func (x *ListMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use ListMessageResponse.ProtoReflect.Descriptor instead.
 func (*ListMessageResponse) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{5}
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *ListMessageResponse) GetData() []*Message {
@@ -345,7 +713,7 @@ type CreateMessageRequest struct {
 
 func (x *CreateMessageRequest) Reset() {
 	*x = CreateMessageRequest{}
-	mi := &file_core_v1_srv_base_proto_msgTypes[6]
+	mi := &file_core_v1_srv_base_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -357,7 +725,7 @@ func (x *CreateMessageRequest) String() string {
 func (*CreateMessageRequest) ProtoMessage() {}
 
 func (x *CreateMessageRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_base_proto_msgTypes[6]
+	mi := &file_core_v1_srv_base_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -370,7 +738,7 @@ func (x *CreateMessageRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateMessageRequest.ProtoReflect.Descriptor instead.
 func (*CreateMessageRequest) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{6}
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *CreateMessageRequest) GetSourceId() *v1.UUID {
@@ -403,7 +771,7 @@ type CreateMessageResponse struct {
 
 func (x *CreateMessageResponse) Reset() {
 	*x = CreateMessageResponse{}
-	mi := &file_core_v1_srv_base_proto_msgTypes[7]
+	mi := &file_core_v1_srv_base_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -415,7 +783,7 @@ func (x *CreateMessageResponse) String() string {
 func (*CreateMessageResponse) ProtoMessage() {}
 
 func (x *CreateMessageResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_core_v1_srv_base_proto_msgTypes[7]
+	mi := &file_core_v1_srv_base_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -428,7 +796,7 @@ func (x *CreateMessageResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateMessageResponse.ProtoReflect.Descriptor instead.
 func (*CreateMessageResponse) Descriptor() ([]byte, []int) {
-	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{7}
+	return file_core_v1_srv_base_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *CreateMessageResponse) GetData() *Message {
@@ -456,7 +824,25 @@ const file_core_v1_srv_base_proto_rawDesc = "" +
 	"\x05count\x18\x02 \x01(\x03R\x05count\"\x15\n" +
 	"\x13CreateClientRequest\";\n" +
 	"\x14CreateClientResponse\x12#\n" +
-	"\x04data\x18\x01 \x01(\v2\x0f.core.v1.ClientR\x04data\"\xe6\x01\n" +
+	"\x04data\x18\x01 \x01(\v2\x0f.core.v1.ClientR\x04data\"K\n" +
+	"\x1dListClientConversationRequest\x12*\n" +
+	"\tclient_id\x18\x01 \x03(\v2\r.base.v1.UUIDR\bclientId\"Q\n" +
+	"\x1eListClientConversationResponse\x12/\n" +
+	"\x04data\x18\x01 \x03(\v2\x1b.core.v1.ClientConversationR\x04data\"c\n" +
+	"\x1fCreateClientConversationRequest\x12*\n" +
+	"\tclient_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bclientId\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"X\n" +
+	" CreateClientConversationResponse\x124\n" +
+	"\x04data\x18\x01 \x01(\v2 .core.v1.ClientGroupConversationR\x04data\"N\n" +
+	"\"ListClientGroupConversationRequest\x12(\n" +
+	"\bgroup_id\x18\x01 \x03(\v2\r.base.v1.UUIDR\agroupId\"[\n" +
+	"#ListClientGroupConversationResponse\x124\n" +
+	"\x04data\x18\x01 \x03(\v2 .core.v1.ClientGroupConversationR\x04data\"f\n" +
+	"$CreateClientGroupConversationRequest\x12(\n" +
+	"\bgroup_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\agroupId\x12\x14\n" +
+	"\x05title\x18\x02 \x01(\tR\x05title\"]\n" +
+	"%CreateClientGroupConversationResponse\x124\n" +
+	"\x04data\x18\x01 \x01(\v2 .core.v1.ClientGroupConversationR\x04data\"\xe6\x01\n" +
 	"\x12ListMessageRequest\x128\n" +
 	"\n" +
 	"pagination\x18\x01 \x01(\v2\x13.base.v1.PaginationH\x00R\n" +
@@ -474,11 +860,15 @@ const file_core_v1_srv_base_proto_rawDesc = "" +
 	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x12\x18\n" +
 	"\acontent\x18\x03 \x01(\tR\acontent\"=\n" +
 	"\x15CreateMessageResponse\x12$\n" +
-	"\x04data\x18\x01 \x01(\v2\x10.core.v1.MessageR\x04data2\xc3\x02\n" +
+	"\x04data\x18\x01 \x01(\v2\x10.core.v1.MessageR\x04data2\xa2\x06\n" +
 	"\vBaseService\x12G\n" +
 	"\n" +
 	"ListClient\x12\x1a.core.v1.ListClientRequest\x1a\x1b.core.v1.ListClientResponse\"\x00\x12M\n" +
-	"\fCreateClient\x12\x1c.core.v1.CreateClientRequest\x1a\x1d.core.v1.CreateClientResponse\"\x00\x12J\n" +
+	"\fCreateClient\x12\x1c.core.v1.CreateClientRequest\x1a\x1d.core.v1.CreateClientResponse\"\x00\x12k\n" +
+	"\x16ListClientConversation\x12&.core.v1.ListClientConversationRequest\x1a'.core.v1.ListClientConversationResponse\"\x00\x12q\n" +
+	"\x18CreateClientConversation\x12(.core.v1.CreateClientConversationRequest\x1a).core.v1.CreateClientConversationResponse\"\x00\x12z\n" +
+	"\x1bListClientGroupConversation\x12+.core.v1.ListClientGroupConversationRequest\x1a,.core.v1.ListClientGroupConversationResponse\"\x00\x12\x80\x01\n" +
+	"\x1dCreateClientGroupConversation\x12-.core.v1.CreateClientGroupConversationRequest\x1a..core.v1.CreateClientGroupConversationResponse\"\x00\x12J\n" +
 	"\vListMessage\x12\x1b.core.v1.ListMessageRequest\x1a\x1c.core.v1.ListMessageResponse\"\x00\x12P\n" +
 	"\rCreateMessage\x12\x1d.core.v1.CreateMessageRequest\x1a\x1e.core.v1.CreateMessageResponse\"\x00B\x7f\n" +
 	"\vcom.core.v1B\fSrvBaseProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
@@ -495,49 +885,75 @@ func file_core_v1_srv_base_proto_rawDescGZIP() []byte {
 	return file_core_v1_srv_base_proto_rawDescData
 }
 
-var file_core_v1_srv_base_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
+var file_core_v1_srv_base_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_core_v1_srv_base_proto_goTypes = []any{
-	(*ListClientRequest)(nil),     // 0: core.v1.ListClientRequest
-	(*ListClientResponse)(nil),    // 1: core.v1.ListClientResponse
-	(*CreateClientRequest)(nil),   // 2: core.v1.CreateClientRequest
-	(*CreateClientResponse)(nil),  // 3: core.v1.CreateClientResponse
-	(*ListMessageRequest)(nil),    // 4: core.v1.ListMessageRequest
-	(*ListMessageResponse)(nil),   // 5: core.v1.ListMessageResponse
-	(*CreateMessageRequest)(nil),  // 6: core.v1.CreateMessageRequest
-	(*CreateMessageResponse)(nil), // 7: core.v1.CreateMessageResponse
-	(*v1.Pagination)(nil),         // 8: base.v1.Pagination
-	(*v1.Sort)(nil),               // 9: base.v1.Sort
-	(*v1.UUID)(nil),               // 10: base.v1.UUID
-	(*Client)(nil),                // 11: core.v1.Client
-	(*Message)(nil),               // 12: core.v1.Message
+	(*ListClientRequest)(nil),                     // 0: core.v1.ListClientRequest
+	(*ListClientResponse)(nil),                    // 1: core.v1.ListClientResponse
+	(*CreateClientRequest)(nil),                   // 2: core.v1.CreateClientRequest
+	(*CreateClientResponse)(nil),                  // 3: core.v1.CreateClientResponse
+	(*ListClientConversationRequest)(nil),         // 4: core.v1.ListClientConversationRequest
+	(*ListClientConversationResponse)(nil),        // 5: core.v1.ListClientConversationResponse
+	(*CreateClientConversationRequest)(nil),       // 6: core.v1.CreateClientConversationRequest
+	(*CreateClientConversationResponse)(nil),      // 7: core.v1.CreateClientConversationResponse
+	(*ListClientGroupConversationRequest)(nil),    // 8: core.v1.ListClientGroupConversationRequest
+	(*ListClientGroupConversationResponse)(nil),   // 9: core.v1.ListClientGroupConversationResponse
+	(*CreateClientGroupConversationRequest)(nil),  // 10: core.v1.CreateClientGroupConversationRequest
+	(*CreateClientGroupConversationResponse)(nil), // 11: core.v1.CreateClientGroupConversationResponse
+	(*ListMessageRequest)(nil),                    // 12: core.v1.ListMessageRequest
+	(*ListMessageResponse)(nil),                   // 13: core.v1.ListMessageResponse
+	(*CreateMessageRequest)(nil),                  // 14: core.v1.CreateMessageRequest
+	(*CreateMessageResponse)(nil),                 // 15: core.v1.CreateMessageResponse
+	(*v1.Pagination)(nil),                         // 16: base.v1.Pagination
+	(*v1.Sort)(nil),                               // 17: base.v1.Sort
+	(*v1.UUID)(nil),                               // 18: base.v1.UUID
+	(*Client)(nil),                                // 19: core.v1.Client
+	(*ClientConversation)(nil),                    // 20: core.v1.ClientConversation
+	(*ClientGroupConversation)(nil),               // 21: core.v1.ClientGroupConversation
+	(*Message)(nil),                               // 22: core.v1.Message
 }
 var file_core_v1_srv_base_proto_depIdxs = []int32{
-	8,  // 0: core.v1.ListClientRequest.pagination:type_name -> base.v1.Pagination
-	9,  // 1: core.v1.ListClientRequest.sort:type_name -> base.v1.Sort
-	10, // 2: core.v1.ListClientRequest.id:type_name -> base.v1.UUID
-	11, // 3: core.v1.ListClientResponse.data:type_name -> core.v1.Client
-	11, // 4: core.v1.CreateClientResponse.data:type_name -> core.v1.Client
-	8,  // 5: core.v1.ListMessageRequest.pagination:type_name -> base.v1.Pagination
-	9,  // 6: core.v1.ListMessageRequest.sort:type_name -> base.v1.Sort
-	10, // 7: core.v1.ListMessageRequest.source_id:type_name -> base.v1.UUID
-	10, // 8: core.v1.ListMessageRequest.target_id:type_name -> base.v1.UUID
-	12, // 9: core.v1.ListMessageResponse.data:type_name -> core.v1.Message
-	10, // 10: core.v1.CreateMessageRequest.source_id:type_name -> base.v1.UUID
-	10, // 11: core.v1.CreateMessageRequest.target_id:type_name -> base.v1.UUID
-	12, // 12: core.v1.CreateMessageResponse.data:type_name -> core.v1.Message
-	0,  // 13: core.v1.BaseService.ListClient:input_type -> core.v1.ListClientRequest
-	2,  // 14: core.v1.BaseService.CreateClient:input_type -> core.v1.CreateClientRequest
-	4,  // 15: core.v1.BaseService.ListMessage:input_type -> core.v1.ListMessageRequest
-	6,  // 16: core.v1.BaseService.CreateMessage:input_type -> core.v1.CreateMessageRequest
-	1,  // 17: core.v1.BaseService.ListClient:output_type -> core.v1.ListClientResponse
-	3,  // 18: core.v1.BaseService.CreateClient:output_type -> core.v1.CreateClientResponse
-	5,  // 19: core.v1.BaseService.ListMessage:output_type -> core.v1.ListMessageResponse
-	7,  // 20: core.v1.BaseService.CreateMessage:output_type -> core.v1.CreateMessageResponse
-	17, // [17:21] is the sub-list for method output_type
-	13, // [13:17] is the sub-list for method input_type
-	13, // [13:13] is the sub-list for extension type_name
-	13, // [13:13] is the sub-list for extension extendee
-	0,  // [0:13] is the sub-list for field type_name
+	16, // 0: core.v1.ListClientRequest.pagination:type_name -> base.v1.Pagination
+	17, // 1: core.v1.ListClientRequest.sort:type_name -> base.v1.Sort
+	18, // 2: core.v1.ListClientRequest.id:type_name -> base.v1.UUID
+	19, // 3: core.v1.ListClientResponse.data:type_name -> core.v1.Client
+	19, // 4: core.v1.CreateClientResponse.data:type_name -> core.v1.Client
+	18, // 5: core.v1.ListClientConversationRequest.client_id:type_name -> base.v1.UUID
+	20, // 6: core.v1.ListClientConversationResponse.data:type_name -> core.v1.ClientConversation
+	18, // 7: core.v1.CreateClientConversationRequest.client_id:type_name -> base.v1.UUID
+	21, // 8: core.v1.CreateClientConversationResponse.data:type_name -> core.v1.ClientGroupConversation
+	18, // 9: core.v1.ListClientGroupConversationRequest.group_id:type_name -> base.v1.UUID
+	21, // 10: core.v1.ListClientGroupConversationResponse.data:type_name -> core.v1.ClientGroupConversation
+	18, // 11: core.v1.CreateClientGroupConversationRequest.group_id:type_name -> base.v1.UUID
+	21, // 12: core.v1.CreateClientGroupConversationResponse.data:type_name -> core.v1.ClientGroupConversation
+	16, // 13: core.v1.ListMessageRequest.pagination:type_name -> base.v1.Pagination
+	17, // 14: core.v1.ListMessageRequest.sort:type_name -> base.v1.Sort
+	18, // 15: core.v1.ListMessageRequest.source_id:type_name -> base.v1.UUID
+	18, // 16: core.v1.ListMessageRequest.target_id:type_name -> base.v1.UUID
+	22, // 17: core.v1.ListMessageResponse.data:type_name -> core.v1.Message
+	18, // 18: core.v1.CreateMessageRequest.source_id:type_name -> base.v1.UUID
+	18, // 19: core.v1.CreateMessageRequest.target_id:type_name -> base.v1.UUID
+	22, // 20: core.v1.CreateMessageResponse.data:type_name -> core.v1.Message
+	0,  // 21: core.v1.BaseService.ListClient:input_type -> core.v1.ListClientRequest
+	2,  // 22: core.v1.BaseService.CreateClient:input_type -> core.v1.CreateClientRequest
+	4,  // 23: core.v1.BaseService.ListClientConversation:input_type -> core.v1.ListClientConversationRequest
+	6,  // 24: core.v1.BaseService.CreateClientConversation:input_type -> core.v1.CreateClientConversationRequest
+	8,  // 25: core.v1.BaseService.ListClientGroupConversation:input_type -> core.v1.ListClientGroupConversationRequest
+	10, // 26: core.v1.BaseService.CreateClientGroupConversation:input_type -> core.v1.CreateClientGroupConversationRequest
+	12, // 27: core.v1.BaseService.ListMessage:input_type -> core.v1.ListMessageRequest
+	14, // 28: core.v1.BaseService.CreateMessage:input_type -> core.v1.CreateMessageRequest
+	1,  // 29: core.v1.BaseService.ListClient:output_type -> core.v1.ListClientResponse
+	3,  // 30: core.v1.BaseService.CreateClient:output_type -> core.v1.CreateClientResponse
+	5,  // 31: core.v1.BaseService.ListClientConversation:output_type -> core.v1.ListClientConversationResponse
+	7,  // 32: core.v1.BaseService.CreateClientConversation:output_type -> core.v1.CreateClientConversationResponse
+	9,  // 33: core.v1.BaseService.ListClientGroupConversation:output_type -> core.v1.ListClientGroupConversationResponse
+	11, // 34: core.v1.BaseService.CreateClientGroupConversation:output_type -> core.v1.CreateClientGroupConversationResponse
+	13, // 35: core.v1.BaseService.ListMessage:output_type -> core.v1.ListMessageResponse
+	15, // 36: core.v1.BaseService.CreateMessage:output_type -> core.v1.CreateMessageResponse
+	29, // [29:37] is the sub-list for method output_type
+	21, // [21:29] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_srv_base_proto_init() }
@@ -548,14 +964,14 @@ func file_core_v1_srv_base_proto_init() {
 	file_core_v1_client_proto_init()
 	file_core_v1_message_proto_init()
 	file_core_v1_srv_base_proto_msgTypes[0].OneofWrappers = []any{}
-	file_core_v1_srv_base_proto_msgTypes[4].OneofWrappers = []any{}
+	file_core_v1_srv_base_proto_msgTypes[12].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_srv_base_proto_rawDesc), len(file_core_v1_srv_base_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   8,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

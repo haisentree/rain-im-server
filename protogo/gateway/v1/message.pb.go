@@ -23,58 +23,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type ConnectRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	ClientId      string                 `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty" validate:"required"`
-	Platform      Platform               `protobuf:"varint,2,opt,name=platform,proto3,enum=gateway.v1.Platform" json:"platform,omitempty" validate:"required"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *ConnectRequest) Reset() {
-	*x = ConnectRequest{}
-	mi := &file_gateway_v1_message_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *ConnectRequest) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*ConnectRequest) ProtoMessage() {}
-
-func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_gateway_v1_message_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
-func (*ConnectRequest) Descriptor() ([]byte, []int) {
-	return file_gateway_v1_message_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *ConnectRequest) GetClientId() string {
-	if x != nil {
-		return x.ClientId
-	}
-	return ""
-}
-
-func (x *ConnectRequest) GetPlatform() Platform {
-	if x != nil {
-		return x.Platform
-	}
-	return Platform_PLATFORM_UNSPECIFIED
-}
-
 type RawMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Type          Message                `protobuf:"varint,1,opt,name=type,proto3,enum=gateway.v1.Message" json:"type,omitempty"`
@@ -85,7 +33,7 @@ type RawMessage struct {
 
 func (x *RawMessage) Reset() {
 	*x = RawMessage{}
-	mi := &file_gateway_v1_message_proto_msgTypes[1]
+	mi := &file_gateway_v1_message_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -97,7 +45,7 @@ func (x *RawMessage) String() string {
 func (*RawMessage) ProtoMessage() {}
 
 func (x *RawMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_gateway_v1_message_proto_msgTypes[1]
+	mi := &file_gateway_v1_message_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -110,7 +58,7 @@ func (x *RawMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use RawMessage.ProtoReflect.Descriptor instead.
 func (*RawMessage) Descriptor() ([]byte, []int) {
-	return file_gateway_v1_message_proto_rawDescGZIP(), []int{1}
+	return file_gateway_v1_message_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *RawMessage) GetType() Message {
@@ -131,15 +79,15 @@ type SingleMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SourceId      *v1.UUID               `protobuf:"bytes,1,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty"`
 	TargetId      *v1.UUID               `protobuf:"bytes,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
-	Content       string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty" validate:"required"`
-	Method        Method                 `protobuf:"varint,4,opt,name=method,proto3,enum=gateway.v1.Method" json:"method,omitempty"`
+	SeqId         uint64                 `protobuf:"fixed64,3,opt,name=seq_id,json=seqId,proto3" json:"seq_id,omitempty"`
+	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty" validate:"required"` // 时间
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *SingleMessage) Reset() {
 	*x = SingleMessage{}
-	mi := &file_gateway_v1_message_proto_msgTypes[2]
+	mi := &file_gateway_v1_message_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -151,7 +99,7 @@ func (x *SingleMessage) String() string {
 func (*SingleMessage) ProtoMessage() {}
 
 func (x *SingleMessage) ProtoReflect() protoreflect.Message {
-	mi := &file_gateway_v1_message_proto_msgTypes[2]
+	mi := &file_gateway_v1_message_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -164,7 +112,7 @@ func (x *SingleMessage) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use SingleMessage.ProtoReflect.Descriptor instead.
 func (*SingleMessage) Descriptor() ([]byte, []int) {
-	return file_gateway_v1_message_proto_rawDescGZIP(), []int{2}
+	return file_gateway_v1_message_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *SingleMessage) GetSourceId() *v1.UUID {
@@ -181,6 +129,13 @@ func (x *SingleMessage) GetTargetId() *v1.UUID {
 	return nil
 }
 
+func (x *SingleMessage) GetSeqId() uint64 {
+	if x != nil {
+		return x.SeqId
+	}
+	return 0
+}
+
 func (x *SingleMessage) GetContent() string {
 	if x != nil {
 		return x.Content
@@ -188,11 +143,49 @@ func (x *SingleMessage) GetContent() string {
 	return ""
 }
 
-func (x *SingleMessage) GetMethod() Method {
+// TODO: 暂时不使用,RelayGatewaySingleMessage类型的RawMessage,data直接对应了SingleMessage
+type RelayGatewaySingleMessage struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []byte                 `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *RelayGatewaySingleMessage) Reset() {
+	*x = RelayGatewaySingleMessage{}
+	mi := &file_gateway_v1_message_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *RelayGatewaySingleMessage) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*RelayGatewaySingleMessage) ProtoMessage() {}
+
+func (x *RelayGatewaySingleMessage) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_message_proto_msgTypes[2]
 	if x != nil {
-		return x.Method
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
 	}
-	return Method_METHOD_UNSPECIFIED
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use RelayGatewaySingleMessage.ProtoReflect.Descriptor instead.
+func (*RelayGatewaySingleMessage) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_message_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *RelayGatewaySingleMessage) GetData() []byte {
+	if x != nil {
+		return x.Data
+	}
+	return nil
 }
 
 type GroupMessage struct {
@@ -512,19 +505,18 @@ var File_gateway_v1_message_proto protoreflect.FileDescriptor
 const file_gateway_v1_message_proto_rawDesc = "" +
 	"\n" +
 	"\x18gateway/v1/message.proto\x12\n" +
-	"gateway.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/uuid.proto\x1a\x18gateway/v1/gateway.proto\"\x93\x01\n" +
-	"\x0eConnectRequest\x125\n" +
-	"\tclient_id\x18\x01 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bclientId\x12J\n" +
-	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bplatform\"I\n" +
+	"gateway.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/uuid.proto\x1a\x18gateway/v1/gateway.proto\"I\n" +
 	"\n" +
 	"RawMessage\x12'\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x13.gateway.v1.MessageR\x04type\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\"\xc7\x01\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\xb2\x01\n" +
 	"\rSingleMessage\x12*\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bsourceId\x12*\n" +
-	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x122\n" +
-	"\acontent\x18\x03 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\acontent\x12*\n" +
-	"\x06method\x18\x04 \x01(\x0e2\x12.gateway.v1.MethodR\x06method\"\xc4\x01\n" +
+	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x12\x15\n" +
+	"\x06seq_id\x18\x03 \x01(\x06R\x05seqId\x122\n" +
+	"\acontent\x18\x04 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\acontent\"/\n" +
+	"\x19RelayGatewaySingleMessage\x12\x12\n" +
+	"\x04data\x18\x01 \x01(\fR\x04data\"\xc4\x01\n" +
 	"\fGroupMessage\x12*\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bsourceId\x12(\n" +
 	"\bgroup_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\agroupId\x12*\n" +
@@ -561,38 +553,34 @@ func file_gateway_v1_message_proto_rawDescGZIP() []byte {
 
 var file_gateway_v1_message_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_gateway_v1_message_proto_goTypes = []any{
-	(*ConnectRequest)(nil), // 0: gateway.v1.ConnectRequest
-	(*RawMessage)(nil),     // 1: gateway.v1.RawMessage
-	(*SingleMessage)(nil),  // 2: gateway.v1.SingleMessage
-	(*GroupMessage)(nil),   // 3: gateway.v1.GroupMessage
-	(*RelayMessage)(nil),   // 4: gateway.v1.RelayMessage
-	(*PushMessage)(nil),    // 5: gateway.v1.PushMessage
-	(*PullMessage)(nil),    // 6: gateway.v1.PullMessage
-	(*ConfirmMessage)(nil), // 7: gateway.v1.ConfirmMessage
-	(*ReadedMessage)(nil),  // 8: gateway.v1.ReadedMessage
-	(Platform)(0),          // 9: gateway.v1.Platform
-	(Message)(0),           // 10: gateway.v1.Message
-	(*v1.UUID)(nil),        // 11: base.v1.UUID
-	(Method)(0),            // 12: gateway.v1.Method
+	(*RawMessage)(nil),                // 0: gateway.v1.RawMessage
+	(*SingleMessage)(nil),             // 1: gateway.v1.SingleMessage
+	(*RelayGatewaySingleMessage)(nil), // 2: gateway.v1.RelayGatewaySingleMessage
+	(*GroupMessage)(nil),              // 3: gateway.v1.GroupMessage
+	(*RelayMessage)(nil),              // 4: gateway.v1.RelayMessage
+	(*PushMessage)(nil),               // 5: gateway.v1.PushMessage
+	(*PullMessage)(nil),               // 6: gateway.v1.PullMessage
+	(*ConfirmMessage)(nil),            // 7: gateway.v1.ConfirmMessage
+	(*ReadedMessage)(nil),             // 8: gateway.v1.ReadedMessage
+	(Message)(0),                      // 9: gateway.v1.Message
+	(*v1.UUID)(nil),                   // 10: base.v1.UUID
 }
 var file_gateway_v1_message_proto_depIdxs = []int32{
-	9,  // 0: gateway.v1.ConnectRequest.platform:type_name -> gateway.v1.Platform
-	10, // 1: gateway.v1.RawMessage.type:type_name -> gateway.v1.Message
-	11, // 2: gateway.v1.SingleMessage.source_id:type_name -> base.v1.UUID
-	11, // 3: gateway.v1.SingleMessage.target_id:type_name -> base.v1.UUID
-	12, // 4: gateway.v1.SingleMessage.method:type_name -> gateway.v1.Method
-	11, // 5: gateway.v1.GroupMessage.source_id:type_name -> base.v1.UUID
-	11, // 6: gateway.v1.GroupMessage.group_id:type_name -> base.v1.UUID
-	11, // 7: gateway.v1.GroupMessage.target_id:type_name -> base.v1.UUID
-	11, // 8: gateway.v1.RelayMessage.source_id:type_name -> base.v1.UUID
-	11, // 9: gateway.v1.RelayMessage.target_id:type_name -> base.v1.UUID
-	11, // 10: gateway.v1.PullMessage.client_id:type_name -> base.v1.UUID
-	11, // 11: gateway.v1.PullMessage.target_id:type_name -> base.v1.UUID
-	12, // [12:12] is the sub-list for method output_type
-	12, // [12:12] is the sub-list for method input_type
-	12, // [12:12] is the sub-list for extension type_name
-	12, // [12:12] is the sub-list for extension extendee
-	0,  // [0:12] is the sub-list for field type_name
+	9,  // 0: gateway.v1.RawMessage.type:type_name -> gateway.v1.Message
+	10, // 1: gateway.v1.SingleMessage.source_id:type_name -> base.v1.UUID
+	10, // 2: gateway.v1.SingleMessage.target_id:type_name -> base.v1.UUID
+	10, // 3: gateway.v1.GroupMessage.source_id:type_name -> base.v1.UUID
+	10, // 4: gateway.v1.GroupMessage.group_id:type_name -> base.v1.UUID
+	10, // 5: gateway.v1.GroupMessage.target_id:type_name -> base.v1.UUID
+	10, // 6: gateway.v1.RelayMessage.source_id:type_name -> base.v1.UUID
+	10, // 7: gateway.v1.RelayMessage.target_id:type_name -> base.v1.UUID
+	10, // 8: gateway.v1.PullMessage.client_id:type_name -> base.v1.UUID
+	10, // 9: gateway.v1.PullMessage.target_id:type_name -> base.v1.UUID
+	10, // [10:10] is the sub-list for method output_type
+	10, // [10:10] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_gateway_v1_message_proto_init() }

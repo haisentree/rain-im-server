@@ -14,7 +14,7 @@ service BaseService {
     rpc CreateClientConversation(CreateClientConversationRequest) returns (CreateClientConversationResponse) {}
 
     rpc ListClientGroupConversation(ListClientGroupConversationRequest) returns (ListClientGroupConversationResponse) {}
-    rpc CreateClientGroupConversation(CreateClientGroupConversationRequest) returns (CreateClientGroupConversationResponse
+    rpc CreateClientGroupConversation(CreateClientGroupConversationRequest) returns (CreateClientGroupConversationResponse){}
 
     rpc ListMessage(ListMessageRequest) returns (ListMessageResponse) {}
     rpc CreateMessage(CreateMessageRequest) returns (CreateMessageResponse) {}
@@ -39,7 +39,7 @@ message ListClientConversationRequest {
     repeated base.v1.UUID client_id = 1;
 }
 message ListClientConversationResponse {
-    repeated Conversation data = 1;
+    repeated ClientConversation data = 1;
 }
 
 message CreateClientConversationRequest {
@@ -47,14 +47,22 @@ message CreateClientConversationRequest {
     string       title     = 2;
 }
 message CreateClientConversationResponse {
-    Conversation data = 1;
+    ClientGroupConversation data = 1;
 }
 
 message ListClientGroupConversationRequest {
     repeated base.v1.UUID group_id = 1;
 }
 message ListClientGroupConversationResponse {
-    repeated Conversation data = 1;
+    repeated ClientGroupConversation data = 1;
+}
+
+message CreateClientGroupConversationRequest {
+    base.v1.UUID group_id = 1;
+    string       title    = 2;
+}
+message CreateClientGroupConversationResponse {
+    ClientGroupConversation data = 1;
 }
 
 message ListMessageRequest {

@@ -2,6 +2,8 @@ package service
 
 import (
 	"net/http"
+	"rain-im-server/global"
+	"rain-im-server/internal/core/biz"
 	"rain-im-server/protogo/core/v1/corev1connect"
 
 	"connectrpc.com/connect"
@@ -9,11 +11,13 @@ import (
 )
 
 func NewServer() http.Server {
-	base := &BaseServer{}
+	messageBiz := biz.NewMessageBiz(global.DB)
+
+	baseServer := NewBaseServer(messageBiz)
 	mux := http.NewServeMux()
 
 	path, handler := corev1connect.NewBaseServiceHandler(
-		base,
+		baseServer,
 		connect.WithInterceptors(validate.NewInterceptor()),
 	)
 

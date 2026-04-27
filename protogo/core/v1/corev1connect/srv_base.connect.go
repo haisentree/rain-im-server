@@ -38,6 +38,18 @@ const (
 	// BaseServiceCreateClientProcedure is the fully-qualified name of the BaseService's CreateClient
 	// RPC.
 	BaseServiceCreateClientProcedure = "/core.v1.BaseService/CreateClient"
+	// BaseServiceListClientConversationProcedure is the fully-qualified name of the BaseService's
+	// ListClientConversation RPC.
+	BaseServiceListClientConversationProcedure = "/core.v1.BaseService/ListClientConversation"
+	// BaseServiceCreateClientConversationProcedure is the fully-qualified name of the BaseService's
+	// CreateClientConversation RPC.
+	BaseServiceCreateClientConversationProcedure = "/core.v1.BaseService/CreateClientConversation"
+	// BaseServiceListClientGroupConversationProcedure is the fully-qualified name of the BaseService's
+	// ListClientGroupConversation RPC.
+	BaseServiceListClientGroupConversationProcedure = "/core.v1.BaseService/ListClientGroupConversation"
+	// BaseServiceCreateClientGroupConversationProcedure is the fully-qualified name of the
+	// BaseService's CreateClientGroupConversation RPC.
+	BaseServiceCreateClientGroupConversationProcedure = "/core.v1.BaseService/CreateClientGroupConversation"
 	// BaseServiceListMessageProcedure is the fully-qualified name of the BaseService's ListMessage RPC.
 	BaseServiceListMessageProcedure = "/core.v1.BaseService/ListMessage"
 	// BaseServiceCreateMessageProcedure is the fully-qualified name of the BaseService's CreateMessage
@@ -49,6 +61,10 @@ const (
 type BaseServiceClient interface {
 	ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error)
 	CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error)
+	ListClientConversation(context.Context, *connect.Request[v1.ListClientConversationRequest]) (*connect.Response[v1.ListClientConversationResponse], error)
+	CreateClientConversation(context.Context, *connect.Request[v1.CreateClientConversationRequest]) (*connect.Response[v1.CreateClientConversationResponse], error)
+	ListClientGroupConversation(context.Context, *connect.Request[v1.ListClientGroupConversationRequest]) (*connect.Response[v1.ListClientGroupConversationResponse], error)
+	CreateClientGroupConversation(context.Context, *connect.Request[v1.CreateClientGroupConversationRequest]) (*connect.Response[v1.CreateClientGroupConversationResponse], error)
 	ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error)
 	CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error)
 }
@@ -76,6 +92,30 @@ func NewBaseServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 			connect.WithSchema(baseServiceMethods.ByName("CreateClient")),
 			connect.WithClientOptions(opts...),
 		),
+		listClientConversation: connect.NewClient[v1.ListClientConversationRequest, v1.ListClientConversationResponse](
+			httpClient,
+			baseURL+BaseServiceListClientConversationProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("ListClientConversation")),
+			connect.WithClientOptions(opts...),
+		),
+		createClientConversation: connect.NewClient[v1.CreateClientConversationRequest, v1.CreateClientConversationResponse](
+			httpClient,
+			baseURL+BaseServiceCreateClientConversationProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("CreateClientConversation")),
+			connect.WithClientOptions(opts...),
+		),
+		listClientGroupConversation: connect.NewClient[v1.ListClientGroupConversationRequest, v1.ListClientGroupConversationResponse](
+			httpClient,
+			baseURL+BaseServiceListClientGroupConversationProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("ListClientGroupConversation")),
+			connect.WithClientOptions(opts...),
+		),
+		createClientGroupConversation: connect.NewClient[v1.CreateClientGroupConversationRequest, v1.CreateClientGroupConversationResponse](
+			httpClient,
+			baseURL+BaseServiceCreateClientGroupConversationProcedure,
+			connect.WithSchema(baseServiceMethods.ByName("CreateClientGroupConversation")),
+			connect.WithClientOptions(opts...),
+		),
 		listMessage: connect.NewClient[v1.ListMessageRequest, v1.ListMessageResponse](
 			httpClient,
 			baseURL+BaseServiceListMessageProcedure,
@@ -93,10 +133,14 @@ func NewBaseServiceClient(httpClient connect.HTTPClient, baseURL string, opts ..
 
 // baseServiceClient implements BaseServiceClient.
 type baseServiceClient struct {
-	listClient    *connect.Client[v1.ListClientRequest, v1.ListClientResponse]
-	createClient  *connect.Client[v1.CreateClientRequest, v1.CreateClientResponse]
-	listMessage   *connect.Client[v1.ListMessageRequest, v1.ListMessageResponse]
-	createMessage *connect.Client[v1.CreateMessageRequest, v1.CreateMessageResponse]
+	listClient                    *connect.Client[v1.ListClientRequest, v1.ListClientResponse]
+	createClient                  *connect.Client[v1.CreateClientRequest, v1.CreateClientResponse]
+	listClientConversation        *connect.Client[v1.ListClientConversationRequest, v1.ListClientConversationResponse]
+	createClientConversation      *connect.Client[v1.CreateClientConversationRequest, v1.CreateClientConversationResponse]
+	listClientGroupConversation   *connect.Client[v1.ListClientGroupConversationRequest, v1.ListClientGroupConversationResponse]
+	createClientGroupConversation *connect.Client[v1.CreateClientGroupConversationRequest, v1.CreateClientGroupConversationResponse]
+	listMessage                   *connect.Client[v1.ListMessageRequest, v1.ListMessageResponse]
+	createMessage                 *connect.Client[v1.CreateMessageRequest, v1.CreateMessageResponse]
 }
 
 // ListClient calls core.v1.BaseService.ListClient.
@@ -107,6 +151,26 @@ func (c *baseServiceClient) ListClient(ctx context.Context, req *connect.Request
 // CreateClient calls core.v1.BaseService.CreateClient.
 func (c *baseServiceClient) CreateClient(ctx context.Context, req *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
 	return c.createClient.CallUnary(ctx, req)
+}
+
+// ListClientConversation calls core.v1.BaseService.ListClientConversation.
+func (c *baseServiceClient) ListClientConversation(ctx context.Context, req *connect.Request[v1.ListClientConversationRequest]) (*connect.Response[v1.ListClientConversationResponse], error) {
+	return c.listClientConversation.CallUnary(ctx, req)
+}
+
+// CreateClientConversation calls core.v1.BaseService.CreateClientConversation.
+func (c *baseServiceClient) CreateClientConversation(ctx context.Context, req *connect.Request[v1.CreateClientConversationRequest]) (*connect.Response[v1.CreateClientConversationResponse], error) {
+	return c.createClientConversation.CallUnary(ctx, req)
+}
+
+// ListClientGroupConversation calls core.v1.BaseService.ListClientGroupConversation.
+func (c *baseServiceClient) ListClientGroupConversation(ctx context.Context, req *connect.Request[v1.ListClientGroupConversationRequest]) (*connect.Response[v1.ListClientGroupConversationResponse], error) {
+	return c.listClientGroupConversation.CallUnary(ctx, req)
+}
+
+// CreateClientGroupConversation calls core.v1.BaseService.CreateClientGroupConversation.
+func (c *baseServiceClient) CreateClientGroupConversation(ctx context.Context, req *connect.Request[v1.CreateClientGroupConversationRequest]) (*connect.Response[v1.CreateClientGroupConversationResponse], error) {
+	return c.createClientGroupConversation.CallUnary(ctx, req)
 }
 
 // ListMessage calls core.v1.BaseService.ListMessage.
@@ -123,6 +187,10 @@ func (c *baseServiceClient) CreateMessage(ctx context.Context, req *connect.Requ
 type BaseServiceHandler interface {
 	ListClient(context.Context, *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error)
 	CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error)
+	ListClientConversation(context.Context, *connect.Request[v1.ListClientConversationRequest]) (*connect.Response[v1.ListClientConversationResponse], error)
+	CreateClientConversation(context.Context, *connect.Request[v1.CreateClientConversationRequest]) (*connect.Response[v1.CreateClientConversationResponse], error)
+	ListClientGroupConversation(context.Context, *connect.Request[v1.ListClientGroupConversationRequest]) (*connect.Response[v1.ListClientGroupConversationResponse], error)
+	CreateClientGroupConversation(context.Context, *connect.Request[v1.CreateClientGroupConversationRequest]) (*connect.Response[v1.CreateClientGroupConversationResponse], error)
 	ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error)
 	CreateMessage(context.Context, *connect.Request[v1.CreateMessageRequest]) (*connect.Response[v1.CreateMessageResponse], error)
 }
@@ -146,6 +214,30 @@ func NewBaseServiceHandler(svc BaseServiceHandler, opts ...connect.HandlerOption
 		connect.WithSchema(baseServiceMethods.ByName("CreateClient")),
 		connect.WithHandlerOptions(opts...),
 	)
+	baseServiceListClientConversationHandler := connect.NewUnaryHandler(
+		BaseServiceListClientConversationProcedure,
+		svc.ListClientConversation,
+		connect.WithSchema(baseServiceMethods.ByName("ListClientConversation")),
+		connect.WithHandlerOptions(opts...),
+	)
+	baseServiceCreateClientConversationHandler := connect.NewUnaryHandler(
+		BaseServiceCreateClientConversationProcedure,
+		svc.CreateClientConversation,
+		connect.WithSchema(baseServiceMethods.ByName("CreateClientConversation")),
+		connect.WithHandlerOptions(opts...),
+	)
+	baseServiceListClientGroupConversationHandler := connect.NewUnaryHandler(
+		BaseServiceListClientGroupConversationProcedure,
+		svc.ListClientGroupConversation,
+		connect.WithSchema(baseServiceMethods.ByName("ListClientGroupConversation")),
+		connect.WithHandlerOptions(opts...),
+	)
+	baseServiceCreateClientGroupConversationHandler := connect.NewUnaryHandler(
+		BaseServiceCreateClientGroupConversationProcedure,
+		svc.CreateClientGroupConversation,
+		connect.WithSchema(baseServiceMethods.ByName("CreateClientGroupConversation")),
+		connect.WithHandlerOptions(opts...),
+	)
 	baseServiceListMessageHandler := connect.NewUnaryHandler(
 		BaseServiceListMessageProcedure,
 		svc.ListMessage,
@@ -164,6 +256,14 @@ func NewBaseServiceHandler(svc BaseServiceHandler, opts ...connect.HandlerOption
 			baseServiceListClientHandler.ServeHTTP(w, r)
 		case BaseServiceCreateClientProcedure:
 			baseServiceCreateClientHandler.ServeHTTP(w, r)
+		case BaseServiceListClientConversationProcedure:
+			baseServiceListClientConversationHandler.ServeHTTP(w, r)
+		case BaseServiceCreateClientConversationProcedure:
+			baseServiceCreateClientConversationHandler.ServeHTTP(w, r)
+		case BaseServiceListClientGroupConversationProcedure:
+			baseServiceListClientGroupConversationHandler.ServeHTTP(w, r)
+		case BaseServiceCreateClientGroupConversationProcedure:
+			baseServiceCreateClientGroupConversationHandler.ServeHTTP(w, r)
 		case BaseServiceListMessageProcedure:
 			baseServiceListMessageHandler.ServeHTTP(w, r)
 		case BaseServiceCreateMessageProcedure:
@@ -183,6 +283,22 @@ func (UnimplementedBaseServiceHandler) ListClient(context.Context, *connect.Requ
 
 func (UnimplementedBaseServiceHandler) CreateClient(context.Context, *connect.Request[v1.CreateClientRequest]) (*connect.Response[v1.CreateClientResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.CreateClient is not implemented"))
+}
+
+func (UnimplementedBaseServiceHandler) ListClientConversation(context.Context, *connect.Request[v1.ListClientConversationRequest]) (*connect.Response[v1.ListClientConversationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.ListClientConversation is not implemented"))
+}
+
+func (UnimplementedBaseServiceHandler) CreateClientConversation(context.Context, *connect.Request[v1.CreateClientConversationRequest]) (*connect.Response[v1.CreateClientConversationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.CreateClientConversation is not implemented"))
+}
+
+func (UnimplementedBaseServiceHandler) ListClientGroupConversation(context.Context, *connect.Request[v1.ListClientGroupConversationRequest]) (*connect.Response[v1.ListClientGroupConversationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.ListClientGroupConversation is not implemented"))
+}
+
+func (UnimplementedBaseServiceHandler) CreateClientGroupConversation(context.Context, *connect.Request[v1.CreateClientGroupConversationRequest]) (*connect.Response[v1.CreateClientGroupConversationResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.BaseService.CreateClientGroupConversation is not implemented"))
 }
 
 func (UnimplementedBaseServiceHandler) ListMessage(context.Context, *connect.Request[v1.ListMessageRequest]) (*connect.Response[v1.ListMessageResponse], error) {

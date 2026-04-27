@@ -2,6 +2,7 @@ syntax = "proto3";
 package core.v1;
 
 import "base/v1/uuid.proto";
+import "core/v1/message.proto";
 
 service MessageService {
     rpc ListMessageBySeq(ListMessageBySeqRequest) returns (ListMessageBySeqResponse) {}

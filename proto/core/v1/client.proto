@@ -5,19 +5,19 @@ import "tagger/tagger.proto";
 import "base/v1/time.proto";
 import "base/v1/uuid.proto";
 
+enum ClientType {
+    CLIENT_TYPE_UNSPECIFIED = 0;
+    CLIENT_TYPE_SYSTEM      = 1;
+    CLIENT_TYPE_USER        = 2;
+    CLIENT_TYPE_GROUP       = 3;
+}
+
 message Client {
     base.v1.UUID id                  = 1 [(tagger.tags) = "bun:\"type:uuid,pk\""];
     ClientType   type                = 2;
     base.v1.Time created_at          = 3 [(tagger.tags) = "bun:\"type:timestamptz\""];
     base.v1.Time updated_at          = 4 [(tagger.tags) = "bun:\"type:timestamptz\""];
     optional base.v1.Time deleted_at = 5 [(tagger.tags) = "bun:\"type:timestamptz,soft_delete,nullzero\""];
-}
-
-enum ClientType {
-    CLIENT_TYPE_UNSPECIFIED = 0;
-    CLIENT_TYPE_SYSTEM      = 1;
-    CLIENT_TYPE_USER        = 2;
-    CLIENT_TYPE_GROUP       = 3;
 }
 
 message ClientConversation {

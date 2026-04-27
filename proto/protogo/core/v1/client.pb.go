@@ -23,12 +23,65 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type ClientType int32
+
+const (
+	ClientType_CLIENT_TYPE_UNSPECIFIED ClientType = 0
+	ClientType_CLIENT_TYPE_SYSTEM      ClientType = 1
+	ClientType_CLIENT_TYPE_USER        ClientType = 2
+	ClientType_CLIENT_TYPE_GROUP       ClientType = 3
+)
+
+// Enum value maps for ClientType.
+var (
+	ClientType_name = map[int32]string{
+		0: "CLIENT_TYPE_UNSPECIFIED",
+		1: "CLIENT_TYPE_SYSTEM",
+		2: "CLIENT_TYPE_USER",
+		3: "CLIENT_TYPE_GROUP",
+	}
+	ClientType_value = map[string]int32{
+		"CLIENT_TYPE_UNSPECIFIED": 0,
+		"CLIENT_TYPE_SYSTEM":      1,
+		"CLIENT_TYPE_USER":        2,
+		"CLIENT_TYPE_GROUP":       3,
+	}
+)
+
+func (x ClientType) Enum() *ClientType {
+	p := new(ClientType)
+	*p = x
+	return p
+}
+
+func (x ClientType) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (ClientType) Descriptor() protoreflect.EnumDescriptor {
+	return file_core_v1_client_proto_enumTypes[0].Descriptor()
+}
+
+func (ClientType) Type() protoreflect.EnumType {
+	return &file_core_v1_client_proto_enumTypes[0]
+}
+
+func (x ClientType) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use ClientType.Descriptor instead.
+func (ClientType) EnumDescriptor() ([]byte, []int) {
+	return file_core_v1_client_proto_rawDescGZIP(), []int{0}
+}
+
 type Client struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	CreatedAt     *v1.Time               `protobuf:"bytes,2,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *v1.Time               `protobuf:"bytes,3,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     *v1.Time               `protobuf:"bytes,4,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`
+	Type          ClientType             `protobuf:"varint,2,opt,name=type,proto3,enum=core.v1.ClientType" json:"type,omitempty"`
+	CreatedAt     *v1.Time               `protobuf:"bytes,3,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *v1.Time               `protobuf:"bytes,4,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	DeletedAt     *v1.Time               `protobuf:"bytes,5,opt,name=deleted_at,json=deletedAt,proto3,oneof" json:"deleted_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -70,6 +123,13 @@ func (x *Client) GetId() *v1.UUID {
 	return nil
 }
 
+func (x *Client) GetType() ClientType {
+	if x != nil {
+		return x.Type
+	}
+	return ClientType_CLIENT_TYPE_UNSPECIFIED
+}
+
 func (x *Client) GetCreatedAt() *v1.Time {
 	if x != nil {
 		return x.CreatedAt
@@ -91,30 +151,31 @@ func (x *Client) GetDeletedAt() *v1.Time {
 	return nil
 }
 
-type ClientConversition struct {
+type ClientConversation struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	ClientMin     *v1.UUID               `protobuf:"bytes,2,opt,name=client_min,json=clientMin,proto3" json:"client_min,omitempty"`
 	ClientMax     *v1.UUID               `protobuf:"bytes,3,opt,name=client_max,json=clientMax,proto3" json:"client_max,omitempty"`
-	CreatedAt     *v1.Time               `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	Seq           uint64                 `protobuf:"fixed64,4,opt,name=seq,proto3" json:"seq,omitempty"`
+	CreatedAt     *v1.Time               `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *ClientConversition) Reset() {
-	*x = ClientConversition{}
+func (x *ClientConversation) Reset() {
+	*x = ClientConversation{}
 	mi := &file_core_v1_client_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *ClientConversition) String() string {
+func (x *ClientConversation) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ClientConversition) ProtoMessage() {}
+func (*ClientConversation) ProtoMessage() {}
 
-func (x *ClientConversition) ProtoReflect() protoreflect.Message {
+func (x *ClientConversation) ProtoReflect() protoreflect.Message {
 	mi := &file_core_v1_client_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -126,33 +187,108 @@ func (x *ClientConversition) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ClientConversition.ProtoReflect.Descriptor instead.
-func (*ClientConversition) Descriptor() ([]byte, []int) {
+// Deprecated: Use ClientConversation.ProtoReflect.Descriptor instead.
+func (*ClientConversation) Descriptor() ([]byte, []int) {
 	return file_core_v1_client_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ClientConversition) GetId() *v1.UUID {
+func (x *ClientConversation) GetId() *v1.UUID {
 	if x != nil {
 		return x.Id
 	}
 	return nil
 }
 
-func (x *ClientConversition) GetClientMin() *v1.UUID {
+func (x *ClientConversation) GetClientMin() *v1.UUID {
 	if x != nil {
 		return x.ClientMin
 	}
 	return nil
 }
 
-func (x *ClientConversition) GetClientMax() *v1.UUID {
+func (x *ClientConversation) GetClientMax() *v1.UUID {
 	if x != nil {
 		return x.ClientMax
 	}
 	return nil
 }
 
-func (x *ClientConversition) GetCreatedAt() *v1.Time {
+func (x *ClientConversation) GetSeq() uint64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
+func (x *ClientConversation) GetCreatedAt() *v1.Time {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+type ClientGroupConversation struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	GroupId       *v1.UUID               `protobuf:"bytes,2,opt,name=group_id,json=groupId,proto3" json:"group_id,omitempty"`
+	Seq           uint64                 `protobuf:"fixed64,3,opt,name=seq,proto3" json:"seq,omitempty"`
+	CreatedAt     *v1.Time               `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ClientGroupConversation) Reset() {
+	*x = ClientGroupConversation{}
+	mi := &file_core_v1_client_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ClientGroupConversation) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ClientGroupConversation) ProtoMessage() {}
+
+func (x *ClientGroupConversation) ProtoReflect() protoreflect.Message {
+	mi := &file_core_v1_client_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ClientGroupConversation.ProtoReflect.Descriptor instead.
+func (*ClientGroupConversation) Descriptor() ([]byte, []int) {
+	return file_core_v1_client_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *ClientGroupConversation) GetId() *v1.UUID {
+	if x != nil {
+		return x.Id
+	}
+	return nil
+}
+
+func (x *ClientGroupConversation) GetGroupId() *v1.UUID {
+	if x != nil {
+		return x.GroupId
+	}
+	return nil
+}
+
+func (x *ClientGroupConversation) GetSeq() uint64 {
+	if x != nil {
+		return x.Seq
+	}
+	return 0
+}
+
+func (x *ClientGroupConversation) GetCreatedAt() *v1.Time {
 	if x != nil {
 		return x.CreatedAt
 	}
@@ -163,24 +299,38 @@ var File_core_v1_client_proto protoreflect.FileDescriptor
 
 const file_core_v1_client_proto_rawDesc = "" +
 	"\n" +
-	"\x14core/v1/client.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\xca\x02\n" +
+	"\x14core/v1/client.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\xf3\x02\n" +
 	"\x06Client\x126\n" +
-	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12I\n" +
+	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12'\n" +
+	"\x04type\x18\x02 \x01(\x0e2\x13.core.v1.ClientTypeR\x04type\x12I\n" +
 	"\n" +
-	"created_at\x18\x02 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\x12I\n" +
+	"created_at\x18\x03 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\x12I\n" +
 	"\n" +
-	"updated_at\x18\x03 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAt\x12c\n" +
+	"updated_at\x18\x04 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAt\x12c\n" +
 	"\n" +
-	"deleted_at\x18\x04 \x01(\v2\r.base.v1.TimeB0\x9a\x84\x9e\x03+bun:\"type:timestamptz,soft_delete,nullzero\"H\x00R\tdeletedAt\x88\x01\x01B\r\n" +
-	"\v_deleted_at\"\x9f\x02\n" +
-	"\x12ClientConversition\x126\n" +
+	"deleted_at\x18\x05 \x01(\v2\r.base.v1.TimeB0\x9a\x84\x9e\x03+bun:\"type:timestamptz,soft_delete,nullzero\"H\x00R\tdeletedAt\x88\x01\x01B\r\n" +
+	"\v_deleted_at\"\xb1\x02\n" +
+	"\x12ClientConversation\x126\n" +
 	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12B\n" +
 	"\n" +
 	"client_min\x18\x02 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\tclientMin\x12B\n" +
 	"\n" +
-	"client_max\x18\x03 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\tclientMax\x12I\n" +
+	"client_max\x18\x03 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\tclientMax\x12\x10\n" +
+	"\x03seq\x18\x04 \x01(\x06R\x03seq\x12I\n" +
 	"\n" +
-	"created_at\x18\x04 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAtB~\n" +
+	"created_at\x18\x05 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\"\xee\x01\n" +
+	"\x17ClientGroupConversation\x126\n" +
+	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12>\n" +
+	"\bgroup_id\x18\x02 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\agroupId\x12\x10\n" +
+	"\x03seq\x18\x03 \x01(\x06R\x03seq\x12I\n" +
+	"\n" +
+	"created_at\x18\x04 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt*n\n" +
+	"\n" +
+	"ClientType\x12\x1b\n" +
+	"\x17CLIENT_TYPE_UNSPECIFIED\x10\x00\x12\x16\n" +
+	"\x12CLIENT_TYPE_SYSTEM\x10\x01\x12\x14\n" +
+	"\x10CLIENT_TYPE_USER\x10\x02\x12\x15\n" +
+	"\x11CLIENT_TYPE_GROUP\x10\x03B~\n" +
 	"\vcom.core.v1B\vClientProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -195,27 +345,34 @@ func file_core_v1_client_proto_rawDescGZIP() []byte {
 	return file_core_v1_client_proto_rawDescData
 }
 
-var file_core_v1_client_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_core_v1_client_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
+var file_core_v1_client_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_core_v1_client_proto_goTypes = []any{
-	(*Client)(nil),             // 0: core.v1.Client
-	(*ClientConversition)(nil), // 1: core.v1.ClientConversition
-	(*v1.UUID)(nil),            // 2: base.v1.UUID
-	(*v1.Time)(nil),            // 3: base.v1.Time
+	(ClientType)(0),                 // 0: core.v1.ClientType
+	(*Client)(nil),                  // 1: core.v1.Client
+	(*ClientConversation)(nil),      // 2: core.v1.ClientConversation
+	(*ClientGroupConversation)(nil), // 3: core.v1.ClientGroupConversation
+	(*v1.UUID)(nil),                 // 4: base.v1.UUID
+	(*v1.Time)(nil),                 // 5: base.v1.Time
 }
 var file_core_v1_client_proto_depIdxs = []int32{
-	2, // 0: core.v1.Client.id:type_name -> base.v1.UUID
-	3, // 1: core.v1.Client.created_at:type_name -> base.v1.Time
-	3, // 2: core.v1.Client.updated_at:type_name -> base.v1.Time
-	3, // 3: core.v1.Client.deleted_at:type_name -> base.v1.Time
-	2, // 4: core.v1.ClientConversition.id:type_name -> base.v1.UUID
-	2, // 5: core.v1.ClientConversition.client_min:type_name -> base.v1.UUID
-	2, // 6: core.v1.ClientConversition.client_max:type_name -> base.v1.UUID
-	3, // 7: core.v1.ClientConversition.created_at:type_name -> base.v1.Time
-	8, // [8:8] is the sub-list for method output_type
-	8, // [8:8] is the sub-list for method input_type
-	8, // [8:8] is the sub-list for extension type_name
-	8, // [8:8] is the sub-list for extension extendee
-	0, // [0:8] is the sub-list for field type_name
+	4,  // 0: core.v1.Client.id:type_name -> base.v1.UUID
+	0,  // 1: core.v1.Client.type:type_name -> core.v1.ClientType
+	5,  // 2: core.v1.Client.created_at:type_name -> base.v1.Time
+	5,  // 3: core.v1.Client.updated_at:type_name -> base.v1.Time
+	5,  // 4: core.v1.Client.deleted_at:type_name -> base.v1.Time
+	4,  // 5: core.v1.ClientConversation.id:type_name -> base.v1.UUID
+	4,  // 6: core.v1.ClientConversation.client_min:type_name -> base.v1.UUID
+	4,  // 7: core.v1.ClientConversation.client_max:type_name -> base.v1.UUID
+	5,  // 8: core.v1.ClientConversation.created_at:type_name -> base.v1.Time
+	4,  // 9: core.v1.ClientGroupConversation.id:type_name -> base.v1.UUID
+	4,  // 10: core.v1.ClientGroupConversation.group_id:type_name -> base.v1.UUID
+	5,  // 11: core.v1.ClientGroupConversation.created_at:type_name -> base.v1.Time
+	12, // [12:12] is the sub-list for method output_type
+	12, // [12:12] is the sub-list for method input_type
+	12, // [12:12] is the sub-list for extension type_name
+	12, // [12:12] is the sub-list for extension extendee
+	0,  // [0:12] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_client_proto_init() }
@@ -229,13 +386,14 @@ func file_core_v1_client_proto_init() {
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_core_v1_client_proto_rawDesc), len(file_core_v1_client_proto_rawDesc)),
-			NumEnums:      0,
-			NumMessages:   2,
+			NumEnums:      1,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_core_v1_client_proto_goTypes,
 		DependencyIndexes: file_core_v1_client_proto_depIdxs,
+		EnumInfos:         file_core_v1_client_proto_enumTypes,
 		MessageInfos:      file_core_v1_client_proto_msgTypes,
 	}.Build()
 	File_core_v1_client_proto = out.File

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"database/sql"
+	"rain-im-server/internal/core/biz"
 	"rain-im-server/internal/core/global"
 	"rain-im-server/internal/core/model"
 	v1 "rain-im-server/protogo/core/v1"
@@ -16,6 +17,11 @@ import (
 
 type BaseServer struct {
 	corev1connect.UnimplementedBaseServiceHandler
+	messageBiz *biz.MessageBiz
+}
+
+func NewBaseServer(messageBiz *biz.MessageBiz) *BaseServer {
+	return &BaseServer{messageBiz: messageBiz}
 }
 
 func (BaseServer) ListClient(ctx context.Context, req *connect.Request[v1.ListClientRequest]) (*connect.Response[v1.ListClientResponse], error) {

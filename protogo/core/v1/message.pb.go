@@ -24,16 +24,17 @@ const (
 )
 
 type Message struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" bun:"type:uuid,pk"`
-	SourceId      *v1.UUID               `protobuf:"bytes,2,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty" bun:"type:uuid"`
-	TargetId      *v1.UUID               `protobuf:"bytes,3,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty" bun:"type:uuid"`
-	Seq           uint64                 `protobuf:"fixed64,4,opt,name=seq,proto3" json:"seq,omitempty"`
-	Content       string                 `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`
-	CreatedAt     *v1.Time               `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" bun:"type:timestamptz"`
-	UpdatedAt     *v1.Time               `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" bun:"type:timestamptz"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state          protoimpl.MessageState `protogen:"open.v1"`
+	Id             *v1.UUID               `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" bun:"type:uuid,pk"`
+	SourceId       *v1.UUID               `protobuf:"bytes,2,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty" bun:"type:uuid"`
+	TargetId       *v1.UUID               `protobuf:"bytes,3,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty" bun:"type:uuid"`
+	ConversationId *v1.UUID               `protobuf:"bytes,4,opt,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty" bun:"type:uuid"`
+	Seq            uint64                 `protobuf:"fixed64,5,opt,name=seq,proto3" json:"seq,omitempty"`
+	Content        string                 `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`
+	CreatedAt      *v1.Time               `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" bun:"type:timestamptz"`
+	UpdatedAt      *v1.Time               `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" bun:"type:timestamptz"`
+	unknownFields  protoimpl.UnknownFields
+	sizeCache      protoimpl.SizeCache
 }
 
 func (x *Message) Reset() {
@@ -87,6 +88,13 @@ func (x *Message) GetTargetId() *v1.UUID {
 	return nil
 }
 
+func (x *Message) GetConversationId() *v1.UUID {
+	if x != nil {
+		return x.ConversationId
+	}
+	return nil
+}
+
 func (x *Message) GetSeq() uint64 {
 	if x != nil {
 		return x.Seq
@@ -119,17 +127,18 @@ var File_core_v1_message_proto protoreflect.FileDescriptor
 
 const file_core_v1_message_proto_rawDesc = "" +
 	"\n" +
-	"\x15core/v1/message.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\x87\x03\n" +
+	"\x15core/v1/message.proto\x12\acore.v1\x1a\x13tagger/tagger.proto\x1a\x12base/v1/time.proto\x1a\x12base/v1/uuid.proto\"\xd5\x03\n" +
 	"\aMessage\x126\n" +
 	"\x02id\x18\x01 \x01(\v2\r.base.v1.UUIDB\x17\x9a\x84\x9e\x03\x12bun:\"type:uuid,pk\"R\x02id\x12@\n" +
 	"\tsource_id\x18\x02 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\bsourceId\x12@\n" +
-	"\ttarget_id\x18\x03 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\btargetId\x12\x10\n" +
-	"\x03seq\x18\x04 \x01(\x06R\x03seq\x12\x18\n" +
-	"\acontent\x18\x05 \x01(\tR\acontent\x12I\n" +
+	"\ttarget_id\x18\x03 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\btargetId\x12L\n" +
+	"\x0fconversation_id\x18\x04 \x01(\v2\r.base.v1.UUIDB\x14\x9a\x84\x9e\x03\x0fbun:\"type:uuid\"R\x0econversationId\x12\x10\n" +
+	"\x03seq\x18\x05 \x01(\x06R\x03seq\x12\x18\n" +
+	"\acontent\x18\x06 \x01(\tR\acontent\x12I\n" +
 	"\n" +
-	"created_at\x18\x06 \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\x12I\n" +
+	"created_at\x18\a \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tcreatedAt\x12I\n" +
 	"\n" +
-	"updated_at\x18\a \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAtB\x7f\n" +
+	"updated_at\x18\b \x01(\v2\r.base.v1.TimeB\x1b\x9a\x84\x9e\x03\x16bun:\"type:timestamptz\"R\tupdatedAtB\x7f\n" +
 	"\vcom.core.v1B\fMessageProtoP\x01Z%rain-im-server/protogo/core/v1;corev1\xa2\x02\x03CXX\xaa\x02\aCore.V1\xca\x02\aCore\\V1\xe2\x02\x13Core\\V1\\GPBMetadata\xea\x02\bCore::V1b\x06proto3"
 
 var (
@@ -154,13 +163,14 @@ var file_core_v1_message_proto_depIdxs = []int32{
 	1, // 0: core.v1.Message.id:type_name -> base.v1.UUID
 	1, // 1: core.v1.Message.source_id:type_name -> base.v1.UUID
 	1, // 2: core.v1.Message.target_id:type_name -> base.v1.UUID
-	2, // 3: core.v1.Message.created_at:type_name -> base.v1.Time
-	2, // 4: core.v1.Message.updated_at:type_name -> base.v1.Time
-	5, // [5:5] is the sub-list for method output_type
-	5, // [5:5] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	1, // 3: core.v1.Message.conversation_id:type_name -> base.v1.UUID
+	2, // 4: core.v1.Message.created_at:type_name -> base.v1.Time
+	2, // 5: core.v1.Message.updated_at:type_name -> base.v1.Time
+	6, // [6:6] is the sub-list for method output_type
+	6, // [6:6] is the sub-list for method input_type
+	6, // [6:6] is the sub-list for extension type_name
+	6, // [6:6] is the sub-list for extension extendee
+	0, // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_core_v1_message_proto_init() }

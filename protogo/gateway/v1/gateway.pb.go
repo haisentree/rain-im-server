@@ -7,6 +7,7 @@
 package gatewayv1
 
 import (
+	_ "github.com/srikrsna/protoc-gen-gotag/tagger"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,88 +22,24 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type Platform int32
-
-const (
-	Platform_PLATFORM_UNSPECIFIED Platform = 0
-	Platform_PLATFORM_SYSTEM      Platform = 1 // 系统
-	Platform_PLATFORM_WEB         Platform = 2 // 网页
-	Platform_PLATFORM_ANDROID     Platform = 3 // 安卓
-	Platform_PLATFORM_IPHONE      Platform = 4 // 苹果
-	Platform_PLATFORM_WINDOWS     Platform = 5 // Windows
-	Platform_PLATFORM_MACOS       Platform = 6 // Mac
-	Platform_PLATFORM_LINUX       Platform = 7 // Linux
-)
-
-// Enum value maps for Platform.
-var (
-	Platform_name = map[int32]string{
-		0: "PLATFORM_UNSPECIFIED",
-		1: "PLATFORM_SYSTEM",
-		2: "PLATFORM_WEB",
-		3: "PLATFORM_ANDROID",
-		4: "PLATFORM_IPHONE",
-		5: "PLATFORM_WINDOWS",
-		6: "PLATFORM_MACOS",
-		7: "PLATFORM_LINUX",
-	}
-	Platform_value = map[string]int32{
-		"PLATFORM_UNSPECIFIED": 0,
-		"PLATFORM_SYSTEM":      1,
-		"PLATFORM_WEB":         2,
-		"PLATFORM_ANDROID":     3,
-		"PLATFORM_IPHONE":      4,
-		"PLATFORM_WINDOWS":     5,
-		"PLATFORM_MACOS":       6,
-		"PLATFORM_LINUX":       7,
-	}
-)
-
-func (x Platform) Enum() *Platform {
-	p := new(Platform)
-	*p = x
-	return p
-}
-
-func (x Platform) String() string {
-	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
-}
-
-func (Platform) Descriptor() protoreflect.EnumDescriptor {
-	return file_gateway_v1_gateway_proto_enumTypes[0].Descriptor()
-}
-
-func (Platform) Type() protoreflect.EnumType {
-	return &file_gateway_v1_gateway_proto_enumTypes[0]
-}
-
-func (x Platform) Number() protoreflect.EnumNumber {
-	return protoreflect.EnumNumber(x)
-}
-
-// Deprecated: Use Platform.Descriptor instead.
-func (Platform) EnumDescriptor() ([]byte, []int) {
-	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{0}
-}
-
 type Message int32
 
 const (
 	Message_MESSAGE_UNSPECIFIED          Message = 0
-	Message_MESSAGE_SINGLE               Message = 1 // 单发
-	Message_MESSAGE_RELAY_GATEWAY_SINGLE Message = 2
-	Message_MESSAGE_GROUP                Message = 3 // 群发,支持使用缓存,第一次发送所有,如果没变化就不需要再全部发送,从缓存中读取
-	Message_MESSAGE_RELAY                Message = 4 // 转发 [拓展使用]
-	Message_MESSAGE_RELAY_GATEWAY        Message = 5
-	// MESSAGE_SYSTEM_RELAY     系统转发消息
-	// MESSAGE_SYSTEM_SAVE      需要持久化的消息,core的msg模块订阅处理
-	// MESSAGE_CLIENT_RELAY      用户单挑或者合并转发功能的消息
-	Message_MESSAGE_PUSH    Message = 6  // 推送消息  系统推送不是转发推送(暂未使用)
-	Message_MESSAGE_PULL    Message = 7  // 拉取消息
-	Message_MESSAGE_CONFIRM Message = 8  // 确认消息
-	Message_MESSAGE_READED  Message = 9  // 已读消息
-	Message_MESSAGE_RECALL  Message = 10 // 撤回消息
-	Message_MESSAGE_MODIFY  Message = 11 // 修改消息
+	Message_MESSAGE_SINGLE               Message = 1 // 单发消息
+	Message_MESSAGE_SINGLE_GATEWAY_RELAY Message = 2 // 网关间传递单发消息
+	// =======待逻辑设计===========
+	Message_MESSAGE_SINGLE_GROUP   Message = 3 // 群里发送的单条消息
+	Message_MESSAGE_PULL           Message = 4 // 拉取消息
+	Message_MESSAGE_PULL_SEQ       Message = 5 // TODO:废弃rpc拉取seq
+	Message_MESSAGE_PUSH           Message = 6 // 推送消息
+	Message_MESSAGE_RELAY          Message = 7
+	Message_MESSAGE_RELAY_PACKATE  Message = 8  // 合并转发
+	Message_MESSAGE_ACTION         Message = 9  // 动作消息
+	Message_MESSAGE_ACTION_MODIFY  Message = 10 // 修改消息
+	Message_MESSAGE_ACTION_CONFIRM Message = 11 // 确认消息
+	Message_MESSAGE_ACTION_READED  Message = 12 // 已读消息
+	Message_MESSAGE_ACTION_RECALL  Message = 13 // 撤回消息
 )
 
 // Enum value maps for Message.
@@ -110,30 +47,34 @@ var (
 	Message_name = map[int32]string{
 		0:  "MESSAGE_UNSPECIFIED",
 		1:  "MESSAGE_SINGLE",
-		2:  "MESSAGE_RELAY_GATEWAY_SINGLE",
-		3:  "MESSAGE_GROUP",
-		4:  "MESSAGE_RELAY",
-		5:  "MESSAGE_RELAY_GATEWAY",
+		2:  "MESSAGE_SINGLE_GATEWAY_RELAY",
+		3:  "MESSAGE_SINGLE_GROUP",
+		4:  "MESSAGE_PULL",
+		5:  "MESSAGE_PULL_SEQ",
 		6:  "MESSAGE_PUSH",
-		7:  "MESSAGE_PULL",
-		8:  "MESSAGE_CONFIRM",
-		9:  "MESSAGE_READED",
-		10: "MESSAGE_RECALL",
-		11: "MESSAGE_MODIFY",
+		7:  "MESSAGE_RELAY",
+		8:  "MESSAGE_RELAY_PACKATE",
+		9:  "MESSAGE_ACTION",
+		10: "MESSAGE_ACTION_MODIFY",
+		11: "MESSAGE_ACTION_CONFIRM",
+		12: "MESSAGE_ACTION_READED",
+		13: "MESSAGE_ACTION_RECALL",
 	}
 	Message_value = map[string]int32{
 		"MESSAGE_UNSPECIFIED":          0,
 		"MESSAGE_SINGLE":               1,
-		"MESSAGE_RELAY_GATEWAY_SINGLE": 2,
-		"MESSAGE_GROUP":                3,
-		"MESSAGE_RELAY":                4,
-		"MESSAGE_RELAY_GATEWAY":        5,
+		"MESSAGE_SINGLE_GATEWAY_RELAY": 2,
+		"MESSAGE_SINGLE_GROUP":         3,
+		"MESSAGE_PULL":                 4,
+		"MESSAGE_PULL_SEQ":             5,
 		"MESSAGE_PUSH":                 6,
-		"MESSAGE_PULL":                 7,
-		"MESSAGE_CONFIRM":              8,
-		"MESSAGE_READED":               9,
-		"MESSAGE_RECALL":               10,
-		"MESSAGE_MODIFY":               11,
+		"MESSAGE_RELAY":                7,
+		"MESSAGE_RELAY_PACKATE":        8,
+		"MESSAGE_ACTION":               9,
+		"MESSAGE_ACTION_MODIFY":        10,
+		"MESSAGE_ACTION_CONFIRM":       11,
+		"MESSAGE_ACTION_READED":        12,
+		"MESSAGE_ACTION_RECALL":        13,
 	}
 )
 
@@ -148,11 +89,11 @@ func (x Message) String() string {
 }
 
 func (Message) Descriptor() protoreflect.EnumDescriptor {
-	return file_gateway_v1_gateway_proto_enumTypes[1].Descriptor()
+	return file_gateway_v1_gateway_proto_enumTypes[0].Descriptor()
 }
 
 func (Message) Type() protoreflect.EnumType {
-	return &file_gateway_v1_gateway_proto_enumTypes[1]
+	return &file_gateway_v1_gateway_proto_enumTypes[0]
 }
 
 func (x Message) Number() protoreflect.EnumNumber {
@@ -161,65 +102,175 @@ func (x Message) Number() protoreflect.EnumNumber {
 
 // Deprecated: Use Message.Descriptor instead.
 func (Message) EnumDescriptor() ([]byte, []int) {
-	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{1}
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{0}
 }
 
-type Method int32
+type Platform int32
 
 const (
-	Method_METHOD_UNSPECIFIED Method = 0
-	Method_METHOD_UNUSED      Method = 1 // 未使用,默认值
-	Method_METHOD_ALL         Method = 2 // 全连接发送, 本地连接和其他连接都发送
-	Method_METHOD_LOCAL       Method = 3 // 本地发送, 只发送到本地连接
-	Method_METHOD_DELAY       Method = 4 // TODO:延时发送
-	Method_METHOD_ONCE        Method = 5 // TODO:仅发送一次（不重试）
+	Platform_PLATFORM_UNSPECIFIED Platform = 0
+	Platform_PLATFORM_SYSTEM      Platform = 1 // 系统
+	Platform_PLATFORM_WEB         Platform = 2 // 网页
+	Platform_PLATFORM_ANDROID     Platform = 3 // 安卓
+	Platform_PLATFORM_IPHONE      Platform = 4 // 苹果
+	Platform_PLATFORM_WINDOWS     Platform = 5 // Windows
+	Platform_PLATFORM_MACOS       Platform = 6 // Mac
+	Platform_PLATFORM_LINUX       Platform = 7 // Linux
+	Platform_PLATFORM_MOBILE      Platform = 8 // 移动端通用
+	Platform_PLATFORM_IPAD        Platform = 9 // iPad
 )
 
-// Enum value maps for Method.
+// Enum value maps for Platform.
 var (
-	Method_name = map[int32]string{
-		0: "METHOD_UNSPECIFIED",
-		1: "METHOD_UNUSED",
-		2: "METHOD_ALL",
-		3: "METHOD_LOCAL",
-		4: "METHOD_DELAY",
-		5: "METHOD_ONCE",
+	Platform_name = map[int32]string{
+		0: "PLATFORM_UNSPECIFIED",
+		1: "PLATFORM_SYSTEM",
+		2: "PLATFORM_WEB",
+		3: "PLATFORM_ANDROID",
+		4: "PLATFORM_IPHONE",
+		5: "PLATFORM_WINDOWS",
+		6: "PLATFORM_MACOS",
+		7: "PLATFORM_LINUX",
+		8: "PLATFORM_MOBILE",
+		9: "PLATFORM_IPAD",
 	}
-	Method_value = map[string]int32{
-		"METHOD_UNSPECIFIED": 0,
-		"METHOD_UNUSED":      1,
-		"METHOD_ALL":         2,
-		"METHOD_LOCAL":       3,
-		"METHOD_DELAY":       4,
-		"METHOD_ONCE":        5,
+	Platform_value = map[string]int32{
+		"PLATFORM_UNSPECIFIED": 0,
+		"PLATFORM_SYSTEM":      1,
+		"PLATFORM_WEB":         2,
+		"PLATFORM_ANDROID":     3,
+		"PLATFORM_IPHONE":      4,
+		"PLATFORM_WINDOWS":     5,
+		"PLATFORM_MACOS":       6,
+		"PLATFORM_LINUX":       7,
+		"PLATFORM_MOBILE":      8,
+		"PLATFORM_IPAD":        9,
 	}
 )
 
-func (x Method) Enum() *Method {
-	p := new(Method)
+func (x Platform) Enum() *Platform {
+	p := new(Platform)
 	*p = x
 	return p
 }
 
-func (x Method) String() string {
+func (x Platform) String() string {
 	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
 }
 
-func (Method) Descriptor() protoreflect.EnumDescriptor {
-	return file_gateway_v1_gateway_proto_enumTypes[2].Descriptor()
+func (Platform) Descriptor() protoreflect.EnumDescriptor {
+	return file_gateway_v1_gateway_proto_enumTypes[1].Descriptor()
 }
 
-func (Method) Type() protoreflect.EnumType {
-	return &file_gateway_v1_gateway_proto_enumTypes[2]
+func (Platform) Type() protoreflect.EnumType {
+	return &file_gateway_v1_gateway_proto_enumTypes[1]
 }
 
-func (x Method) Number() protoreflect.EnumNumber {
+func (x Platform) Number() protoreflect.EnumNumber {
 	return protoreflect.EnumNumber(x)
 }
 
-// Deprecated: Use Method.Descriptor instead.
-func (Method) EnumDescriptor() ([]byte, []int) {
+// Deprecated: Use Platform.Descriptor instead.
+func (Platform) EnumDescriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{1}
+}
+
+type MessageStatus int32
+
+const (
+	MessageStatus_MESSAGE_STATUS_UNSPECIFIED MessageStatus = 0
+	MessageStatus_MESSAGE_STATUS_MODIFIED    MessageStatus = 1 // 已修改
+)
+
+// Enum value maps for MessageStatus.
+var (
+	MessageStatus_name = map[int32]string{
+		0: "MESSAGE_STATUS_UNSPECIFIED",
+		1: "MESSAGE_STATUS_MODIFIED",
+	}
+	MessageStatus_value = map[string]int32{
+		"MESSAGE_STATUS_UNSPECIFIED": 0,
+		"MESSAGE_STATUS_MODIFIED":    1,
+	}
+)
+
+func (x MessageStatus) Enum() *MessageStatus {
+	p := new(MessageStatus)
+	*p = x
+	return p
+}
+
+func (x MessageStatus) String() string {
+	return protoimpl.X.EnumStringOf(x.Descriptor(), protoreflect.EnumNumber(x))
+}
+
+func (MessageStatus) Descriptor() protoreflect.EnumDescriptor {
+	return file_gateway_v1_gateway_proto_enumTypes[2].Descriptor()
+}
+
+func (MessageStatus) Type() protoreflect.EnumType {
+	return &file_gateway_v1_gateway_proto_enumTypes[2]
+}
+
+func (x MessageStatus) Number() protoreflect.EnumNumber {
+	return protoreflect.EnumNumber(x)
+}
+
+// Deprecated: Use MessageStatus.Descriptor instead.
+func (MessageStatus) EnumDescriptor() ([]byte, []int) {
 	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{2}
+}
+
+type ConnectRequest struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	ClientId      string                 `protobuf:"bytes,1,opt,name=client_id,json=clientId,proto3" json:"client_id,omitempty" validate:"required"`
+	Platform      Platform               `protobuf:"varint,2,opt,name=platform,proto3,enum=gateway.v1.Platform" json:"platform,omitempty" validate:"required"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *ConnectRequest) Reset() {
+	*x = ConnectRequest{}
+	mi := &file_gateway_v1_gateway_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *ConnectRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ConnectRequest) ProtoMessage() {}
+
+func (x *ConnectRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_gateway_v1_gateway_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ConnectRequest.ProtoReflect.Descriptor instead.
+func (*ConnectRequest) Descriptor() ([]byte, []int) {
+	return file_gateway_v1_gateway_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *ConnectRequest) GetClientId() string {
+	if x != nil {
+		return x.ClientId
+	}
+	return ""
+}
+
+func (x *ConnectRequest) GetPlatform() Platform {
+	if x != nil {
+		return x.Platform
+	}
+	return Platform_PLATFORM_UNSPECIFIED
 }
 
 var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
@@ -227,7 +278,26 @@ var File_gateway_v1_gateway_proto protoreflect.FileDescriptor
 const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\n" +
 	"\x18gateway/v1/gateway.proto\x12\n" +
-	"gateway.v1*\xb4\x01\n" +
+	"gateway.v1\x1a\x13tagger/tagger.proto\"\x93\x01\n" +
+	"\x0eConnectRequest\x125\n" +
+	"\tclient_id\x18\x01 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bclientId\x12J\n" +
+	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bplatform*\xdb\x02\n" +
+	"\aMessage\x12\x17\n" +
+	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
+	"\x0eMESSAGE_SINGLE\x10\x01\x12 \n" +
+	"\x1cMESSAGE_SINGLE_GATEWAY_RELAY\x10\x02\x12\x18\n" +
+	"\x14MESSAGE_SINGLE_GROUP\x10\x03\x12\x10\n" +
+	"\fMESSAGE_PULL\x10\x04\x12\x14\n" +
+	"\x10MESSAGE_PULL_SEQ\x10\x05\x12\x10\n" +
+	"\fMESSAGE_PUSH\x10\x06\x12\x11\n" +
+	"\rMESSAGE_RELAY\x10\a\x12\x19\n" +
+	"\x15MESSAGE_RELAY_PACKATE\x10\b\x12\x12\n" +
+	"\x0eMESSAGE_ACTION\x10\t\x12\x19\n" +
+	"\x15MESSAGE_ACTION_MODIFY\x10\n" +
+	"\x12\x1a\n" +
+	"\x16MESSAGE_ACTION_CONFIRM\x10\v\x12\x19\n" +
+	"\x15MESSAGE_ACTION_READED\x10\f\x12\x19\n" +
+	"\x15MESSAGE_ACTION_RECALL\x10\r*\xdc\x01\n" +
 	"\bPlatform\x12\x18\n" +
 	"\x14PLATFORM_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fPLATFORM_SYSTEM\x10\x01\x12\x10\n" +
@@ -236,29 +306,12 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"\x0fPLATFORM_IPHONE\x10\x04\x12\x14\n" +
 	"\x10PLATFORM_WINDOWS\x10\x05\x12\x12\n" +
 	"\x0ePLATFORM_MACOS\x10\x06\x12\x12\n" +
-	"\x0ePLATFORM_LINUX\x10\a*\x8e\x02\n" +
-	"\aMessage\x12\x17\n" +
-	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
-	"\x0eMESSAGE_SINGLE\x10\x01\x12 \n" +
-	"\x1cMESSAGE_RELAY_GATEWAY_SINGLE\x10\x02\x12\x11\n" +
-	"\rMESSAGE_GROUP\x10\x03\x12\x11\n" +
-	"\rMESSAGE_RELAY\x10\x04\x12\x19\n" +
-	"\x15MESSAGE_RELAY_GATEWAY\x10\x05\x12\x10\n" +
-	"\fMESSAGE_PUSH\x10\x06\x12\x10\n" +
-	"\fMESSAGE_PULL\x10\a\x12\x13\n" +
-	"\x0fMESSAGE_CONFIRM\x10\b\x12\x12\n" +
-	"\x0eMESSAGE_READED\x10\t\x12\x12\n" +
-	"\x0eMESSAGE_RECALL\x10\n" +
-	"\x12\x12\n" +
-	"\x0eMESSAGE_MODIFY\x10\v*x\n" +
-	"\x06Method\x12\x16\n" +
-	"\x12METHOD_UNSPECIFIED\x10\x00\x12\x11\n" +
-	"\rMETHOD_UNUSED\x10\x01\x12\x0e\n" +
-	"\n" +
-	"METHOD_ALL\x10\x02\x12\x10\n" +
-	"\fMETHOD_LOCAL\x10\x03\x12\x10\n" +
-	"\fMETHOD_DELAY\x10\x04\x12\x0f\n" +
-	"\vMETHOD_ONCE\x10\x05B\x94\x01\n" +
+	"\x0ePLATFORM_LINUX\x10\a\x12\x13\n" +
+	"\x0fPLATFORM_MOBILE\x10\b\x12\x11\n" +
+	"\rPLATFORM_IPAD\x10\t*L\n" +
+	"\rMessageStatus\x12\x1e\n" +
+	"\x1aMESSAGE_STATUS_UNSPECIFIED\x10\x00\x12\x1b\n" +
+	"\x17MESSAGE_STATUS_MODIFIED\x10\x01B\x94\x01\n" +
 	"\x0ecom.gateway.v1B\fGatewayProtoP\x01Z+rain-im-server/protogo/gateway/v1;gatewayv1\xa2\x02\x03GXX\xaa\x02\n" +
 	"Gateway.V1\xca\x02\n" +
 	"Gateway\\V1\xe2\x02\x16Gateway\\V1\\GPBMetadata\xea\x02\vGateway::V1b\x06proto3"
@@ -276,17 +329,20 @@ func file_gateway_v1_gateway_proto_rawDescGZIP() []byte {
 }
 
 var file_gateway_v1_gateway_proto_enumTypes = make([]protoimpl.EnumInfo, 3)
+var file_gateway_v1_gateway_proto_msgTypes = make([]protoimpl.MessageInfo, 1)
 var file_gateway_v1_gateway_proto_goTypes = []any{
-	(Platform)(0), // 0: gateway.v1.Platform
-	(Message)(0),  // 1: gateway.v1.Message
-	(Method)(0),   // 2: gateway.v1.Method
+	(Message)(0),           // 0: gateway.v1.Message
+	(Platform)(0),          // 1: gateway.v1.Platform
+	(MessageStatus)(0),     // 2: gateway.v1.MessageStatus
+	(*ConnectRequest)(nil), // 3: gateway.v1.ConnectRequest
 }
 var file_gateway_v1_gateway_proto_depIdxs = []int32{
-	0, // [0:0] is the sub-list for method output_type
-	0, // [0:0] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	1, // 0: gateway.v1.ConnectRequest.platform:type_name -> gateway.v1.Platform
+	1, // [1:1] is the sub-list for method output_type
+	1, // [1:1] is the sub-list for method input_type
+	1, // [1:1] is the sub-list for extension type_name
+	1, // [1:1] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_gateway_v1_gateway_proto_init() }
@@ -300,13 +356,14 @@ func file_gateway_v1_gateway_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_gateway_v1_gateway_proto_rawDesc), len(file_gateway_v1_gateway_proto_rawDesc)),
 			NumEnums:      3,
-			NumMessages:   0,
+			NumMessages:   1,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
 		GoTypes:           file_gateway_v1_gateway_proto_goTypes,
 		DependencyIndexes: file_gateway_v1_gateway_proto_depIdxs,
 		EnumInfos:         file_gateway_v1_gateway_proto_enumTypes,
+		MessageInfos:      file_gateway_v1_gateway_proto_msgTypes,
 	}.Build()
 	File_gateway_v1_gateway_proto = out.File
 	file_gateway_v1_gateway_proto_goTypes = nil

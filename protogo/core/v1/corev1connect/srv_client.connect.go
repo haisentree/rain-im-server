@@ -35,12 +35,16 @@ const (
 const (
 	// ClientServiceSetTokenProcedure is the fully-qualified name of the ClientService's SetToken RPC.
 	ClientServiceSetTokenProcedure = "/core.v1.ClientService/SetToken"
+	// ClientServiceGetConversationSeqProcedure is the fully-qualified name of the ClientService's
+	// GetConversationSeq RPC.
+	ClientServiceGetConversationSeqProcedure = "/core.v1.ClientService/GetConversationSeq"
 )
 
 // ClientServiceClient is a client for the core.v1.ClientService service.
 type ClientServiceClient interface {
 	// 确定clientId存在,设置token到缓存再redis中
 	SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error)
+	GetConversationSeq(context.Context, *connect.Request[v1.GetConversationSeqRequest]) (*connect.Response[v1.GetConversationSeqResponse], error)
 }
 
 // NewClientServiceClient constructs a client for the core.v1.ClientService service. By default, it
@@ -60,12 +64,19 @@ func NewClientServiceClient(httpClient connect.HTTPClient, baseURL string, opts 
 			connect.WithSchema(clientServiceMethods.ByName("SetToken")),
 			connect.WithClientOptions(opts...),
 		),
+		getConversationSeq: connect.NewClient[v1.GetConversationSeqRequest, v1.GetConversationSeqResponse](
+			httpClient,
+			baseURL+ClientServiceGetConversationSeqProcedure,
+			connect.WithSchema(clientServiceMethods.ByName("GetConversationSeq")),
+			connect.WithClientOptions(opts...),
+		),
 	}
 }
 
 // clientServiceClient implements ClientServiceClient.
 type clientServiceClient struct {
-	setToken *connect.Client[v1.SetTokenRequest, v1.SetTokenResponse]
+	setToken           *connect.Client[v1.SetTokenRequest, v1.SetTokenResponse]
+	getConversationSeq *connect.Client[v1.GetConversationSeqRequest, v1.GetConversationSeqResponse]
 }
 
 // SetToken calls core.v1.ClientService.SetToken.
@@ -73,10 +84,16 @@ func (c *clientServiceClient) SetToken(ctx context.Context, req *connect.Request
 	return c.setToken.CallUnary(ctx, req)
 }
 
+// GetConversationSeq calls core.v1.ClientService.GetConversationSeq.
+func (c *clientServiceClient) GetConversationSeq(ctx context.Context, req *connect.Request[v1.GetConversationSeqRequest]) (*connect.Response[v1.GetConversationSeqResponse], error) {
+	return c.getConversationSeq.CallUnary(ctx, req)
+}
+
 // ClientServiceHandler is an implementation of the core.v1.ClientService service.
 type ClientServiceHandler interface {
 	// 确定clientId存在,设置token到缓存再redis中
 	SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error)
+	GetConversationSeq(context.Context, *connect.Request[v1.GetConversationSeqRequest]) (*connect.Response[v1.GetConversationSeqResponse], error)
 }
 
 // NewClientServiceHandler builds an HTTP handler from the service implementation. It returns the
@@ -92,10 +109,18 @@ func NewClientServiceHandler(svc ClientServiceHandler, opts ...connect.HandlerOp
 		connect.WithSchema(clientServiceMethods.ByName("SetToken")),
 		connect.WithHandlerOptions(opts...),
 	)
+	clientServiceGetConversationSeqHandler := connect.NewUnaryHandler(
+		ClientServiceGetConversationSeqProcedure,
+		svc.GetConversationSeq,
+		connect.WithSchema(clientServiceMethods.ByName("GetConversationSeq")),
+		connect.WithHandlerOptions(opts...),
+	)
 	return "/core.v1.ClientService/", http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case ClientServiceSetTokenProcedure:
 			clientServiceSetTokenHandler.ServeHTTP(w, r)
+		case ClientServiceGetConversationSeqProcedure:
+			clientServiceGetConversationSeqHandler.ServeHTTP(w, r)
 		default:
 			http.NotFound(w, r)
 		}
@@ -107,4 +132,8 @@ type UnimplementedClientServiceHandler struct{}
 
 func (UnimplementedClientServiceHandler) SetToken(context.Context, *connect.Request[v1.SetTokenRequest]) (*connect.Response[v1.SetTokenResponse], error) {
 	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.ClientService.SetToken is not implemented"))
+}
+
+func (UnimplementedClientServiceHandler) GetConversationSeq(context.Context, *connect.Request[v1.GetConversationSeqRequest]) (*connect.Response[v1.GetConversationSeqResponse], error) {
+	return nil, connect.NewError(connect.CodeUnimplemented, errors.New("core.v1.ClientService.GetConversationSeq is not implemented"))
 }
