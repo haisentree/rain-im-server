@@ -79,7 +79,7 @@ type SingleMessage struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SourceId      *v1.UUID               `protobuf:"bytes,1,opt,name=source_id,json=sourceId,proto3" json:"source_id,omitempty"`
 	TargetId      *v1.UUID               `protobuf:"bytes,2,opt,name=target_id,json=targetId,proto3" json:"target_id,omitempty"`
-	SeqId         uint64                 `protobuf:"fixed64,3,opt,name=seq_id,json=seqId,proto3" json:"seq_id,omitempty"`
+	Seq           uint64                 `protobuf:"fixed64,3,opt,name=seq,proto3" json:"seq,omitempty"`
 	Content       string                 `protobuf:"bytes,4,opt,name=content,proto3" json:"content,omitempty" validate:"required"` // 时间
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -129,9 +129,9 @@ func (x *SingleMessage) GetTargetId() *v1.UUID {
 	return nil
 }
 
-func (x *SingleMessage) GetSeqId() uint64 {
+func (x *SingleMessage) GetSeq() uint64 {
 	if x != nil {
-		return x.SeqId
+		return x.Seq
 	}
 	return 0
 }
@@ -509,11 +509,11 @@ const file_gateway_v1_message_proto_rawDesc = "" +
 	"\n" +
 	"RawMessage\x12'\n" +
 	"\x04type\x18\x01 \x01(\x0e2\x13.gateway.v1.MessageR\x04type\x12\x12\n" +
-	"\x04data\x18\x02 \x01(\fR\x04data\"\xb2\x01\n" +
+	"\x04data\x18\x02 \x01(\fR\x04data\"\xad\x01\n" +
 	"\rSingleMessage\x12*\n" +
 	"\tsource_id\x18\x01 \x01(\v2\r.base.v1.UUIDR\bsourceId\x12*\n" +
-	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x12\x15\n" +
-	"\x06seq_id\x18\x03 \x01(\x06R\x05seqId\x122\n" +
+	"\ttarget_id\x18\x02 \x01(\v2\r.base.v1.UUIDR\btargetId\x12\x10\n" +
+	"\x03seq\x18\x03 \x01(\x06R\x03seq\x122\n" +
 	"\acontent\x18\x04 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\acontent\"/\n" +
 	"\x19RelayGatewaySingleMessage\x12\x12\n" +
 	"\x04data\x18\x01 \x01(\fR\x04data\"\xc4\x01\n" +

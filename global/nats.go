@@ -13,11 +13,13 @@ const (
 )
 
 const (
-	GatewayStreamNameMessage       = "GATEWAY-PERSIST-MESSAGE"
-	GatewayMessageSeqIncreaseTheme = "gateway.message.seq.increase.%s"
-	GatewayMessageSeqIncreaseQueue = "gateway-message-seq-increase" //  这个队列中单个消费者顺序消费
-	GatewayMessageSaveTheme        = "gateway.message.save.%s"
-	GatewayMessageSaveQueue        = "gateway-message-save"
+	GatewayStreamNameMessage          = "GATEWAY-PERSIST-MESSAGE"
+	GatewayMessageSeqIncreaseTheme    = "gateway.message.seq.increase.%s"
+	GatewayMessageSeqIncreaseQueue    = "gateway-message-seq-increase"
+	GatewayMessageSeqIncreaseConsumer = "gateway-message-seq-increase-consumer"
+	GatewayMessageSaveTheme           = "gateway.message.save.%s"
+	GatewayMessageSaveQueue           = "gateway-message-save"
+	GatewayMessageSaveConsumer        = "gateway-message-save-consumer"
 )
 
 func initJetStream(js nats.JetStreamContext) error {

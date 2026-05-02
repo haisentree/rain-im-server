@@ -3,6 +3,9 @@ package global
 var (
 	ConnDetailHashKey = "conn:"
 	ConnStatusSetKey  = "client:conn:"
+	// client:conversation:{sourceClientId}-{targetClientId} -> conversationId
+	// client:conversation:{groupId}-{groupId} -> conversationId
+	ClientConversationStringKey = "client:conversation:"
 )
 
 var (

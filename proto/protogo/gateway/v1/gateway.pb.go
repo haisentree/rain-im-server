@@ -28,18 +28,19 @@ const (
 	Message_MESSAGE_UNSPECIFIED          Message = 0
 	Message_MESSAGE_SINGLE               Message = 1 // 单发消息
 	Message_MESSAGE_SINGLE_GATEWAY_RELAY Message = 2 // 网关间传递单发消息
+	Message_MESSAGE_DB_SAVE              Message = 3 // 需要持久化的消息, core的msg模块订阅处理
 	// =======待逻辑设计===========
-	Message_MESSAGE_SINGLE_GROUP   Message = 3 // 群里发送的单条消息
-	Message_MESSAGE_PULL           Message = 4 // 拉取消息
-	Message_MESSAGE_PULL_SEQ       Message = 5 // TODO:废弃rpc拉取seq
-	Message_MESSAGE_PUSH           Message = 6 // 推送消息
-	Message_MESSAGE_RELAY          Message = 7
-	Message_MESSAGE_RELAY_PACKATE  Message = 8  // 合并转发
-	Message_MESSAGE_ACTION         Message = 9  // 动作消息
-	Message_MESSAGE_ACTION_MODIFY  Message = 10 // 修改消息
-	Message_MESSAGE_ACTION_CONFIRM Message = 11 // 确认消息
-	Message_MESSAGE_ACTION_READED  Message = 12 // 已读消息
-	Message_MESSAGE_ACTION_RECALL  Message = 13 // 撤回消息
+	Message_MESSAGE_SINGLE_GROUP   Message = 4 // 群里发送的单条消息
+	Message_MESSAGE_PULL           Message = 5 // 拉取消息
+	Message_MESSAGE_PULL_SEQ       Message = 6 // TODO:废弃rpc拉取seq
+	Message_MESSAGE_PUSH           Message = 7 // 推送消息
+	Message_MESSAGE_RELAY          Message = 8
+	Message_MESSAGE_RELAY_PACKATE  Message = 9  // 合并转发
+	Message_MESSAGE_ACTION         Message = 10 // 动作消息
+	Message_MESSAGE_ACTION_MODIFY  Message = 11 // 修改消息
+	Message_MESSAGE_ACTION_CONFIRM Message = 12 // 确认消息
+	Message_MESSAGE_ACTION_READED  Message = 13 // 已读消息
+	Message_MESSAGE_ACTION_RECALL  Message = 14 // 撤回消息
 )
 
 // Enum value maps for Message.
@@ -48,33 +49,35 @@ var (
 		0:  "MESSAGE_UNSPECIFIED",
 		1:  "MESSAGE_SINGLE",
 		2:  "MESSAGE_SINGLE_GATEWAY_RELAY",
-		3:  "MESSAGE_SINGLE_GROUP",
-		4:  "MESSAGE_PULL",
-		5:  "MESSAGE_PULL_SEQ",
-		6:  "MESSAGE_PUSH",
-		7:  "MESSAGE_RELAY",
-		8:  "MESSAGE_RELAY_PACKATE",
-		9:  "MESSAGE_ACTION",
-		10: "MESSAGE_ACTION_MODIFY",
-		11: "MESSAGE_ACTION_CONFIRM",
-		12: "MESSAGE_ACTION_READED",
-		13: "MESSAGE_ACTION_RECALL",
+		3:  "MESSAGE_DB_SAVE",
+		4:  "MESSAGE_SINGLE_GROUP",
+		5:  "MESSAGE_PULL",
+		6:  "MESSAGE_PULL_SEQ",
+		7:  "MESSAGE_PUSH",
+		8:  "MESSAGE_RELAY",
+		9:  "MESSAGE_RELAY_PACKATE",
+		10: "MESSAGE_ACTION",
+		11: "MESSAGE_ACTION_MODIFY",
+		12: "MESSAGE_ACTION_CONFIRM",
+		13: "MESSAGE_ACTION_READED",
+		14: "MESSAGE_ACTION_RECALL",
 	}
 	Message_value = map[string]int32{
 		"MESSAGE_UNSPECIFIED":          0,
 		"MESSAGE_SINGLE":               1,
 		"MESSAGE_SINGLE_GATEWAY_RELAY": 2,
-		"MESSAGE_SINGLE_GROUP":         3,
-		"MESSAGE_PULL":                 4,
-		"MESSAGE_PULL_SEQ":             5,
-		"MESSAGE_PUSH":                 6,
-		"MESSAGE_RELAY":                7,
-		"MESSAGE_RELAY_PACKATE":        8,
-		"MESSAGE_ACTION":               9,
-		"MESSAGE_ACTION_MODIFY":        10,
-		"MESSAGE_ACTION_CONFIRM":       11,
-		"MESSAGE_ACTION_READED":        12,
-		"MESSAGE_ACTION_RECALL":        13,
+		"MESSAGE_DB_SAVE":              3,
+		"MESSAGE_SINGLE_GROUP":         4,
+		"MESSAGE_PULL":                 5,
+		"MESSAGE_PULL_SEQ":             6,
+		"MESSAGE_PUSH":                 7,
+		"MESSAGE_RELAY":                8,
+		"MESSAGE_RELAY_PACKATE":        9,
+		"MESSAGE_ACTION":               10,
+		"MESSAGE_ACTION_MODIFY":        11,
+		"MESSAGE_ACTION_CONFIRM":       12,
+		"MESSAGE_ACTION_READED":        13,
+		"MESSAGE_ACTION_RECALL":        14,
 	}
 )
 
@@ -281,23 +284,24 @@ const file_gateway_v1_gateway_proto_rawDesc = "" +
 	"gateway.v1\x1a\x13tagger/tagger.proto\"\x93\x01\n" +
 	"\x0eConnectRequest\x125\n" +
 	"\tclient_id\x18\x01 \x01(\tB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bclientId\x12J\n" +
-	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bplatform*\xdb\x02\n" +
+	"\bplatform\x18\x02 \x01(\x0e2\x14.gateway.v1.PlatformB\x18\x9a\x84\x9e\x03\x13validate:\"required\"R\bplatform*\xf0\x02\n" +
 	"\aMessage\x12\x17\n" +
 	"\x13MESSAGE_UNSPECIFIED\x10\x00\x12\x12\n" +
 	"\x0eMESSAGE_SINGLE\x10\x01\x12 \n" +
-	"\x1cMESSAGE_SINGLE_GATEWAY_RELAY\x10\x02\x12\x18\n" +
-	"\x14MESSAGE_SINGLE_GROUP\x10\x03\x12\x10\n" +
-	"\fMESSAGE_PULL\x10\x04\x12\x14\n" +
-	"\x10MESSAGE_PULL_SEQ\x10\x05\x12\x10\n" +
-	"\fMESSAGE_PUSH\x10\x06\x12\x11\n" +
-	"\rMESSAGE_RELAY\x10\a\x12\x19\n" +
-	"\x15MESSAGE_RELAY_PACKATE\x10\b\x12\x12\n" +
-	"\x0eMESSAGE_ACTION\x10\t\x12\x19\n" +
-	"\x15MESSAGE_ACTION_MODIFY\x10\n" +
-	"\x12\x1a\n" +
-	"\x16MESSAGE_ACTION_CONFIRM\x10\v\x12\x19\n" +
-	"\x15MESSAGE_ACTION_READED\x10\f\x12\x19\n" +
-	"\x15MESSAGE_ACTION_RECALL\x10\r*\xdc\x01\n" +
+	"\x1cMESSAGE_SINGLE_GATEWAY_RELAY\x10\x02\x12\x13\n" +
+	"\x0fMESSAGE_DB_SAVE\x10\x03\x12\x18\n" +
+	"\x14MESSAGE_SINGLE_GROUP\x10\x04\x12\x10\n" +
+	"\fMESSAGE_PULL\x10\x05\x12\x14\n" +
+	"\x10MESSAGE_PULL_SEQ\x10\x06\x12\x10\n" +
+	"\fMESSAGE_PUSH\x10\a\x12\x11\n" +
+	"\rMESSAGE_RELAY\x10\b\x12\x19\n" +
+	"\x15MESSAGE_RELAY_PACKATE\x10\t\x12\x12\n" +
+	"\x0eMESSAGE_ACTION\x10\n" +
+	"\x12\x19\n" +
+	"\x15MESSAGE_ACTION_MODIFY\x10\v\x12\x1a\n" +
+	"\x16MESSAGE_ACTION_CONFIRM\x10\f\x12\x19\n" +
+	"\x15MESSAGE_ACTION_READED\x10\r\x12\x19\n" +
+	"\x15MESSAGE_ACTION_RECALL\x10\x0e*\xdc\x01\n" +
 	"\bPlatform\x12\x18\n" +
 	"\x14PLATFORM_UNSPECIFIED\x10\x00\x12\x13\n" +
 	"\x0fPLATFORM_SYSTEM\x10\x01\x12\x10\n" +

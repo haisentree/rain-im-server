@@ -12,18 +12,19 @@ enum Message {
     MESSAGE_UNSPECIFIED          = 0;
     MESSAGE_SINGLE               = 1;  // 单发消息
     MESSAGE_SINGLE_GATEWAY_RELAY = 2;  // 网关间传递单发消息
+    MESSAGE_DB_SAVE              = 3;  // 需要持久化的消息, core的msg模块订阅处理
     // =======待逻辑设计===========
-    MESSAGE_SINGLE_GROUP   = 3;  // 群里发送的单条消息
-    MESSAGE_PULL           = 4;  // 拉取消息
-    MESSAGE_PULL_SEQ       = 5;  // TODO:废弃rpc拉取seq
-    MESSAGE_PUSH           = 6;  // 推送消息
-    MESSAGE_RELAY          = 7;
-    MESSAGE_RELAY_PACKATE  = 8;   // 合并转发
-    MESSAGE_ACTION         = 9;   // 动作消息
-    MESSAGE_ACTION_MODIFY  = 10;  // 修改消息
-    MESSAGE_ACTION_CONFIRM = 11;  // 确认消息
-    MESSAGE_ACTION_READED  = 12;  // 已读消息
-    MESSAGE_ACTION_RECALL  = 13;  // 撤回消息
+    MESSAGE_SINGLE_GROUP   = 4;  // 群里发送的单条消息
+    MESSAGE_PULL           = 5;  // 拉取消息
+    MESSAGE_PULL_SEQ       = 6;  // TODO:废弃rpc拉取seq
+    MESSAGE_PUSH           = 7;  // 推送消息
+    MESSAGE_RELAY          = 8;
+    MESSAGE_RELAY_PACKATE  = 9;   // 合并转发
+    MESSAGE_ACTION         = 10;  // 动作消息
+    MESSAGE_ACTION_MODIFY  = 11;  // 修改消息
+    MESSAGE_ACTION_CONFIRM = 12;  // 确认消息
+    MESSAGE_ACTION_READED  = 13;  // 已读消息
+    MESSAGE_ACTION_RECALL  = 14;  // 撤回消息
 }
 
 enum Platform {

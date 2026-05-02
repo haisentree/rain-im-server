@@ -1,6 +1,7 @@
 package service
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"rain-im-server/global"
@@ -24,18 +25,45 @@ func NewMessageHandle(sender MessageSender) *MessageHandle {
 }
 
 func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
+	ctx := context.Background()
+
 	var singleMsg gatewayv1.SingleMessage
 	if err := protojson.Unmarshal(rawMsg.Data, &singleMsg); err != nil {
 		fmt.Println("解析 SingleMessage 失败:", err)
 		return
 	}
 
+	// 获取seq
+	seqKey := fmt.Sprintf("%s%s-%s", global.ClientConversationStringKey, singleMsg.SourceId.ToUUID().String(), singleMsg.TargetId.ToUUID().String())
+
+	// 先检查 key 是否存在
+	// exists, err := global.Redis.Exists(ctx, seqKey).Result()
+	// if err != nil {
+	// 	fmt.Println("检查key是否存在失败:", err)
+	// 	return
+	// }
+
+	// if exists == 0 {
+	// 	// key 不存在，这是首次创建
+	// 	fmt.Println("首次创建会话，seq从1开始")
+	// }
+
+	seq, err := global.Redis.Incr(ctx, seqKey).Uint64()
+	if err != nil {
+		fmt.Println("获取消息序号失败:", err)
+		return
+	}
+
+	singleMsg.Seq = seq
+
 	rawMsgByte, err := json.Marshal(rawMsg)
 	if err != nil {
 		fmt.Println("序列化 rawMsg 失败:", err)
 		return
 	}
+
 	// 1.写入到持久化存储队列
+	rawMsg.Type = gatewayv1.Message_MESSAGE_DB_SAVE
 	pubSaveTheme := fmt.Sprintf(global.GatewayMessageSaveTheme, singleMsg.TargetId.ToUUID().String()[0:2]) // 取前两位作为分片
 	if ack, err := global.NatsJS.Publish(pubSaveTheme, rawMsgByte); err != nil {
 		fmt.Println("发布消息到 NATS 失败:", err)

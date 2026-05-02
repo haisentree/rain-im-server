@@ -13,7 +13,7 @@ message RawMessage {
 message SingleMessage {
     base.v1.UUID source_id = 1;
     base.v1.UUID target_id = 2;
-    fixed64      seq_id    = 3;
+    fixed64      seq       = 3;
     string       content   = 4 [(tagger.tags) = "validate:\"required\""];
     // 时间
 }
