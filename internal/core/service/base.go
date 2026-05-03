@@ -3,8 +3,9 @@ package service
 import (
 	"context"
 	"database/sql"
+	"rain-im-server/global"
 	"rain-im-server/internal/core/biz"
-	"rain-im-server/internal/core/global"
+
 	"rain-im-server/internal/core/model"
 	v1 "rain-im-server/protogo/core/v1"
 	"rain-im-server/protogo/core/v1/corev1connect"

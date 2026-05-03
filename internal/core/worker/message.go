@@ -21,9 +21,6 @@ func NewMessageWorker() *MessageWorker {
 
 func (w *MessageWorker) Run() {
 	w.Subscribe()
-
-	// 保持运行
-	select {}
 }
 
 // 优雅关闭
@@ -89,6 +86,8 @@ func (w *MessageWorker) Subscribe() {
 func (w *MessageWorker) handleMessage(msg *nats.Msg) {
 	defer msg.Ack()
 
+	fmt.Printf("收到消息: %s\n", string(msg.Data))
+
 	// 1. 解析原始消息
 	var rawMsg gatewayv1.RawMessage
 	if err := json.Unmarshal(msg.Data, &rawMsg); err != nil {
@@ -102,6 +101,8 @@ func (w *MessageWorker) handleMessage(msg *nats.Msg) {
 		log.Printf("解析 SingleMessage 失败: %v", err)
 		return
 	}
+
+	fmt.Printf("收到消息: %v\n", singleMsg)
 
 	// 3. 持久化到数据库
 	if err := w.saveToDatabase(&singleMsg, &rawMsg); err != nil {

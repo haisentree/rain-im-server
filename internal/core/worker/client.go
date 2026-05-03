@@ -15,8 +15,8 @@ type ClientWorker struct {
 	subscriptions []*nats.Subscription
 }
 
-func NewClientWorker() *MessageWorker {
-	return &MessageWorker{}
+func NewClientWorker() *ClientWorker {
+	return &ClientWorker{}
 }
 
 func (w *ClientWorker) Run() {
@@ -40,12 +40,12 @@ func (w *ClientWorker) Subscribe() {
 	seqSubject := fmt.Sprintf("%s.*", global.GatewayMessageSeqIncreaseTheme[:len(global.GatewayMessageSeqIncreaseTheme)-3])
 	seqSub, err := global.NatsJS.QueueSubscribe(
 		seqSubject,
-		"message-seq-worker-group",
+		global.GatewayMessageSeqIncreaseQueue,
 		func(msg *nats.Msg) {
 			w.handleMessage(msg)
 		},
 		nats.ManualAck(),
-		nats.Durable("message-seq-consumer"),
+		nats.Durable(global.GatewayMessageSeqIncreaseConsumer),
 	)
 	if err != nil {
 		log.Fatalf("订阅消息序号队列失败: %v", err)
@@ -53,12 +53,13 @@ func (w *ClientWorker) Subscribe() {
 
 	w.subscriptions = append(w.subscriptions, seqSub)
 	log.Printf("消息序号工作器已启动，订阅主题: %s", seqSubject)
-
 }
 
 // 处理消息持久化
 func (w *ClientWorker) handleMessage(msg *nats.Msg) {
 	defer msg.Ack()
+
+	fmt.Printf("收到消息: %s\n", string(msg.Data))
 
 	// 1. 解析原始消息
 	var rawMsg gatewayv1.RawMessage
@@ -73,10 +74,12 @@ func (w *ClientWorker) handleMessage(msg *nats.Msg) {
 		log.Printf("解析 SingleMessage 失败: %v", err)
 		return
 	}
+
+	fmt.Printf("收到消息: %v\n", singleMsg)
 }
 
 // 处理序号增加
-func (w *MessageWorker) handleSeqIncrease(msg *nats.Msg) {
+func (w *ClientWorker) handleSeqIncrease(msg *nats.Msg) {
 	defer msg.Ack()
 
 	var rawMsg gatewayv1.RawMessage

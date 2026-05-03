@@ -10,10 +10,15 @@ import (
 )
 
 var (
-	GatewayServerKey           = "uuid"
-	EtcdRedisConfig            = "/rian-im-server/%s/redis/config"
+	GatewayServerKey = "uuid"
+
+	// 基础服务配置
+	EtcdRedisConfig    = "/rian-im-server/%s/redis/config"
+	EtcdNatsConfig     = "/rian-im-server/%s/nats/config"
+	EtcdPostgresConfig = "/rian-im-server/%s/postgres/config"
+
+	// 服务注册
 	EtcdServiceRegisterGateway = "/rian-im-server/%s/service/register/gateway/%s"
-	EtcdNatsConfig             = "/rian-im-server/%s/nats/config"
 )
 
 func init() {
@@ -34,4 +39,5 @@ func SprintfEtcdWorkMode(mode string) {
 	EtcdRedisConfig = fmt.Sprintf(EtcdRedisConfig, mode)
 	EtcdServiceRegisterGateway = fmt.Sprintf(EtcdServiceRegisterGateway, mode, GatewayServerKey)
 	EtcdNatsConfig = fmt.Sprintf(EtcdNatsConfig, mode)
+	EtcdPostgresConfig = fmt.Sprintf(EtcdPostgresConfig, mode)
 }

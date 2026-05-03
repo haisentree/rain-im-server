@@ -96,8 +96,9 @@ func (g *GatewayServer) Run() {
 	// 注册和续期服务
 	g.RegisterService()
 
+	log.Printf("Gateway server started successfully with key: %s", g.Key)
 	// 启动 HTTP 服务（阻塞）
-	if err := http.Serve(listener, nil); err != nil {
+	if err := http.Serve(listener, mux); err != nil {
 		panic("websocket serving error: " + err.Error())
 	}
 }
@@ -161,6 +162,7 @@ func (g *GatewayServer) RegisterService() {
 }
 
 func (g *GatewayServer) ConnHandler(w http.ResponseWriter, r *http.Request) {
+	log.Println("new connection")
 
 	if err := r.ParseForm(); err != nil {
 		http.Error(w, "解析表单失败: "+err.Error(), http.StatusBadRequest)

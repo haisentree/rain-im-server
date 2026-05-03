@@ -2,7 +2,7 @@ package model
 
 import (
 	"context"
-	"rain-im-server/internal/core/global"
+	"rain-im-server/global"
 
 	"log/slog"
 )

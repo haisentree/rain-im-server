@@ -48,6 +48,7 @@ func WSClientSendCmd() *cobra.Command {
 		Short: "send websocket message & keep receiving",
 		Run: func(cmd *cobra.Command, args []string) {
 			// 1. 连接 WS
+			fmt.Println("addr:", address)
 			conn, _, err := websocket.DefaultDialer.DialContext(context.Background(), address, nil)
 			if err != nil {
 				log.Fatal("ws connect error:", err)

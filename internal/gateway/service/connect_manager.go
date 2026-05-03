@@ -105,7 +105,7 @@ func (cm *ConnectionManager) Remove(conn *WSClient) {
 
 	ctx := context.Background()
 	pipe := global.Redis.Pipeline()
-	pipe.HDel(ctx, global.ConnDetailHashKey+key)               // 删除 hash 字段
+	pipe.Del(ctx, global.ConnDetailHashKey+key)                // 删除 hash 字段
 	pipe.SRem(ctx, global.ConnStatusSetKey+conn.ClientId, key) // 从集合移除
 	_, err := pipe.Exec(ctx)
 	if err != nil {

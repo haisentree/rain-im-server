@@ -20,7 +20,7 @@ func ServerCmd() *cobra.Command {
 }
 
 func RunServer() {
-	gatewayServer, err := service.NewGatewayServer("")
+	gatewayServer, err := service.NewGatewayServer("0.0.0.0:5173")
 	if err != nil {
 		panic("RunServer err")
 	}

@@ -2,7 +2,6 @@ package service
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"rain-im-server/global"
 	gatewayv1 "rain-im-server/protogo/gateway/v1"
@@ -56,7 +55,9 @@ func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
 
 	singleMsg.Seq = seq
 
-	rawMsgByte, err := json.Marshal(rawMsg)
+	fmt.Println("消息序号已更新:", seq)
+
+	rawMsgByte, err := protojson.Marshal(&singleMsg)
 	if err != nil {
 		fmt.Println("序列化 rawMsg 失败:", err)
 		return
@@ -71,6 +72,7 @@ func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
 	} else {
 		fmt.Printf("消息已发布到 NATS: %v\n", ack)
 	}
+	fmt.Println("消息已发布到 NATS 主题:", pubSaveTheme)
 
 	// 2.消息会话seq+1
 	pubSeqIncreaseTheme := fmt.Sprintf(global.GatewayMessageSeqIncreaseTheme, singleMsg.TargetId.ToUUID().String()[0:2]) // 取前两位作为分片
@@ -80,6 +82,7 @@ func (m *MessageHandle) SingleMessageHandle(rawMsg *gatewayv1.RawMessage) {
 	} else {
 		fmt.Printf("消息已发布到 NATS: %v\n", ack)
 	}
+	fmt.Println("消息已发布到 NATS 主题:", pubSeqIncreaseTheme)
 
 	// 3.本地和远程连接消息发送
 	m.sender.WriteToLocalClient(singleMsg.TargetId.ToUUID().String(), rawMsg)

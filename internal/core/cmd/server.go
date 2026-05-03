@@ -1,7 +1,7 @@
 package cmd
 
 import (
-	_ "rain-im-server/internal/core/global"
+	"rain-im-server/global"
 	_ "rain-im-server/internal/core/model"
 	"rain-im-server/internal/core/service"
 
@@ -23,4 +23,6 @@ func RunServer() {
 	httpServer.Addr = "0.0.0.0:5173"
 
 	httpServer.ListenAndServe()
+
+	defer global.CloseService()
 }

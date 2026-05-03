@@ -68,11 +68,11 @@ func NewEtcd() *clientv3.Client {
 	return cli
 }
 
-// /rian-im-server/core/db/postgres
+// /rian-im-server/prod/postgres/config
 func NewPG(ctx context.Context) *bun.DB {
 	var dataSource string
 
-	resp, err := Etcd.Get(ctx, "/core/db/postgres")
+	resp, err := Etcd.Get(ctx, EtcdPostgresConfig)
 	if err != nil {
 		slog.Error("err",
 			slog.String("err", err.Error()),
@@ -120,6 +120,7 @@ func NewRedisDB(ctx context.Context) *redisv8.Client {
 func NewNats() *nats.Conn {
 	ctx := context.Background()
 	var natsCfg NatsConfig
+
 	resp, err := Etcd.Get(ctx, EtcdNatsConfig)
 	if err != nil {
 		fmt.Println("NewNats err:", err.Error())
