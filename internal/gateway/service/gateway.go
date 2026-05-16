@@ -297,6 +297,11 @@ func (g *GatewayServer) ParseMsg(b []byte) {
 
 		g.MsgH.SingleMessageHandle(&msgReq)
 
+	case gatewayv1.Message_MESSAGE_SINGLE_GROUP:
+		log.Println("group message")
+
+		// g.MsgH.GroupHandleMessage(&msgReq)
+
 	default:
 		log.Println("clientType error")
 	}

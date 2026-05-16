@@ -100,3 +100,14 @@ func (m *MessageHandle) RelayGatewaySingleMessageHandle(rawMsg *gatewayv1.RawMes
 	rawMsg.Type = gatewayv1.Message_MESSAGE_SINGLE // 还原消息类型再发送
 	rw.WriteToLocalClient(relaySingleMsg.TargetId.ToUUID().String(), rawMsg)
 }
+
+func GroupHandleMessage(rawMsg *gatewayv1.RawMessage) {
+	var groupMsg gatewayv1.GroupMessage
+	if err := protojson.Unmarshal(rawMsg.Data, &groupMsg); err != nil {
+		fmt.Println("解析 groupMsg 失败:", err)
+		return
+	}
+
+	// groupMsg.Seq = 1
+
+}
