@@ -7,6 +7,8 @@ import (
 	"log"
 	"net"
 	"net/http"
+	"os"
+	"path/filepath"
 	"time"
 
 	"rain-im-server/global"
@@ -58,6 +60,16 @@ func (g *GatewayServer) Run() {
 	// 注册路由
 	mux := http.NewServeMux()
 	mux.HandleFunc("/gateway", g.ConnHandler)
+
+	// 静态文件服务：提供 web/dist 目录下的前端页面
+	webDir := filepath.Join("web", "dist")
+	if _, err := os.Stat(webDir); os.IsNotExist(err) {
+		log.Printf("web dist directory not found at %s, skipping static file server", webDir)
+	} else {
+		fs := http.FileServer(http.Dir(webDir))
+		mux.Handle("/", fs)
+		log.Printf("Serving static files from %s", webDir)
+	}
 
 	var listener net.Listener
 	var err error
